@@ -1,4 +1,5 @@
 docs/labs/*
 .idea
 *.bkp
+*.dtmp
 
