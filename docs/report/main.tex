@@ -1,0 +1,23 @@
+% !TEX program = xelatex
+\include{preamble}
+
+% ---------------------- Документ ----------------------
+\begin{document}
+	\include{00-title}
+	
+	\normalsize
+	\setcounter{page}{5}
+	
+	\pagebreak
+    \include{10-abstract}
+	
+	\renewcommand{\contentsname}{\normalsize\bfseries\centering СОДЕРЖАНИЕ}
+	\small
+	\tableofcontents
+	\normalsize
+	
+	\pagebreak
+	\include{15-intro}
+	\include{20-analysis}
+	
+\end{document}
