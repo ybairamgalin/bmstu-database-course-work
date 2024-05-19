@@ -30,6 +30,17 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/components.cpp
     src/handlers/request_post.hpp
     src/handlers/request_post.cpp
+    src/services/auth_service.hpp
+    src/repository/user_data_repository.hpp
+    src/repository/user_data_repository.cpp
+    src/repository/database/user_data.hpp
+    src/services/auth/yandex_auth.hpp
+    src/services/auth/yandex_auth.cpp
+    src/repository/database/user_data.cpp
+    src/repository/http/user_data.hpp
+    src/repository/http/user_data.cpp
+        src/handlers/base_handler.hpp
+        src/handlers/base_handler.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 
