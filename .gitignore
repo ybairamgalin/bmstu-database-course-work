@@ -3,3 +3,19 @@ docs/labs/*
 *.bkp
 *.dtmp
 
+__pycache__
+build*
+compile_commands.json
+.cache/
+.ccache/
+.idea/
+.vscode/
+!.vscode/c_cpp_properties.json
+!.vscode/cmake-variants.yaml
+!.vscode/README.md
+.cores/
+.pgdata/
+cmake-build-*
+Testing/
+.DS_Store
+Makefile.local
