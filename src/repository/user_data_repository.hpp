@@ -16,13 +16,15 @@ struct AuthData {
   std::string login;
   std::string name;
   std::string phone;
-  std::vector<std::string> permission_group;
+  std::set<std::string> permission_group;
 };
 
 class UserDataRepository {
  public:
   virtual ~UserDataRepository() = default;
   virtual std::optional<AuthData> GetUserData(const std::string& token) = 0;
+  virtual std::optional<AuthData> GetUserDataByLogin(
+      const std::string& login) = 0;
   virtual void SaveUserData(const AuthData&) = 0;
 };
 

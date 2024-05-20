@@ -4,12 +4,9 @@
 #include <set>
 #include <string>
 
-namespace services {
+#include "models/permission.hpp"
 
-enum class Permission {
-  kModerateRequests,
-  kManageModerators,
-};
+namespace services {
 
 struct AuthData {
   int64_t user_id;

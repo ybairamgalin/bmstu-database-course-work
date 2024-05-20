@@ -1,6 +1,7 @@
 #include "base_handler.hpp"
 
 #include "../services/auth/yandex_auth.hpp"
+#include "../services/exception.hpp"
 
 namespace handlers {
 
@@ -31,7 +32,12 @@ userver::formats::json::Value BaseHandlerWithAuth::HandleRequestJsonThrow(
     return response_builder.ExtractValue();
   }
 
-  return Handle(request, request_json, auth_data.value());
+  try {
+    return Handle(request, request_json, auth_data.value());
+  } catch (const services::ServiceLevelException& ex) {
+    response_builder["message"] = ex.what();
+    return response_builder.ExtractValue();
+  }
 }
 
 }  // namespace handlers

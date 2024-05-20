@@ -41,6 +41,17 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/repository/http/user_data.cpp
         src/handlers/base_handler.hpp
         src/handlers/base_handler.cpp
+        src/handlers/manage_access_post.hpp
+        src/handlers/manage_access_post.cpp
+        src/services/idm_service.hpp
+        src/services/models/permission.hpp
+        src/services/idm/idm.hpp
+        src/services/idm/idm.cpp
+        src/services/mapping/mapping.cpp
+        src/services/mapping/mapping.hpp
+        src/services/exception.hpp
+        src/utils/merge_utils.hpp
+        src/services/models/permission.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 

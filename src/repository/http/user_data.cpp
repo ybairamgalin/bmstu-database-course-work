@@ -46,6 +46,11 @@ std::optional<AuthData> YandexLoginDataProvider::GetUserData(
   return MapToResponse(response->body(), token);
 }
 
+std::optional<AuthData> YandexLoginDataProvider::GetUserDataByLogin(
+    const std::string&) {
+  return std::nullopt;
+}
+
 void YandexLoginDataProvider::SaveUserData(const AuthData&) {}
 
 }  // namespace repository

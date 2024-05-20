@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include <userver/storages/postgres/cluster.hpp>
 
 #include "../user_data_repository.hpp"
@@ -12,8 +15,17 @@ class DbUserDataRepository : public UserDataRepository {
 
   std::optional<repository::AuthData> GetUserData(
       const std::string& token) override;
+  std::optional<AuthData> GetUserDataByLogin(
+      const std::string& login) override;
 
   void SaveUserData(const repository::AuthData&) override;
+
+ private:
+  template <typename... Args>
+  std::optional<repository::AuthData> GetUserDataByQuery(
+      const std::string& query, Args&&... args);
+
+  std::set<std::string> GetPermissions(int64_t user_id);
 
  private:
   userver::storages::postgres::ClusterPtr cluster_ptr_;
