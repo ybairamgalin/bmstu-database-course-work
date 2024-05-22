@@ -32,26 +32,45 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/handlers/request_post.cpp
     src/services/auth_service.hpp
     src/repository/user_data_repository.hpp
-    src/repository/user_data_repository.cpp
     src/repository/database/user_data.hpp
     src/services/auth/yandex_auth.hpp
     src/services/auth/yandex_auth.cpp
     src/repository/database/user_data.cpp
     src/repository/http/user_data.hpp
     src/repository/http/user_data.cpp
-        src/handlers/base_handler.hpp
-        src/handlers/base_handler.cpp
-        src/handlers/manage_access_post.hpp
-        src/handlers/manage_access_post.cpp
-        src/services/idm_service.hpp
-        src/services/models/permission.hpp
-        src/services/idm/idm.hpp
-        src/services/idm/idm.cpp
-        src/services/mapping/mapping.cpp
-        src/services/mapping/mapping.hpp
-        src/services/exception.hpp
-        src/utils/merge_utils.hpp
-        src/services/models/permission.cpp
+    src/handlers/base_handler.hpp
+    src/handlers/base_handler.cpp
+    src/handlers/manage_access_post.hpp
+    src/handlers/manage_access_post.cpp
+    src/services/idm_service.hpp
+    src/services/models/permission.hpp
+    src/services/idm/idm.hpp
+    src/services/idm/idm.cpp
+    src/services/mapping/mapping.cpp
+    src/services/mapping/mapping.hpp
+    src/services/exception.hpp
+    src/utils/merge_utils.hpp
+    src/services/models/permission.cpp
+    src/repository/requests_repository.hpp
+    src/repository/requests_repository.cpp
+    src/repository/database/request.hpp
+    src/repository/database/request.cpp
+    src/services/request_management_service.hpp
+    src/services/request_management/request_management.hpp
+    src/services/factory.hpp
+    src/services/factory.cpp
+    src/repository/factory.cpp
+    src/repository/factory.hpp
+    src/services/request_management/request_management.cpp
+        src/services/file_service.hpp
+        src/services/file_service/file_service.cpp
+        src/services/file_service/file_service.hpp
+        src/repository/file_storage_repository.hpp
+        src/repository/file_meta_repository.hpp
+        src/repository/database/file_meta.cpp
+        src/repository/database/file_meta.hpp
+        src/repository/http/file_storage.cpp
+        src/repository/http/file_storage.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 
@@ -62,7 +81,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 
 
 add_executable(${PROJECT_NAME}_unittest
-    src/tests/example.cpp
+    src/tests/test_auth_service.cpp
+    src/tests/mock_repositories.hpp
+    src/tests/mock_repositories.cpp
+    src/tests/test_idm_service.cpp
 )
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver::utest)
 add_google_tests(${PROJECT_NAME}_unittest)

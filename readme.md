@@ -82,7 +82,7 @@ Jugru - конференция cppcon.
 
 ### Стек
 
-- Бэкенд - Python3 Fastapi
+- Бэкенд - C++ userver
 - Основная СУБД - Pg
 - СУБД для хранения файлов - Yandex S3
 

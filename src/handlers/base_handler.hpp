@@ -7,16 +7,16 @@
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 
-#include "../services/auth_service.hpp"
+#include "../repository/factory.hpp"
+#include "../services/factory.hpp"
 
 namespace handlers {
 
 class BaseHandlerWithAuth
     : public userver::server::handlers::HttpHandlerJsonBase {
  public:
-  BaseHandlerWithAuth(
-      const userver::components::ComponentConfig& config,
-      const userver::components::ComponentContext& context);
+  BaseHandlerWithAuth(const userver::components::ComponentConfig& config,
+                      const userver::components::ComponentContext& context);
 
   userver::formats::json::Value HandleRequestJsonThrow(
       const userver::server::http::HttpRequest& request,
@@ -29,8 +29,7 @@ class BaseHandlerWithAuth
       const services::AuthData& user_data) const = 0;
 
  protected:
-  userver::clients::http::Client& http_client_;
-  userver::storages::postgres::ClusterPtr cluster_ptr_;
+  std::unique_ptr<services::IServiceFactory> service_factory_;
 };
 
 }  // namespace handlers

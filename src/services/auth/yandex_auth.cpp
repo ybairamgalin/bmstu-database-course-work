@@ -8,24 +8,21 @@
 namespace services {
 
 YandexAuthService::YandexAuthService(
-    userver::clients::http::Client& http_client_,
-    userver::storages::postgres::ClusterPtr cluster_ptr_)
-    : http_client_(http_client_), cluster_ptr_(std::move(cluster_ptr_)) {}
+    const std::shared_ptr<repository::IRepositoryFactory>& repository_factory)
+    : db_repository_(repository_factory->MakeUserDataDbRepository()),
+      http_repository_(repository_factory->MakeUserDataHttpRepository()) {}
 
 std::optional<services::AuthData> YandexAuthService::GetAuthDataByToken(
     const std::string& token) {
-  repository::YandexDataRepositoryFactory repository_factory(http_client_,
-                                                             cluster_ptr_);
-  auto db_user_opt = repository_factory.GetDbRepository()->GetUserData(token);
+  auto db_user_opt = db_repository_->GetUserData(token);
   if (db_user_opt) {
     return internal::MapAuthData(db_user_opt.value());
   }
-  auto yandex_user_opt =
-      repository_factory.GetHttpRepository()->GetUserData(token);
+  auto yandex_user_opt = http_repository_->GetUserData(token);
   if (!yandex_user_opt) {
     return std::nullopt;
   }
-  repository_factory.GetDbRepository()->SaveUserData(yandex_user_opt.value());
+  db_repository_->SaveUserData(yandex_user_opt.value());
   return internal::MapAuthData(yandex_user_opt.value());
 }
 

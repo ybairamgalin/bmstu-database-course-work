@@ -47,7 +47,7 @@ userver::formats::json::Value ManageAccessPost::Handle(
 
   idm_request.login = request_json["login"].As<std::string>();
 
-  services::IdmService(cluster_ptr_).HandleIdmRequest(std::move(idm_request));
+  service_factory_->MakeIdmService()->HandleIdmRequest(std::move(idm_request));
   builder["message"] = "Ok";
   return builder.ExtractValue();
 }

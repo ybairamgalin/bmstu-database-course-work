@@ -11,14 +11,12 @@
 
 namespace services {
 
-IdmService::IdmService(userver::storages::postgres::ClusterPtr cluster_ptr)
-    : cluster_ptr_(std::move(cluster_ptr)) {}
+IdmService::IdmService(
+    const std::shared_ptr<repository::IRepositoryFactory>& repository_factory)
+    : user_data_repository_(repository_factory->MakeUserDataDbRepository()) {}
 
 void IdmService::HandleIdmRequest(services::IdmRequest&& request) {
-  std::unique_ptr<repository::UserDataRepository> user_data_repository =
-      std::make_unique<repository::DbUserDataRepository>(cluster_ptr_);
-
-  auto db_user = user_data_repository->GetUserDataByLogin(request.login);
+  auto db_user = user_data_repository_->GetUserDataByLogin(request.login);
   if (!db_user) {
     throw services::ServiceLevelException("User not found");
   }
@@ -35,7 +33,7 @@ void IdmService::HandleIdmRequest(services::IdmRequest&& request) {
     }
     db_user->permission_group.erase(ToString(request.permission));
   }
-  user_data_repository->SaveUserData(db_user.value());
+  user_data_repository_->SaveUserData(db_user.value());
 }
 
 }  // namespace services

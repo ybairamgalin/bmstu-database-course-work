@@ -13,6 +13,11 @@ struct AuthData {
   std::string login;
   std::string name;
   std::set<Permission> permissions;
+
+  bool operator==(const AuthData& other) const {
+    return user_id == other.user_id && login == other.login &&
+           name == other.name && permissions == other.permissions;
+  }
 };
 
 class IAuthService {

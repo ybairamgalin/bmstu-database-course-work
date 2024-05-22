@@ -6,20 +6,22 @@
 #include <userver/clients/http/client.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 
+#include "../../repository/factory.hpp"
+#include "../../repository/user_data_repository.hpp"
 #include "../auth_service.hpp"
 
 namespace services {
 
 class YandexAuthService : public services::IAuthService {
  public:
-  YandexAuthService(userver::clients::http::Client& http_client,
-                    userver::storages::postgres::ClusterPtr cluster_ptr);
+  explicit YandexAuthService(
+      const std::shared_ptr<repository::IRepositoryFactory>& repository_factory);
   std::optional<services::AuthData> GetAuthDataByToken(
       const std::string& token) override;
 
  private:
-  userver::clients::http::Client& http_client_;
-  userver::storages::postgres::ClusterPtr cluster_ptr_;
+  std::unique_ptr<repository::UserDataRepository> db_repository_;
+  std::unique_ptr<repository::UserDataRepository> http_repository_;
 };
 
 }  // namespace services
