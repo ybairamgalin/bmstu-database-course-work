@@ -53,4 +53,18 @@ create table service.comments(
     author_id bigint not null references service.users(yandex_id),
     content text not null,
     created_at timestamptz not null default now()
-)
+);
+
+create or replace function service.update_updated_at()
+    returns trigger as $$
+begin
+    new.updated_at = now();
+    return new;
+end;
+$$ language plpgsql;
+
+drop trigger if exists update_updated_at on service.requests;
+create trigger update_updated_at
+before update on service.requests
+for each row
+execute function service.update_updated_at();
