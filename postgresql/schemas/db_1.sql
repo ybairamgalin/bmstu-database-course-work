@@ -13,9 +13,7 @@ create table service.users(
 
 create table service.events(
     event_id bigserial not null primary key,
-    name text not null,
-    start_date date not null,
-    duration_days int not null check (duration_days >= 0)
+    name text not null
 );
 
 create table service.requests(
@@ -31,7 +29,6 @@ create table service.requests(
 create table service.permissions(
     slug text not null,
     user_id bigint not null references service.users(yandex_id),
-    created_at timestamptz not null default now(),
 
     primary key (user_id, slug)
 );
@@ -42,3 +39,18 @@ create table service.file_meta(
     hash text not null unique,
     created_at timestamptz not null default now()
 );
+
+create table service.request_file_meta(
+    request_id bigint not null references service.requests(request_id),
+    file_uuid uuid not null references service.file_meta(uuid),
+
+    unique (request_id, file_uuid)
+);
+
+create table service.comments(
+    comment_id bigserial not null primary key,
+    request_id bigint not null references service.requests(request_id),
+    author_id bigint not null references service.users(yandex_id),
+    content text not null,
+    created_at timestamptz not null default now()
+)
