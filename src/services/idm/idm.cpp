@@ -4,10 +4,10 @@
 
 #include <userver/storages/postgres/cluster.hpp>
 
-#include "../../repository/database/user_data.hpp"
-#include "../../repository/user_data_repository.hpp"
-#include "../exception.hpp"
-#include "../mapping/mapping.hpp"
+#include "repository/database/user_data.hpp"
+#include "repository/user_data_repository.hpp"
+#include "services/exception.hpp"
+#include "services/mapping/mapping.hpp"
 
 namespace services {
 

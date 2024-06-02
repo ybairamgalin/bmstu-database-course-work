@@ -26,13 +26,6 @@ create table service.requests(
     updated_at timestamptz not null default now()
 );
 
-create table service.permissions(
-    slug text not null,
-    user_id bigint not null references service.users(yandex_id),
-
-    primary key (user_id, slug)
-);
-
 create table service.file_meta(
     uuid uuid not null primary key,
     source_name text not null,
@@ -40,11 +33,11 @@ create table service.file_meta(
     created_at timestamptz not null default now()
 );
 
-create table service.request_file_meta(
+create table service.request_file(
     request_id bigint not null references service.requests(request_id),
     file_uuid uuid not null references service.file_meta(uuid),
 
-    unique (request_id, file_uuid)
+    primary key (request_id, file_uuid)
 );
 
 create table service.comments(
@@ -68,3 +61,18 @@ create trigger update_updated_at
 before update on service.requests
 for each row
 execute function service.update_updated_at();
+
+create table service.articles(
+    article_id bigserial not null primary key,
+    description text,
+    author_id bigint not null references service.users(yandex_id),
+    event_id bigint not null references service.events(event_id),
+    created_at timestamptz not null default now()
+);
+
+create table service.article_file(
+    article_id bigint not null references service.articles(article_id),
+    file_uuid uuid not null references service.file_meta(uuid),
+
+    primary key (article_id, file_uuid)
+)

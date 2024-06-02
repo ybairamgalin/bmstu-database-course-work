@@ -62,17 +62,19 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/repository/factory.cpp
     src/repository/factory.hpp
     src/services/request_management/request_management.cpp
-        src/services/file_service.hpp
-        src/services/file_service/file_service.cpp
-        src/services/file_service/file_service.hpp
-        src/repository/file_storage_repository.hpp
-        src/repository/file_meta_repository.hpp
-        src/repository/database/file_meta.cpp
-        src/repository/database/file_meta.hpp
-        src/repository/http/file_storage.cpp
-        src/repository/http/file_storage.hpp
+    src/services/file_service.hpp
+    src/services/file_service/file_service.cpp
+    src/services/file_service/file_service.hpp
+    src/repository/file_storage_repository.hpp
+    src/repository/file_meta_repository.hpp
+    src/repository/database/file_meta.cpp
+    src/repository/database/file_meta.hpp
+    src/repository/http/file_storage.cpp
+    src/repository/http/file_storage.hpp
+    src/services/exception.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
+target_include_directories(${PROJECT_NAME}_objs PUBLIC src)
 
 
 # The Service

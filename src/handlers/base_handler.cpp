@@ -1,9 +1,11 @@
 #include "base_handler.hpp"
 
+#include <memory>
+
+#include <userver/server/http/http_status.hpp>
+
 #include "../services/auth/yandex_auth.hpp"
 #include "../services/exception.hpp"
-
-#include <memory>
 
 #include "../repository/factory.hpp"
 
@@ -25,6 +27,20 @@ std::unique_ptr<services::IServiceFactory> InitFactories(
       std::move(repository_factory));
 }
 
+userver::server::http::HttpStatus MapErrorTypeToHttpStatus(
+    services::ErrorType error) {
+  switch (error) {
+    case services::ErrorType::kNotFound:
+      return userver::server::http::HttpStatus::kNotFound;
+    case services::ErrorType::kConflict:
+      return userver::server::http::HttpStatus::kConflict;
+    case services::ErrorType::kInvalidInput:
+      return userver::server::http::HttpStatus::kBadRequest;
+  }
+
+  throw std::runtime_error("Unknown service error type");
+}
+
 }  // namespace
 
 namespace handlers {
@@ -41,6 +57,7 @@ userver::formats::json::Value BaseHandlerWithAuth::HandleRequestJsonThrow(
     userver::server::request::RequestContext&) const {
   userver::formats::json::ValueBuilder response_builder;
   if (!request.HasHeader("Token")) {
+    request.SetResponseStatus(userver::server::http::HttpStatus::kBadRequest);
     response_builder["message"] = "Token was not provided";
     return response_builder.ExtractValue();
   }
@@ -50,6 +67,7 @@ userver::formats::json::Value BaseHandlerWithAuth::HandleRequestJsonThrow(
       service_factory_->MakeAuthService()->GetAuthDataByToken(token);
   if (!auth_data) {
     response_builder["message"] = "Failed to auth";
+    request.SetResponseStatus(userver::server::http::HttpStatus::kForbidden);
     return response_builder.ExtractValue();
   }
 
@@ -57,6 +75,7 @@ userver::formats::json::Value BaseHandlerWithAuth::HandleRequestJsonThrow(
     return Handle(request, request_json, auth_data.value());
   } catch (const services::ServiceLevelException& ex) {
     response_builder["message"] = ex.what();
+    request.SetResponseStatus(MapErrorTypeToHttpStatus(ex.GetErrorType()));
     return response_builder.ExtractValue();
   }
 }
