@@ -72,6 +72,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/repository/http/file_storage.cpp
     src/repository/http/file_storage.hpp
     src/services/exception.cpp
+        src/utils/uuid.hpp
+        src/utils/uuid.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 target_include_directories(${PROJECT_NAME}_objs PUBLIC src)

@@ -9,7 +9,10 @@ std::optional<std::string> YandexS3FileStorage::GetFile(
     boost::uuids::uuid uuid) {
   return std::string();
 }
+
 YandexS3FileStorage::YandexS3FileStorage(
     userver::clients::http::Client& http_client)
-    : http_client_(http_client) {}
+    : http_client_(http_client) {
+  http_client_.CreateRequest().put()
+}
 }  // namespace repository

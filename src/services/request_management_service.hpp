@@ -18,6 +18,7 @@ struct Request {
 
 class IRequestManagementService {
  public:
+  virtual ~IRequestManagementService() = default;
   virtual void AddRequest(const Request& request) = 0;
   virtual void UpdateRequest(const Request& request) = 0;
 };
