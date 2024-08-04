@@ -85,6 +85,17 @@ docker-start-service-debug docker-start-service-release: docker-start-service-%:
 docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release: docker-%:
 	$(DOCKER_COMPOSE) run --rm pg_service_template-container make $*
 
+.PHONY: gen
+gen:
+	docker run --rm -it --network ip6net \
+		--mount type=bind,source=./schemas,target=/etc/schemas \
+		--mount type=bind,source=./src/gen,target=/gen \
+		-w /etc/schemas \
+		ghcr.io/userver-framework/ubuntu-22.04-userver-pg:latest \
+		bash run_codegen.sh && \
+		find src/gen -type f -exec $(CLANG_FORMAT) -i {} + && \
+		bash schemas/generate_cmake.sh
+
 # Stop docker container and remove PG data
 .PHONY: docker-clean-data
 docker-clean-data:

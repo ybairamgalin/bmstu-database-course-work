@@ -13,6 +13,6 @@ std::optional<std::string> YandexS3FileStorage::GetFile(
 YandexS3FileStorage::YandexS3FileStorage(
     userver::clients::http::Client& http_client)
     : http_client_(http_client) {
-  http_client_.CreateRequest().put()
+  http_client_.CreateRequest().put();
 }
 }  // namespace repository

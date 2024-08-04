@@ -72,16 +72,17 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/repository/http/file_storage.cpp
     src/repository/http/file_storage.hpp
     src/services/exception.cpp
-        src/utils/uuid.hpp
-        src/utils/uuid.cpp
+    src/utils/uuid.hpp
+    src/utils/uuid.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 target_include_directories(${PROJECT_NAME}_objs PUBLIC src)
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/src/gen/CMakeLists.txt)
 
 # The Service
 add_executable(${PROJECT_NAME} src/main.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs ${PROJECT_NAME}_gen)
 
 
 add_executable(${PROJECT_NAME}_unittest
@@ -90,7 +91,11 @@ add_executable(${PROJECT_NAME}_unittest
     src/tests/mock_repositories.cpp
     src/tests/test_idm_service.cpp
 )
-target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver::utest)
+target_link_libraries(${PROJECT_NAME}_unittest PRIVATE
+    ${PROJECT_NAME}_objs
+    ${PROJECT_NAME}_gen
+    userver::utest
+)
 add_google_tests(${PROJECT_NAME}_unittest)
 
 
@@ -98,7 +103,6 @@ add_google_tests(${PROJECT_NAME}_unittest)
 include(UserverTestsuite)
 
 userver_testsuite_add_simple()
-
 
 # Install
 include(GNUInstallDirs)

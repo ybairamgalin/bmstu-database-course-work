@@ -1,0 +1,7 @@
+HelloRequestBody:
+  type: object
+  additionalProperties: false
+  properties:
+    name:
+      type: string
+      nullable: true
