@@ -6,6 +6,7 @@
 
 #include <userver/clients/http/component.hpp>
 #include <userver/components/component.hpp>
+#include <userver/formats/json.hpp>
 #include <userver/formats/json_fwd.hpp>
 #include <userver/server/handlers/http_handler_json_base.hpp>
 #include <userver/storages/postgres/cluster.hpp>
@@ -31,7 +32,7 @@ userver::formats::json::Value ToJson(T&& value) {
 namespace handlers::v2 {
 
 template <typename RequestBody, typename ResponseBody>
-class BaseHandler : public userver::server::handlers::HttpHandlerJsonBase {
+class BaseHandler : public userver::server::handlers::HttpHandlerBase {
  public:
   using Request = http::Request<RequestBody>;
   using Response = http::Response<ResponseBody>;
@@ -42,13 +43,12 @@ class BaseHandler : public userver::server::handlers::HttpHandlerJsonBase {
 
   virtual Response Handle(Request&& request) const = 0;
 
-  userver::formats::json::Value HandleRequestJsonThrow(
+  std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
-      const userver::formats::json::Value& request_json,
       userver::server::request::RequestContext&) const final;
 
  private:
-  userver::formats::json::Value HandleRequestJsonThrowUnsafe(
+  std::optional<userver::formats::json::Value> HandleRequestJsonThrowUnsafe(
       const userver::server::http::HttpRequest& request,
       const userver::formats::json::Value& request_json,
       userver::server::request::RequestContext&) const;
@@ -61,27 +61,40 @@ template <typename RequestBody, typename ResponseBody>
 BaseHandler<RequestBody, ResponseBody>::BaseHandler(
     const userver::components::ComponentConfig& config,
     const userver::components::ComponentContext& context)
-    : HttpHandlerJsonBase(config, context),
+    : HttpHandlerBase(config, context),
       services_(di::InitFactories(config, context)) {}
 
 template <typename RequestBody, typename ResponseBody>
-userver::formats::json::Value
-BaseHandler<RequestBody, ResponseBody>::HandleRequestJsonThrow(
+std::string BaseHandler<RequestBody, ResponseBody>::HandleRequestThrow(
     const userver::server::http::HttpRequest& request,
-    const userver::formats::json::Value& request_json,
     userver::server::request::RequestContext& ctx) const {
+  auto& response = request.GetHttpResponse();
+  response.SetContentType(userver::http::content_type::kApplicationJson);
+
+  userver::formats::json::Value json;
   try {
-    return HandleRequestJsonThrowUnsafe(request, request_json, ctx);
+    json = userver::formats::json::FromString(request.RequestBody());
+  } catch (const std::exception& ex) {
+    return userver::formats::json::ToString(
+        ToJson(gen::ErrorResponse{400, ex.what()}));
+  }
+  try {
+    auto result = HandleRequestJsonThrowUnsafe(request, json, ctx);
+    if (!result.has_value()) {
+      return "";
+    }
+    return userver::formats::json::ToString(std::move(result.value()));
   } catch (const std::exception& ex) {
     LOG_ERROR() << fmt::format("Got unhandled exception: {}", ex.what());
   } catch (...) {
     LOG_ERROR() << fmt::format("Got unknown exception");
   }
-  return ToJson(gen::ErrorResponse{500, "Server error"});
+  return userver::formats::json::ToString(
+      ToJson(gen::ErrorResponse{500, "Server error"}));
 }
 
 template <typename RequestBody, typename ResponseBody>
-userver::formats::json::Value
+std::optional<userver::formats::json::Value>
 BaseHandler<RequestBody, ResponseBody>::HandleRequestJsonThrowUnsafe(
     const userver::server::http::HttpRequest& request,
     const userver::formats::json::Value& request_json,
@@ -120,7 +133,7 @@ BaseHandler<RequestBody, ResponseBody>::HandleRequestJsonThrowUnsafe(
   }
 
   if constexpr (std::is_same_v<ResponseBody, http::EmptyResponseBody>) {
-    return {};
+    return std::nullopt;
   } else {
     return ToJson(std::move(response.body));
   }

@@ -12,8 +12,21 @@ services::AuthData MapAuthData(const repository::AuthData& auth_data) {
     }
   }
 
-  return services::AuthData{auth_data.user_id, auth_data.login, auth_data.name,
-                            permissions};
+  services::AuthData result;
+  result.user_id = auth_data.user_id;
+  result.login = auth_data.login;
+  result.name = auth_data.name;
+  result.permissions = permissions;
+
+  if (auth_data.role == "admin") {
+    result.role = AuthRole::kAdmin;
+  } else if (auth_data.role == "moderator") {
+    result.role = AuthRole::kModerator;
+  } else {
+    result.role = AuthRole::kUser;
+  }
+
+  return result;
 }
 
 }  // namespace services::internal

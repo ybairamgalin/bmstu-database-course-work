@@ -17,7 +17,14 @@ RequestPost::Response RequestPost::Handle(
   auto auth_data =
       utils::AuthOrThrow(request.headers, services_->MakeAuthService());
 
-  services::Request request_creation_request;
+  LOG_ERROR() << "In handler : " << auth_data.user_id;
+
+  services::Request request_creation_request{};
+  request_creation_request.author_id = auth_data.user_id;
+
+  if (request.body.description.has_value()) {
+    request_creation_request.description = request.body.description.value();
+  }
   request_creation_request.event_id = request.body.event_id;
   request_creation_request.attachment_ids =
       std::move(request.body.attachment_ids);

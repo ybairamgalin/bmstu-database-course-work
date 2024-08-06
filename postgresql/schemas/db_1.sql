@@ -8,6 +8,7 @@ create table service.users(
     login text unique not null,
     name text not null,
     phone text unique not null,
+    role text not null default 'user',
     created_at timestamptz not null default now()
 );
 

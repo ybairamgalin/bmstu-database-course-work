@@ -18,14 +18,14 @@ void DbRequestsRepository::Insert(const repository::Request& request) {
 }
 
 void DbRequestsRepository::Update(const repository::Request& request) {
-  cluster_ptr_->Execute(
-      userver::storages::postgres::ClusterHostType::kMaster,
-      "update service.requests set "
-      "description = $2 "
-      "event_id = $3 "
-      "where request_id = $1 "
-      "description = excluded.description ",
-      request.request_id, request.description, request.event_id);
+  cluster_ptr_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                        "update service.requests set "
+                        "description = $2 "
+                        "event_id = $3 "
+                        "where request_id = $1 "
+                        "description = excluded.description ",
+                        request.request_id, request.description,
+                        request.event_id);
 }
 
 }  // namespace repository

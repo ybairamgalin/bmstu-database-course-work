@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "database/file_meta.hpp"
+#include "database/request.hpp"
 #include "database/user_data.hpp"
 #include "http/file_storage.hpp"
 #include "http/user_data.hpp"
@@ -16,7 +17,7 @@ SimpleRepositoryFactory::SimpleRepositoryFactory(
 
 std::unique_ptr<RequestsRepository>
 SimpleRepositoryFactory::MakeRequestsRepository() {
-  throw std::runtime_error("Not implemented");
+  return std::make_unique<DbRequestsRepository>(cluster_ptr_);
 }
 
 std::unique_ptr<UserDataRepository>

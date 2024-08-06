@@ -13,6 +13,9 @@ RequestPostBody:
       items:
         type: string
         format: uuid
+    description:
+      description: Description of request
+      type: string
 RequestPostResponse200:
   additionalProperties: false
   type: object

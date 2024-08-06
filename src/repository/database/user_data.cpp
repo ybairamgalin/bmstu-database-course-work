@@ -10,13 +10,19 @@ struct DbUser {
   std::string login;
   std::string name;
   std::string phone;
+  std::string role;
 };
 
 repository::AuthData MapToResponse(DbUser&& user,
                                    std::set<std::string>&& permission_groups) {
   return repository::AuthData{
-      user.yandex_id,       std::move(user.token), std::move(user.login),
-      std::move(user.name), std::move(user.phone), std::move(permission_groups),
+      user.yandex_id,
+      std::move(user.token),
+      std::move(user.login),
+      std::move(user.name),
+      std::move(user.phone),
+      std::move(user.role),
+      std::move(permission_groups),
   };
 }
 
@@ -31,7 +37,7 @@ DbUserDataRepository::DbUserDataRepository(
 std::optional<repository::AuthData> DbUserDataRepository::GetUserData(
     const std::string& token) {
   return GetUserDataByQuery(
-      "select yandex_id, token, login, name, phone "
+      "select yandex_id, token, login, name, phone, role "
       "from service.users "
       "where token = $1",
       token);
@@ -40,7 +46,7 @@ std::optional<repository::AuthData> DbUserDataRepository::GetUserData(
 std::optional<AuthData> DbUserDataRepository::GetUserDataByLogin(
     const std::string& login) {
   return GetUserDataByQuery(
-      "select yandex_id, token, login, name, phone "
+      "select yandex_id, token, login, name, phone, role "
       "from service.users "
       "where login = $1",
       login);
@@ -102,6 +108,7 @@ std::optional<repository::AuthData> DbUserDataRepository::GetUserDataByQuery(
     return std::nullopt;
   }
   auto permissions = GetPermissions(db_user->yandex_id);
+  LOG_ERROR() << "Got user data: " << db_user->yandex_id;
 
   return MapToResponse(std::move(db_user.value()), std::move(permissions));
 }

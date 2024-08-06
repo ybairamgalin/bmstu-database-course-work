@@ -16,6 +16,7 @@ struct AuthData {
   std::string login;
   std::string name;
   std::string phone;
+  std::string role;
   std::set<std::string> permission_group;
 };
 
