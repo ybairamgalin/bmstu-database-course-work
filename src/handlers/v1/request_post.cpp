@@ -1,8 +1,10 @@
 #include "request_post.hpp"
 
+#include <gen/handlers/request_post.hpp>
+
 #include <userver/formats/json.hpp>
 
-#include "../services/auth/yandex_auth.hpp"
+#include "../../services/auth/yandex_auth.hpp"
 #include "utils/uuid.hpp"
 
 namespace handlers {
@@ -15,6 +17,8 @@ userver::formats::json::Value RequestPost::Handle(
     const userver::server::http::HttpRequest& request,
     const userver::formats::json::Value& request_json,
     const services::AuthData& user_data) const {
+  auto req = gen::Parse(
+      request_json, userver::formats::parse::To<gen::RequestPostBody>());
   userver::formats::json::ValueBuilder builder;
 
   services::Request mapped_request{};

@@ -4,10 +4,10 @@
 
 #include <userver/server/http/http_status.hpp>
 
-#include "../services/auth/yandex_auth.hpp"
-#include "../services/exception.hpp"
+#include "../../services/auth/yandex_auth.hpp"
+#include "../../services/exception.hpp"
 
-#include "../repository/factory.hpp"
+#include "../../repository/factory.hpp"
 
 namespace {
 

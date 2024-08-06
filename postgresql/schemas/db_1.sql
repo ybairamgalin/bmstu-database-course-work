@@ -11,6 +11,14 @@ create table service.users(
     created_at timestamptz not null default now()
 );
 
+create table service.permissions(
+    slug text not null,
+    user_id bigint not null references service.users(yandex_id),
+    created_at timestamptz not null default now(),
+
+    primary key (user_id, slug)
+);
+
 create table service.events(
     event_id bigserial not null primary key,
     name text not null

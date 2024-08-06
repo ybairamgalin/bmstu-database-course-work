@@ -15,8 +15,7 @@ class DbUserDataRepository : public UserDataRepository {
 
   std::optional<repository::AuthData> GetUserData(
       const std::string& token) override;
-  std::optional<AuthData> GetUserDataByLogin(
-      const std::string& login) override;
+  std::optional<AuthData> GetUserDataByLogin(const std::string& login) override;
 
   void SaveUserData(const repository::AuthData&) override;
 

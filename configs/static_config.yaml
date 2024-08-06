@@ -53,6 +53,10 @@ components_manager:
             path: /v1/request
             method: POST
             task_processor: main-task-processor
+        v2_request_post:
+            path: /v2/request
+            method: POST
+            task_processor: main-task-processor
         manage_access_post:
             path: /v1/manage/access
             method: POST

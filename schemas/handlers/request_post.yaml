@@ -1,7 +1,24 @@
-HelloRequestBody:
+RequestPostBody:
   type: object
   additionalProperties: false
+  required:
+    - event_id
+    - attachment_ids
   properties:
-    name:
+    event_id:
+      description: Related event id
+      type: integer
+    attachment_ids:
+      type: array
+      items:
+        type: string
+        format: uuid
+RequestPostResponse200:
+  additionalProperties: false
+  type: object
+  required:
+    - request_id
+  properties:
+    request_id:
       type: string
-      nullable: true
+      format: uuid

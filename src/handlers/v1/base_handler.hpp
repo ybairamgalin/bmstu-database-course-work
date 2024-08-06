@@ -7,8 +7,8 @@
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 
-#include "../repository/factory.hpp"
-#include "../services/factory.hpp"
+#include "../../repository/factory.hpp"
+#include "../../services/factory.hpp"
 
 namespace handlers {
 

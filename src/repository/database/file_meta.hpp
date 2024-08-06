@@ -14,7 +14,8 @@ class DbMetaRepository : public FileMetaRepository {
   void UpsertFileMeta(const repository::FileMeta&) override;
   std::optional<FileMeta> GetFileMetaByHash(const std::string& hash) override;
   std::vector<FileMeta> GetFileMetaByRequestId(int64_t request_id) override;
-  std::optional<FileMeta> GetFileMetaByFileUuid(const boost::uuids::uuid &uuid) override;
+  std::optional<FileMeta> GetFileMetaByFileUuid(
+      const boost::uuids::uuid& uuid) override;
 
  private:
   userver::storages::postgres::ClusterPtr cluster_ptr_;

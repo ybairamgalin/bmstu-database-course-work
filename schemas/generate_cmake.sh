@@ -7,6 +7,7 @@ FILES="$(find -E src/gen -regex ".*(hpp|cpp|ipp)" -type f)"
 CMAKE_CONTENT+="$FILES"
 
 CMAKE_CONTENT+=$')\n'
-CMAKE_CONTENT+=$'target_link_libraries(${PROJECT_NAME}_gen PUBLIC userver::postgresql)'
+CMAKE_CONTENT+=$'target_link_libraries(${PROJECT_NAME}_gen PUBLIC userver::postgresql userver::chaotic)\n'
+CMAKE_CONTENT+=$'target_include_directories(${PROJECT_NAME}_gen PUBLIC src/gen)'
 
 echo "$CMAKE_CONTENT" > src/gen/CMakeLists.txt

@@ -76,7 +76,7 @@ format:
 		--config_vars /home/user/.local/etc/pg_service_template/config_vars.docker.yaml
 
 # Build and run service in docker environment
-.PHONY: docker-start-service-debug docker-start-service-release
+.PHONY: docker-start-service-debug docker-start-service-releasem
 docker-start-service-debug docker-start-service-release: docker-start-service-%:
 	$(DOCKER_COMPOSE) run -p 8080:8080 --rm pg_service_template-container make -- --in-docker-start-$*
 
@@ -87,14 +87,16 @@ docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docke
 
 .PHONY: gen
 gen:
+	mkdir -p src/gen && \
+	rm -rf src/gen/* && \
 	docker run --rm -it --network ip6net \
 		--mount type=bind,source=./schemas,target=/etc/schemas \
 		--mount type=bind,source=./src/gen,target=/gen \
 		-w /etc/schemas \
 		ghcr.io/userver-framework/ubuntu-22.04-userver-pg:latest \
 		bash run_codegen.sh && \
-		find src/gen -type f -exec $(CLANG_FORMAT) -i {} + && \
-		bash schemas/generate_cmake.sh
+	find src/gen -type f -exec $(CLANG_FORMAT) -i {} + && \
+	bash schemas/generate_cmake.sh
 
 # Stop docker container and remove PG data
 .PHONY: docker-clean-data

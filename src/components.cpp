@@ -7,8 +7,9 @@
 #include <userver/server/handlers/tests_control.hpp>
 #include <userver/testsuite/testsuite_support.hpp>
 
-#include "handlers/request_post.hpp"
-#include "handlers/manage_access_post.hpp"
+#include "handlers/v1/manage_access_post.hpp"
+#include "handlers/v1/request_post.hpp"
+#include "handlers/v2/request_post.hpp"
 
 userver::components::ComponentList MakeComponents() {
   return userver::components::MinimalServerComponentList()
@@ -21,5 +22,6 @@ userver::components::ComponentList MakeComponents() {
       .Append<userver::components::Postgres>("postgres-db-1")
       // handlers
       .Append<handlers::RequestPost>()
-      .Append<handlers::ManageAccessPost>();
+      .Append<handlers::ManageAccessPost>()
+      .Append<handlers::v2::RequestPost>();
 }

@@ -28,8 +28,8 @@ userver_setup_environment()
 add_library(${PROJECT_NAME}_objs OBJECT
     src/components.hpp
     src/components.cpp
-    src/handlers/request_post.hpp
-    src/handlers/request_post.cpp
+    src/handlers/v1/request_post.hpp
+    src/handlers/v1/request_post.cpp
     src/services/auth_service.hpp
     src/repository/user_data_repository.hpp
     src/repository/database/user_data.hpp
@@ -38,10 +38,10 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/repository/database/user_data.cpp
     src/repository/http/user_data.hpp
     src/repository/http/user_data.cpp
-    src/handlers/base_handler.hpp
-    src/handlers/base_handler.cpp
-    src/handlers/manage_access_post.hpp
-    src/handlers/manage_access_post.cpp
+    src/handlers/v1/base_handler.hpp
+    src/handlers/v1/base_handler.cpp
+    src/handlers/v1/manage_access_post.hpp
+    src/handlers/v1/manage_access_post.cpp
     src/services/idm_service.hpp
     src/services/models/permission.hpp
     src/services/idm/idm.hpp
@@ -74,6 +74,15 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/services/exception.cpp
     src/utils/uuid.hpp
     src/utils/uuid.cpp
+    src/handlers/v2/handler.hpp
+    src/http/request.hpp
+    src/http/response.hpp
+    src/handlers/v2/request_post.hpp
+    src/handlers/v2/request_post.cpp
+    src/di/init.hpp
+    src/di/init.cpp
+    src/utils/auth.hpp
+        src/http/exception.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 target_include_directories(${PROJECT_NAME}_objs PUBLIC src)
@@ -97,7 +106,6 @@ target_link_libraries(${PROJECT_NAME}_unittest PRIVATE
     userver::utest
 )
 add_google_tests(${PROJECT_NAME}_unittest)
-
 
 # Functional Tests
 include(UserverTestsuite)
