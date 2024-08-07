@@ -1,6 +1,7 @@
 #include "factory.hpp"
 
 #include "auth/yandex_auth.hpp"
+#include "event/event.hpp"
 #include "idm/idm.hpp"
 #include "request_management/request_management.hpp"
 
@@ -21,6 +22,10 @@ std::unique_ptr<IIdmService> SimpleServiceFactory::MakeIdmService() {
 std::unique_ptr<IRequestManagementService>
 SimpleServiceFactory::MakeRequestManagementService() {
   return std::make_unique<RequestManagementService>(repository_factory_);
+}
+
+std::unique_ptr<IEventService> SimpleServiceFactory::MakeEventService() {
+  return std::make_unique<EventService>(repository_factory_);
 }
 
 }  // namespace services

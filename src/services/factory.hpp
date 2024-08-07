@@ -7,6 +7,7 @@
 
 #include "../repository/factory.hpp"
 #include "auth_service.hpp"
+#include "event_service.hpp"
 #include "idm_service.hpp"
 #include "request_management_service.hpp"
 
@@ -19,6 +20,7 @@ class IServiceFactory {
   virtual std::unique_ptr<IAuthService> MakeAuthService() = 0;
   virtual std::unique_ptr<IRequestManagementService>
   MakeRequestManagementService() = 0;
+  virtual std::unique_ptr<IEventService> MakeEventService() = 0;
 };
 
 class SimpleServiceFactory : public IServiceFactory {
@@ -29,6 +31,7 @@ class SimpleServiceFactory : public IServiceFactory {
   std::unique_ptr<IAuthService> MakeAuthService() override;
   std::unique_ptr<IRequestManagementService> MakeRequestManagementService()
       override;
+  std::unique_ptr<IEventService> MakeEventService() override;
 
  private:
   std::shared_ptr<repository::IRepositoryFactory> repository_factory_;

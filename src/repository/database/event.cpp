@@ -13,12 +13,20 @@ std::vector<Event> DbEventRepository::GetEventsByIds(
     const std::vector<boost::uuids::uuid>& event_ids) {
   auto result = cluster_ptr_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
-      "select event_id, name "
+      "select event_id, name, description "
       "from service.events "
       "where event_id in (select unnest($1))",
       event_ids);
   return result.AsContainer<std::vector<Event>>(
       userver::storages::postgres::kRowTag);
+}
+
+void DbEventRepository::AddEvent(const Event& event) {
+  cluster_ptr_->Execute(
+      userver::storages::postgres::ClusterHostType::kMaster,
+      "insert into service.events (event_id, name, description) "
+      "values ($1, $2, $3)",
+      event.uuid, event.name, event.description);
 }
 
 }  // namespace repository

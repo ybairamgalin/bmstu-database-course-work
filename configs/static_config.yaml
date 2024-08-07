@@ -61,6 +61,10 @@ components_manager:
             path: /v2/request
             method: GET
             task_processor: main-task-processor
+        v2_event_post:
+            path: /v2/event
+            method: POST
+            task_processor: main-task-processor
 
         manage_access_post:
             path: /v1/manage/access

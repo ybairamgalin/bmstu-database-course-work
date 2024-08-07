@@ -23,6 +23,7 @@ create table service.permissions(
 create table service.events(
     event_id uuid not null primary key,
     name text not null,
+    description text not null default '',
     created_at timestamptz not null default now()
 );
 

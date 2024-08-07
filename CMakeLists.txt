@@ -91,6 +91,11 @@ add_library(${PROJECT_NAME}_objs OBJECT
         src/http/query.hpp
         src/utils/meta.hpp
         src/http/query.cpp
+        src/handlers/v2/event.post.cpp
+        src/handlers/v2/event_post.hpp
+        src/services/event_service.hpp
+        src/services/event/event.cpp
+        src/services/event/event.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 target_include_directories(${PROJECT_NAME}_objs PUBLIC src)
