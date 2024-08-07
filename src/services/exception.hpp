@@ -17,6 +17,7 @@ class ServiceLevelException : public std::runtime_error {
   explicit ServiceLevelException(const std::string& text,
                                  ErrorType error_type = ErrorType::kNotFound);
   [[nodiscard]] ErrorType GetErrorType() const;
+  [[nodiscard]] int GetStatusCode() const;
 
  private:
   ErrorType error_type;

@@ -26,6 +26,7 @@ class UserDataRepository {
   virtual std::optional<AuthData> GetUserData(const std::string& token) = 0;
   virtual std::optional<AuthData> GetUserDataByLogin(
       const std::string& login) = 0;
+  virtual std::optional<AuthData> GetUserDataById(int64_t id) = 0;
   virtual void SaveUserData(const AuthData&) = 0;
 };
 

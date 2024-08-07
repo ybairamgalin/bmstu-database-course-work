@@ -83,9 +83,19 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/di/init.cpp
     src/utils/auth.hpp
         src/http/exception.hpp
+        src/repository/event_repository.hpp
+        src/repository/database/event.cpp
+        src/repository/database/event.hpp
+        src/handlers/v2/request_get.cpp
+        src/handlers/v2/request_get.hpp
+        src/http/query.hpp
+        src/utils/meta.hpp
+        src/http/query.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 target_include_directories(${PROJECT_NAME}_objs PUBLIC src)
+
+target_include_directories(${PROJECT_NAME}_objs PUBLIC src/gen)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/gen/CMakeLists.txt)
 

@@ -6,12 +6,12 @@
 namespace handlers::v2 {
 
 class RequestPost
-    : public BaseHandler<gen::RequestPostBody, http::EmptyResponseBody> {
+    : public BaseHandler<gen::RequestPostBody, gen::RequestPostResponse200> {
  public:
   static constexpr std::string_view kName = "v2_request_post";
 
-  using BaseHandler<gen::RequestPostBody, http::EmptyResponseBody>::Request;
-  using BaseHandler<gen::RequestPostBody, http::EmptyResponseBody>::Response;
+  using BaseHandler<gen::RequestPostBody, gen::RequestPostResponse200>::Request;
+  using BaseHandler<gen::RequestPostBody, gen::RequestPostResponse200>::Response;
 
   RequestPost(const userver::components::ComponentConfig& config,
               const userver::components::ComponentContext& context);

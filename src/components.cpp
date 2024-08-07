@@ -9,6 +9,7 @@
 
 #include "handlers/v1/manage_access_post.hpp"
 #include "handlers/v1/request_post.hpp"
+#include "handlers/v2/request_get.hpp"
 #include "handlers/v2/request_post.hpp"
 
 userver::components::ComponentList MakeComponents() {
@@ -23,5 +24,6 @@ userver::components::ComponentList MakeComponents() {
       // handlers
       .Append<handlers::RequestPost>()
       .Append<handlers::ManageAccessPost>()
-      .Append<handlers::v2::RequestPost>();
+      .Append<handlers::v2::RequestPost>()
+      .Append<handlers::v2::RequestGet>();
 }

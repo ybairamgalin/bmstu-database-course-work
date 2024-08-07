@@ -21,13 +21,14 @@ create table service.permissions(
 );
 
 create table service.events(
-    event_id bigserial not null primary key,
-    name text not null
+    event_id uuid not null primary key,
+    name text not null,
+    created_at timestamptz not null default now()
 );
 
 create table service.requests(
-    request_id bigserial not null primary key,
-    event_id bigint not null references service.events(event_id),
+    request_id uuid not null primary key,
+    event_id uuid not null references service.events(event_id),
     user_id bigint not null references service.users(yandex_id),
     description text not null,
     status text not null default 'new',
@@ -43,7 +44,7 @@ create table service.file_meta(
 );
 
 create table service.request_file(
-    request_id bigint not null references service.requests(request_id),
+    request_id uuid not null references service.requests(request_id),
     file_uuid uuid not null references service.file_meta(uuid),
 
     primary key (request_id, file_uuid)
@@ -51,7 +52,7 @@ create table service.request_file(
 
 create table service.comments(
     comment_id bigserial not null primary key,
-    request_id bigint not null references service.requests(request_id),
+    request_id uuid not null references service.requests(request_id),
     author_id bigint not null references service.users(yandex_id),
     content text not null,
     created_at timestamptz not null default now()
@@ -75,7 +76,7 @@ create table service.articles(
     article_id bigserial not null primary key,
     description text,
     author_id bigint not null references service.users(yandex_id),
-    event_id bigint not null references service.events(event_id),
+    event_id uuid not null references service.events(event_id),
     created_at timestamptz not null default now()
 );
 

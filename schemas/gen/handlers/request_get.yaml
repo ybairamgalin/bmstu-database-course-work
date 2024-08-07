@@ -1,27 +1,30 @@
-RequestPostBody:
+RequestGetResponse200:
   type: object
   additionalProperties: false
   required:
     - event_id
     - attachment_ids
+    - user
+    - description
+    - created_at
+    - updated_at
   properties:
     event_id:
       description: Related event id
-      type: integer
+      type: string
+      format: uuid
     attachment_ids:
       type: array
       items:
         type: string
         format: uuid
+    user:
+      $ref: "/etc/schemas/gen/common.yaml#/UserFullInfo"
     description:
-      description: Description of request
       type: string
-RequestPostResponse200:
-  additionalProperties: false
-  type: object
-  required:
-    - request_id
-  properties:
-    request_id:
+    created_at:
       type: string
-      format: uuid
+      format: date-time
+    updated_at:
+      type: string
+      format: date-time

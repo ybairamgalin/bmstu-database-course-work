@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "database/event.hpp"
 #include "database/file_meta.hpp"
 #include "database/request.hpp"
 #include "database/user_data.hpp"
@@ -38,6 +39,11 @@ SimpleRepositoryFactory::MakeFileMetaRepository() {
 std::unique_ptr<FileStorageRepository>
 SimpleRepositoryFactory::MakeFileStorageRepository() {
   return std::make_unique<YandexS3FileStorage>(http_client_);
+}
+
+std::unique_ptr<EventRepository>
+SimpleRepositoryFactory::MakeEventsRepository() {
+  return std::make_unique<DbEventRepository>(cluster_ptr_);
 }
 
 }  // namespace repository

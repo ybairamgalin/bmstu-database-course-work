@@ -122,5 +122,12 @@ std::set<std::string> DbUserDataRepository::GetPermissions(int64_t user_id) {
       user_id);
   return result_permissions.AsContainer<std::set<std::string>>();
 }
+std::optional<AuthData> DbUserDataRepository::GetUserDataById(int64_t id) {
+  return GetUserDataByQuery(
+      "select yandex_id, token, login, name, phone, role "
+      "from service.users "
+      "where yandex_id = $1",
+      id);
+}
 
 }  // namespace repository

@@ -9,17 +9,15 @@ namespace handlers::v2 {
 
 RequestPost::RequestPost(const userver::components::ComponentConfig& config,
                          const userver::components::ComponentContext& context)
-    : BaseHandler<gen::RequestPostBody, http::EmptyResponseBody>(config,
-                                                                 context) {}
+    : BaseHandler<gen::RequestPostBody, gen::RequestPostResponse200>(config,
+                                                                     context) {}
 
 RequestPost::Response RequestPost::Handle(
     RequestPost::Request&& request) const {
   auto auth_data =
       utils::AuthOrThrow(request.headers, services_->MakeAuthService());
 
-  LOG_ERROR() << "In handler : " << auth_data.user_id;
-
-  services::Request request_creation_request{};
+  services::RequestToCreateOrUpdate request_creation_request{};
   request_creation_request.author_id = auth_data.user_id;
 
   if (request.body.description.has_value()) {
@@ -29,10 +27,10 @@ RequestPost::Response RequestPost::Handle(
   request_creation_request.attachment_ids =
       std::move(request.body.attachment_ids);
 
-  services_->MakeRequestManagementService()->AddRequest(
+  auto uuid = services_->MakeRequestManagementService()->AddRequest(
       request_creation_request);
 
-  return Response{201, {}};
+  return Response{gen::RequestPostResponse200{std::move(uuid)}, 201, {}};
 }
 
 }  // namespace handlers::v2

@@ -22,14 +22,13 @@ userver::formats::json::Value RequestPost::Handle(
   userver::formats::json::ValueBuilder builder;
 
   services::Request mapped_request{};
-  mapped_request.author_id = user_data.user_id;
 
   if (!request_json.HasMember("event_id") ||
       !request_json["event_id"].IsInt()) {
     request.SetResponseStatus(userver::server::http::HttpStatus::kBadRequest);
     builder["message"] = "Event id should be specified";
   }
-  mapped_request.event_id = request_json["event_id"].As<int64_t>();
+//  mapped_request.event_id = request_json["event_id"].As<int64_t>();
 
   if (request_json.HasMember("attachment_ids") &&
       request_json["attachment_ids"].IsArray()) {
@@ -46,12 +45,12 @@ userver::formats::json::Value RequestPost::Handle(
   }
 
   if (request_json.HasMember("id") && request_json["id"].IsInt()) {
-    mapped_request.request_id = request_json["id"].As<int64_t>();
-    service_factory_->MakeRequestManagementService()->UpdateRequest(
-        mapped_request);
+//    mapped_request.request_id = request_json["id"].As<int64_t>();
+//    service_factory_->MakeRequestManagementService()->UpdateRequest(
+//        mapped_request);
   } else {
-    service_factory_->MakeRequestManagementService()->AddRequest(
-        mapped_request);
+//    service_factory_->MakeRequestManagementService()->AddRequest(
+//        mapped_request);
   }
 
   return builder.ExtractValue();

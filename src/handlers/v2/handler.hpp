@@ -14,9 +14,11 @@
 
 #include "di/init.hpp"
 #include "gen/common.hpp"
+#include "gen/handlers/request_post.hpp"
 #include "http/exception.hpp"
 #include "http/request.hpp"
 #include "http/response.hpp"
+#include "services/exception.hpp"
 #include "services/factory.hpp"
 
 namespace {
@@ -72,11 +74,13 @@ std::string BaseHandler<RequestBody, ResponseBody>::HandleRequestThrow(
   response.SetContentType(userver::http::content_type::kApplicationJson);
 
   userver::formats::json::Value json;
-  try {
-    json = userver::formats::json::FromString(request.RequestBody());
-  } catch (const std::exception& ex) {
-    return userver::formats::json::ToString(
-        ToJson(gen::ErrorResponse{400, ex.what()}));
+  if constexpr (!std::is_same_v<RequestBody, http::EmptyRequestBody>) {
+    try {
+      json = userver::formats::json::FromString(request.RequestBody());
+    } catch (const std::exception& ex) {
+      return userver::formats::json::ToString(
+          ToJson(gen::ErrorResponse{400, ex.what()}));
+    }
   }
   try {
     auto result = HandleRequestJsonThrowUnsafe(request, json, ctx);
@@ -130,6 +134,10 @@ BaseHandler<RequestBody, ResponseBody>::HandleRequestJsonThrowUnsafe(
   } catch (const http::HttpException& ex) {
     request.SetResponseStatus(userver::server::http::HttpStatus(ex.Get().code));
     return ToJson(ex.Get());
+  } catch (const services::ServiceLevelException& ex) {
+    request.SetResponseStatus(
+        userver::server::http::HttpStatus(ex.GetStatusCode()));
+    return ToJson(gen::ErrorResponse{ex.GetStatusCode(), ex.what()});
   }
 
   if constexpr (std::is_same_v<ResponseBody, http::EmptyResponseBody>) {

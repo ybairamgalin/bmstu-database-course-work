@@ -10,6 +10,8 @@ class DbRequestsRepository : public RequestsRepository {
  public:
   explicit DbRequestsRepository(
       userver::storages::postgres::ClusterPtr cluster_ptr);
+  std::vector<RequestFull> GetRequestsByIds(
+      const std::vector<boost::uuids::uuid>& uuids) override;
   void Insert(const repository::Request& request) override;
   void Update(const repository::Request& request) override;
 

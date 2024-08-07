@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "event_repository.hpp"
 #include "file_meta_repository.hpp"
 #include "file_storage_repository.hpp"
 #include "requests_repository.hpp"
@@ -16,6 +17,7 @@ class IRepositoryFactory {
   virtual std::unique_ptr<UserDataRepository> MakeUserDataDbRepository() = 0;
   virtual std::unique_ptr<UserDataRepository> MakeUserDataHttpRepository() = 0;
   virtual std::unique_ptr<FileMetaRepository> MakeFileMetaRepository() = 0;
+  virtual std::unique_ptr<EventRepository> MakeEventsRepository() = 0;
   virtual std::unique_ptr<FileStorageRepository>
   MakeFileStorageRepository() = 0;
 };
@@ -29,6 +31,7 @@ class SimpleRepositoryFactory : public IRepositoryFactory {
   std::unique_ptr<UserDataRepository> MakeUserDataHttpRepository() override;
   std::unique_ptr<FileMetaRepository> MakeFileMetaRepository() override;
   std::unique_ptr<FileStorageRepository> MakeFileStorageRepository() override;
+  std::unique_ptr<EventRepository> MakeEventsRepository() override;
 
  private:
   userver::clients::http::Client& http_client_;

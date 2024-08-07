@@ -12,10 +12,16 @@ class RequestManagementService : public IRequestManagementService {
   explicit RequestManagementService(
       const std::shared_ptr<repository::IRepositoryFactory>&
           repository_factory);
-  void AddRequest(const services::Request& request) override;
-  void UpdateRequest(const services::Request& request) override;
+  Request GetRequestById(const boost::uuids::uuid &request_id) override;
+  boost::uuids::uuid AddRequest(
+      const services::RequestToCreateOrUpdate& request) override;
+  void UpdateRequest(const boost::uuids::uuid& request_id,
+                     const services::RequestToCreateOrUpdate& request) override;
+
  private:
   std::unique_ptr<repository::RequestsRepository> request_repository_;
+  std::unique_ptr<repository::EventRepository> event_repository_;
+  std::unique_ptr<repository::UserDataRepository> user_data_repository_;
 };
 
 }  // namespace services
