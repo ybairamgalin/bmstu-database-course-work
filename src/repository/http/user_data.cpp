@@ -52,8 +52,9 @@ std::optional<AuthData> YandexLoginDataProvider::GetUserDataByLogin(
 }
 
 void YandexLoginDataProvider::SaveUserData(const AuthData&) {}
-std::optional<AuthData> YandexLoginDataProvider::GetUserDataById(int64_t) {
-  return std::nullopt;
+std::vector<AuthData> YandexLoginDataProvider::GetUserDataByIds(
+    const std::vector<int64_t>& id) {
+  return {};
 }
 
 }  // namespace repository

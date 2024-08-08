@@ -6,6 +6,7 @@ RequestGetResponse200:
     - attachment_ids
     - user
     - description
+    - comments
     - created_at
     - updated_at
   properties:
@@ -22,9 +23,29 @@ RequestGetResponse200:
       $ref: "/etc/schemas/gen/common.yaml#/UserFullInfo"
     description:
       type: string
+    comments:
+      type: array
+      items:
+        $ref: "#/RequestComment"
     created_at:
       type: string
       format: date-time
     updated_at:
+      type: string
+      format: date-time
+
+RequestComment:
+  type: object
+  additionalProperties: false
+  required:
+    - content
+    - author
+    - created_at
+  properties:
+    content:
+      type: string
+    author:
+      $ref: "/etc/schemas/gen/common.yaml#/UserFullInfo"
+    created_at:
       type: string
       format: date-time

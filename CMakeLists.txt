@@ -96,6 +96,10 @@ add_library(${PROJECT_NAME}_objs OBJECT
         src/services/event_service.hpp
         src/services/event/event.cpp
         src/services/event/event.hpp
+        src/handlers/v2/request_comment_post.hpp
+        src/handlers/v2/request_comment_post.cpp
+        src/utils/auth.cpp
+        src/utils/map.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 target_include_directories(${PROJECT_NAME}_objs PUBLIC src)

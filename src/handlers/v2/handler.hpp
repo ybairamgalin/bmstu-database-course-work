@@ -14,6 +14,7 @@
 
 #include "di/init.hpp"
 #include "gen/common.hpp"
+#include "gen/handlers/request_comment_post.hpp"
 #include "gen/handlers/request_post.hpp"
 #include "http/exception.hpp"
 #include "http/request.hpp"

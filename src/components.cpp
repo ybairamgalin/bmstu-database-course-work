@@ -10,6 +10,7 @@
 #include "handlers/v1/manage_access_post.hpp"
 #include "handlers/v1/request_post.hpp"
 #include "handlers/v2/event_post.hpp"
+#include "handlers/v2/request_comment_post.hpp"
 #include "handlers/v2/request_get.hpp"
 #include "handlers/v2/request_post.hpp"
 
@@ -27,5 +28,6 @@ userver::components::ComponentList MakeComponents() {
       .Append<handlers::ManageAccessPost>()
       .Append<handlers::v2::RequestPost>()
       .Append<handlers::v2::RequestGet>()
-      .Append<handlers::v2::EventPost>();
+      .Append<handlers::v2::EventPost>()
+      .Append<handlers::v2::RequestCommentPost>();
 }

@@ -18,12 +18,18 @@ struct Request {
   std::vector<boost::uuids::uuid> attachment_ids;
 };
 
+struct RequestComment {
+  std::string content;
+  int64_t author_id;
+  userver::storages::postgres::TimePointTz created_at;
+};
+
 struct RequestFull {
   boost::uuids::uuid request_id;
   boost::uuids::uuid event_id;
   int64_t author_id;
   std::string description;
-  //  std::vector<boost::uuids::uuid> attachment_ids;
+  std::vector<RequestComment> comments;
   userver::storages::postgres::TimePointTz created_at;
   userver::storages::postgres::TimePointTz updated_at;
 };
@@ -31,11 +37,12 @@ struct RequestFull {
 class RequestsRepository {
  public:
   virtual ~RequestsRepository() = default;
-  virtual std::vector<RequestFull> GetRequestsByIds(
-      const std::vector<boost::uuids::uuid>& uuids) = 0;
-  //  virtual Request
+  virtual std::optional<RequestFull> GetRequestById(
+      const boost::uuids::uuid& uuid) = 0;
   virtual void Insert(const Request& request) = 0;
   virtual void Update(const Request& request) = 0;
+  virtual void AddComment(const boost::uuids::uuid& id,
+                          const std::string& content, int64_t author_id) = 0;
 };
 
 }  // namespace repository

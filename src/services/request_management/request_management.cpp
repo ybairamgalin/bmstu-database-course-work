@@ -5,6 +5,15 @@
 #include <boost/uuid/uuid_generators.hpp>
 
 #include "services/exception.hpp"
+#include "utils/map.hpp"
+
+namespace {
+
+services::UserInfo MapUser(const repository::AuthData& user) {
+  return services::UserInfo{user.user_id, user.name, user.login, user.phone};
+}
+
+}  // namespace
 
 namespace services {
 
@@ -16,28 +25,44 @@ RequestManagementService::RequestManagementService(
 
 Request RequestManagementService::GetRequestById(
     const boost::uuids::uuid& request_id) {
-  auto requests = request_repository_->GetRequestsByIds({request_id});
-  if (requests.empty()) {
+  auto request_opt = request_repository_->GetRequestById(request_id);
+  if (!request_opt) {
     throw ServiceLevelException("Request not found");
   }
-  auto& request = requests.front();
-  auto user = user_data_repository_->GetUserDataById(request.author_id);
-  if (!user.has_value()) {
-    throw std::runtime_error("User not found but is referenced in other table");
+  auto& request = request_opt.value();
+
+  std::vector<int64_t> user_ids_to_request;
+  user_ids_to_request.emplace_back(request.author_id);
+  for (const auto& comment : request.comments) {
+    user_ids_to_request.emplace_back(comment.author_id);
   }
 
-  Request result{};
-  result.author.name = user.value().name;
-  result.author.login = user.value().login;
-  result.author.id = user.value().user_id;
-  result.author.phone = user.value().phone;
+  auto user_id_to_user = utils::AsMap(
+      user_data_repository_->GetUserDataByIds(user_ids_to_request),
+      [](const repository::AuthData& elem) -> int64_t { return elem.user_id; });
 
+  if (!user_id_to_user.count(request.author_id)) {
+    throw std::runtime_error("Author is references but not found");
+  }
+  Request result{};
+
+  result.author = MapUser(user_id_to_user.at(request.author_id));
   result.event_id = request.event_id;
   result.description = request.description;
   result.created_at =
       userver::utils::datetime::TimePointTz{request.created_at.GetUnderlying()};
   result.updated_at =
       userver::utils::datetime::TimePointTz{request.updated_at.GetUnderlying()};
+
+  for (const auto& comment : request.comments) {
+    if (!user_id_to_user.count(comment.author_id)) {
+      throw std::runtime_error("Comment author is references but not found");
+    }
+    result.comments.emplace_back(services::RequestComment{
+        comment.content, MapUser(user_id_to_user.at(comment.author_id)),
+        userver::utils::datetime::TimePointTz{
+            comment.created_at.GetUnderlying()}});
+  }
 
   return result;
 }
@@ -65,6 +90,16 @@ void RequestManagementService::UpdateRequest(
       request.description, request.attachment_ids,
   };
   request_repository_->Update(db_request);
+}
+
+void RequestManagementService::AddComment(const boost::uuids::uuid& request_id,
+                                          const std::string& content,
+                                          int64_t author_id) {
+  auto request_opt = request_repository_->GetRequestById(request_id);
+  if (!request_opt.has_value()) {
+    throw ServiceLevelException("Request does not exist");
+  }
+  request_repository_->AddComment(request_id, content, author_id);
 }
 
 }  // namespace services

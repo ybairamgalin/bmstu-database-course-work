@@ -13,7 +13,8 @@ class DbUserDataRepository : public UserDataRepository {
  public:
   DbUserDataRepository(userver::storages::postgres::ClusterPtr cluster_ptr);
 
-  std::optional<AuthData> GetUserDataById(int64_t id) override;
+  std::vector<AuthData> GetUserDataByIds(
+      const std::vector<int64_t>& ids) override;
   std::optional<repository::AuthData> GetUserData(
       const std::string& token) override;
   std::optional<AuthData> GetUserDataByLogin(const std::string& login) override;

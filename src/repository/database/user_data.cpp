@@ -122,12 +122,22 @@ std::set<std::string> DbUserDataRepository::GetPermissions(int64_t user_id) {
       user_id);
   return result_permissions.AsContainer<std::set<std::string>>();
 }
-std::optional<AuthData> DbUserDataRepository::GetUserDataById(int64_t id) {
-  return GetUserDataByQuery(
-      "select yandex_id, token, login, name, phone, role "
-      "from service.users "
-      "where yandex_id = $1",
-      id);
+std::vector<AuthData> DbUserDataRepository::GetUserDataByIds(
+    const std::vector<int64_t>& ids) {
+  auto users =
+      cluster_ptr_
+          ->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                    "select yandex_id, token, login, name, phone, role "
+                    "from service.users "
+                    "where yandex_id in (select unnest($1))",
+                    ids)
+          .AsContainer<std::vector<DbUser>>(
+              userver::storages::postgres::kRowTag);
+  std::vector<AuthData> result;
+  for (auto&& user : users) {
+    result.emplace_back(MapToResponse(std::move(user), {}));
+  }
+  return result;
 }
 
 }  // namespace repository
