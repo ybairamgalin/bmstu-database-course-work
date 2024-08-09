@@ -12,10 +12,12 @@
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 
-#include "di/init.hpp"
 #include "gen/common.hpp"
+#include "gen/handlers/manage_access_put.hpp"
 #include "gen/handlers/request_comment_post.hpp"
 #include "gen/handlers/request_post.hpp"
+
+#include "di/init.hpp"
 #include "http/exception.hpp"
 #include "http/request.hpp"
 #include "http/response.hpp"

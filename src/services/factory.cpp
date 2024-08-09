@@ -3,6 +3,7 @@
 #include "auth/yandex_auth.hpp"
 #include "event/event.hpp"
 #include "idm/idm.hpp"
+#include "idm/simple_idm_service.hpp"
 #include "request_management/request_management.hpp"
 
 namespace services {
@@ -16,7 +17,7 @@ std::unique_ptr<IAuthService> SimpleServiceFactory::MakeAuthService() {
 }
 
 std::unique_ptr<IIdmService> SimpleServiceFactory::MakeIdmService() {
-  return std::make_unique<IdmService>(repository_factory_);
+  return std::make_unique<SimpleIdmService>(repository_factory_);
 }
 
 std::unique_ptr<IRequestManagementService>

@@ -6,15 +6,22 @@
 
 namespace services {
 
-enum class ActionType {
-  kGrantAccess,
-  kRevokeAccess,
-};
+// enum class ActionType {
+//   kGrantAccess,
+//   kRevokeAccess,
+// };
+//
+// struct IdmRequest {
+//   ActionType action_type;
+//   std::string login;
+//   Permission permission;
+// };
+
+enum class UserRole { kUser, kModerator, kAdmin };
 
 struct IdmRequest {
-  ActionType action_type;
   std::string login;
-  Permission permission;
+  UserRole target_role;
 };
 
 class IIdmService {

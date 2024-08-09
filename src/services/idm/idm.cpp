@@ -16,24 +16,24 @@ IdmService::IdmService(
     : user_data_repository_(repository_factory->MakeUserDataDbRepository()) {}
 
 void IdmService::HandleIdmRequest(services::IdmRequest&& request) {
-  auto db_user = user_data_repository_->GetUserDataByLogin(request.login);
-  if (!db_user) {
-    throw services::ServiceLevelException("User not found");
-  }
-
-  if (request.action_type == ActionType::kGrantAccess) {
-    if (db_user->permission_group.count(ToString(request.permission))) {
-      throw services::ServiceLevelException("Permission was already granted");
-    }
-    db_user->permission_group.emplace(ToString(request.permission));
-  } else if (request.action_type == ActionType::kRevokeAccess) {
-    if (!db_user->permission_group.count(ToString(request.permission))) {
-      throw services::ServiceLevelException(
-          "User does not have the requested permission");
-    }
-    db_user->permission_group.erase(ToString(request.permission));
-  }
-  user_data_repository_->SaveUserData(db_user.value());
+//  auto db_user = user_data_repository_->GetUserDataByLogin(request.login);
+//  if (!db_user) {
+//    throw services::ServiceLevelException("User not found");
+//  }
+//
+//  if (request.action_type == ActionType::kGrantAccess) {
+//    if (db_user->permission_group.count(ToString(request.permission))) {
+//      throw services::ServiceLevelException("Permission was already granted");
+//    }
+//    db_user->permission_group.emplace(ToString(request.permission));
+//  } else if (request.action_type == ActionType::kRevokeAccess) {
+//    if (!db_user->permission_group.count(ToString(request.permission))) {
+//      throw services::ServiceLevelException(
+//          "User does not have the requested permission");
+//    }
+//    db_user->permission_group.erase(ToString(request.permission));
+//  }
+//  user_data_repository_->SaveUserData(db_user.value());
 }
 
 }  // namespace services

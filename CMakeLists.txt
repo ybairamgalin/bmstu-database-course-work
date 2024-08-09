@@ -100,6 +100,11 @@ add_library(${PROJECT_NAME}_objs OBJECT
         src/handlers/v2/request_comment_post.cpp
         src/utils/auth.cpp
         src/utils/map.hpp
+        src/handlers/v2/manage_access_put.hpp
+        src/handlers/v2/manage_access_put.cpp
+        src/services/idm/simple_idm_service.hpp
+        src/services/idm/simple_idm_service.cpp
+        src/services/idm/simple_idm_service.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 target_include_directories(${PROJECT_NAME}_objs PUBLIC src)

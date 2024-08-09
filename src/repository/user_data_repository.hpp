@@ -28,6 +28,8 @@ class UserDataRepository {
       const std::string& login) = 0;
   virtual std::vector<AuthData> GetUserDataByIds(
       const std::vector<int64_t>& id) = 0;
+  virtual void SerUserRole(const std::string& login,
+                           const std::string& role) = 0;
   virtual void SaveUserData(const AuthData&) = 0;
 };
 

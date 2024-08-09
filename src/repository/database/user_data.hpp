@@ -11,7 +11,7 @@ namespace repository {
 
 class DbUserDataRepository : public UserDataRepository {
  public:
-  DbUserDataRepository(userver::storages::postgres::ClusterPtr cluster_ptr);
+  explicit DbUserDataRepository(userver::storages::postgres::ClusterPtr cluster_ptr);
 
   std::vector<AuthData> GetUserDataByIds(
       const std::vector<int64_t>& ids) override;
@@ -20,6 +20,7 @@ class DbUserDataRepository : public UserDataRepository {
   std::optional<AuthData> GetUserDataByLogin(const std::string& login) override;
 
   void SaveUserData(const repository::AuthData&) override;
+  void SerUserRole(const std::string &login, const std::string &role) override;
 
  private:
   template <typename... Args>

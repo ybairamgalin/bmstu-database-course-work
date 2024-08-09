@@ -13,8 +13,9 @@ class YandexLoginDataProvider : public UserDataRepository {
   void SaveUserData(const repository::AuthData&) override;
   std::vector<AuthData> GetUserDataByIds(
       const std::vector<int64_t>& id) override;
-
-      private : userver::clients::http::Client& http_client_;
+  void SerUserRole(const std::string &login, const std::string &role) override;
+ private:
+  userver::clients::http::Client& http_client_;
 };
 
 }  // namespace repository

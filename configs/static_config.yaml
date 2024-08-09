@@ -69,7 +69,10 @@ components_manager:
             path: /v2/request/comment
             method: POST
             task_processor: main-task-processor
-
+        v2_manage_access_put:
+            path: /v2/manage/access
+            method: PUT
+            task_processor: main-task-processor
         manage_access_post:
             path: /v1/manage/access
             method: POST

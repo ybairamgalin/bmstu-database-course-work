@@ -133,11 +133,22 @@ std::vector<AuthData> DbUserDataRepository::GetUserDataByIds(
                     ids)
           .AsContainer<std::vector<DbUser>>(
               userver::storages::postgres::kRowTag);
+
   std::vector<AuthData> result;
+  result.reserve(users.size());
   for (auto&& user : users) {
     result.emplace_back(MapToResponse(std::move(user), {}));
   }
   return result;
+}
+
+void DbUserDataRepository::SerUserRole(const std::string& login,
+                                       const std::string& role) {
+  cluster_ptr_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                        "update service.users "
+                        "set role = $2 "
+                        "where login = $1",
+                        login, role);
 }
 
 }  // namespace repository

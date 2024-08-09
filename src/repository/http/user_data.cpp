@@ -56,5 +56,7 @@ std::vector<AuthData> YandexLoginDataProvider::GetUserDataByIds(
     const std::vector<int64_t>& id) {
   return {};
 }
+void YandexLoginDataProvider::SerUserRole(const std::string&,
+                                          const std::string&) {}
 
 }  // namespace repository
