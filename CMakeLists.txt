@@ -28,8 +28,6 @@ userver_setup_environment()
 add_library(${PROJECT_NAME}_objs OBJECT
     src/components.hpp
     src/components.cpp
-    src/handlers/v1/request_post.hpp
-    src/handlers/v1/request_post.cpp
     src/services/auth_service.hpp
     src/repository/user_data_repository.hpp
     src/repository/database/user_data.hpp
@@ -38,10 +36,6 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/repository/database/user_data.cpp
     src/repository/http/user_data.hpp
     src/repository/http/user_data.cpp
-    src/handlers/v1/base_handler.hpp
-    src/handlers/v1/base_handler.cpp
-    src/handlers/v1/manage_access_post.hpp
-    src/handlers/v1/manage_access_post.cpp
     src/services/idm_service.hpp
     src/services/models/permission.hpp
     src/services/idm/idm.hpp
@@ -82,29 +76,35 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/di/init.hpp
     src/di/init.cpp
     src/utils/auth.hpp
-        src/http/exception.hpp
-        src/repository/event_repository.hpp
-        src/repository/database/event.cpp
-        src/repository/database/event.hpp
-        src/handlers/v2/request_get.cpp
-        src/handlers/v2/request_get.hpp
-        src/http/query.hpp
-        src/utils/meta.hpp
-        src/http/query.cpp
-        src/handlers/v2/event.post.cpp
-        src/handlers/v2/event_post.hpp
-        src/services/event_service.hpp
-        src/services/event/event.cpp
-        src/services/event/event.hpp
-        src/handlers/v2/request_comment_post.hpp
-        src/handlers/v2/request_comment_post.cpp
-        src/utils/auth.cpp
-        src/utils/map.hpp
-        src/handlers/v2/manage_access_put.hpp
-        src/handlers/v2/manage_access_put.cpp
-        src/services/idm/simple_idm_service.hpp
-        src/services/idm/simple_idm_service.cpp
-        src/services/idm/simple_idm_service.cpp
+    src/http/exception.hpp
+    src/repository/event_repository.hpp
+    src/repository/database/event.cpp
+    src/repository/database/event.hpp
+    src/handlers/v2/request_get.cpp
+    src/handlers/v2/request_get.hpp
+    src/http/query.hpp
+    src/utils/meta.hpp
+    src/http/query.cpp
+    src/handlers/v2/event.post.cpp
+    src/handlers/v2/event_post.hpp
+    src/services/event_service.hpp
+    src/services/event/event.cpp
+    src/services/event/event.hpp
+    src/handlers/v2/request_comment_post.hpp
+    src/handlers/v2/request_comment_post.cpp
+    src/utils/auth.cpp
+    src/utils/map.hpp
+    src/handlers/v2/manage_access_put.hpp
+    src/handlers/v2/manage_access_put.cpp
+    src/services/idm/simple_idm_service.hpp
+    src/services/idm/simple_idm_service.cpp
+    src/handlers/base_handler.hpp
+    src/handlers/base_handler.cpp
+    src/handlers/base_json_handler_fwd.hpp
+    src/handlers/base_json_handler.hpp
+    src/utils/json.hpp
+    src/utils/request.hpp
+    src/utils/request.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 target_include_directories(${PROJECT_NAME}_objs PUBLIC src)

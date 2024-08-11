@@ -9,11 +9,12 @@ namespace handlers::v2 {
 
 RequestPost::RequestPost(const userver::components::ComponentConfig& config,
                          const userver::components::ComponentContext& context)
-    : BaseHandler<gen::RequestPostBody, gen::RequestPostResponse200>(config,
-                                                                     context) {}
+    : BaseJsonHandler<gen::RequestPostBody, gen::RequestPostResponse200>(
+          config, context) {}
 
-RequestPost::Response RequestPost::Handle(
-    RequestPost::Request&& request) const {
+RequestPost::Response RequestPost::HandleJson(
+    RequestPost::Request&& request,
+    userver::server::request::RequestContext& ctx) const {
   auto auth_data =
       utils::AuthOrThrow(request.headers, services_->MakeAuthService());
 
@@ -30,7 +31,7 @@ RequestPost::Response RequestPost::Handle(
   auto uuid = services_->MakeRequestManagementService()->AddRequest(
       request_creation_request);
 
-  return Response{gen::RequestPostResponse200{std::move(uuid)}, 201, {}};
+  return Response{gen::RequestPostResponse200{uuid}, 201, {}};
 }
 
 }  // namespace handlers::v2

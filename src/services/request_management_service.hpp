@@ -11,7 +11,7 @@
 namespace services {
 
 struct RequestToCreateOrUpdate {
-  int author_id;
+  int64_t author_id;
   boost::uuids::uuid event_id;
   std::string description;
   std::vector<boost::uuids::uuid> attachment_ids;
