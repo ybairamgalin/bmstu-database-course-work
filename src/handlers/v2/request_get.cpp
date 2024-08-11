@@ -43,10 +43,11 @@ namespace handlers::v2 {
 
 RequestGet::RequestGet(const userver::components::ComponentConfig& config,
                        const userver::components::ComponentContext& context)
-    : BaseHandler<http::EmptyRequestBody, gen::RequestGetResponse200>(
-          config, context) {}
+    : BaseJsonHandler(config, context) {}
 
-RequestGet::Response RequestGet::Handle(RequestGet::Request&& request) const {
+RequestGet::Response RequestGet::HandleJson(
+    RequestGet::Request&& request,
+    userver::server::request::RequestContext&) const {
   auto request_id = http::GetRequiredQueryParamOtThrow<boost::uuids::uuid>(
       request.query_params, "request_id");
 

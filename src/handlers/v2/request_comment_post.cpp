@@ -7,10 +7,11 @@ namespace handlers::v2 {
 RequestCommentPost::RequestCommentPost(
     const userver::components::ComponentConfig& config,
     const userver::components::ComponentContext& context)
-    : BaseHandler(config, context) {}
+    : BaseJsonHandler(config, context) {}
 
-RequestCommentPost::Response RequestCommentPost::Handle(
-    RequestCommentPost::Request&& request) const {
+RequestCommentPost::Response RequestCommentPost::HandleJson(
+    RequestCommentPost::Request&& request,
+    userver::server::request::RequestContext&) const {
   auto auth_data =
       utils::AuthOrThrow(request.headers, services_->MakeAuthService());
   auto request_id = http::GetRequiredQueryParamOtThrow<boost::uuids::uuid>(

@@ -1,24 +1,24 @@
 #pragma once
 
-#include "../../http/response.hpp"
 #include "gen/handlers/manage_access_put.hpp"
-#include "handler.hpp"
+#include "handlers/base_json_handler.hpp"
 
 namespace handlers::v2 {
 
-class ManageAccessPut
-    : public BaseHandler<gen::ManageAccessPutBody, http::EmptyResponseBody> {
+class ManageAccessPut : public BaseJsonHandler<gen::ManageAccessPutBody,
+                                               http::EmptyResponseBody> {
  public:
   static constexpr std::string_view kName = "v2_manage_access_put";
 
-  using BaseHandler<gen::ManageAccessPutBody, http::EmptyResponseBody>::Request;
-  using BaseHandler<gen::ManageAccessPutBody,
-                    http::EmptyResponseBody>::Response;
+  using BaseJsonHandler::Request;
+  using BaseJsonHandler::Response;
 
   ManageAccessPut(const userver::components::ComponentConfig& config,
                   const userver::components::ComponentContext& context);
 
-  Response Handle(Request&& request) const override;
+  Response HandleJson(
+      Request&& request,
+      userver::server::request::RequestContext& ctx) const override;
 };
 
 }  // namespace handlers::v2

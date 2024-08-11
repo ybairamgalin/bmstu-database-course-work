@@ -4,10 +4,11 @@ namespace handlers::v2 {
 
 EventPost::EventPost(const userver::components::ComponentConfig& config,
                      const userver::components::ComponentContext& context)
-    : BaseHandler<gen::EventPostBody, gen::EventPostResponse201>(config,
-                                                                 context) {}
+    : BaseJsonHandler(config, context) {}
 
-EventPost::Response EventPost::Handle(EventPost::Request&& request) const {
+EventPost::Response EventPost::HandleJson(
+    EventPost::Request&& request,
+    userver::server::request::RequestContext& ctx) const {
   auto id = services_->MakeEventService()->AddEvent(
       services::Event{request.body.name, request.body.description});
   return EventPost::Response{gen::EventPostResponse201{id}, 201, {}};

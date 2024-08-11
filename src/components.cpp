@@ -5,6 +5,7 @@
 #include <userver/components/minimal_server_component_list.hpp>
 #include <userver/server/handlers/ping.hpp>
 #include <userver/server/handlers/tests_control.hpp>
+#include <userver/storages/postgres/component.hpp>
 #include <userver/testsuite/testsuite_support.hpp>
 
 #include "handlers/v2/event_post.hpp"

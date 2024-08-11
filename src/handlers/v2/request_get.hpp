@@ -1,25 +1,25 @@
 #pragma once
 
 #include "gen/handlers/request_get.hpp"
-#include "handler.hpp"
+#include "handlers/base_json_handler.hpp"
 #include "http/request.hpp"
 
 namespace handlers::v2 {
 
-class RequestGet
-    : public BaseHandler<http::EmptyRequestBody, gen::RequestGetResponse200> {
+class RequestGet : public BaseJsonHandler<http::EmptyRequestBody,
+                                          gen::RequestGetResponse200> {
  public:
   static constexpr std::string_view kName = "v2_request_get";
 
-  using BaseHandler<http::EmptyRequestBody,
-                    gen::RequestGetResponse200>::Request;
-  using BaseHandler<http::EmptyRequestBody,
-                    gen::RequestGetResponse200>::Response;
+  using BaseJsonHandler::Request;
+  using BaseJsonHandler::Response;
 
   RequestGet(const userver::components::ComponentConfig& config,
              const userver::components::ComponentContext& context);
 
-  Response Handle(Request&& request) const override;
+  Response HandleJson(
+      Request&& request,
+      userver::server::request::RequestContext& ctx) const override;
 };
 
 }  // namespace handlers::v2

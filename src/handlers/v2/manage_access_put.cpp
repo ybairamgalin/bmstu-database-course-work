@@ -21,10 +21,11 @@ namespace handlers::v2 {
 ManageAccessPut::ManageAccessPut(
     const userver::components::ComponentConfig& config,
     const userver::components::ComponentContext& context)
-    : BaseHandler(config, context) {}
+    : BaseJsonHandler(config, context) {}
 
-ManageAccessPut::Response ManageAccessPut::Handle(
-    ManageAccessPut::Request&& request) const {
+ManageAccessPut::Response ManageAccessPut::HandleJson(
+    ManageAccessPut::Request&& request,
+    userver::server::request::RequestContext& ctx) const {
   services_->MakeIdmService()->HandleIdmRequest(
       services::IdmRequest{request.body.login, MapRole(request.body.new_role)});
   return {200, {}};

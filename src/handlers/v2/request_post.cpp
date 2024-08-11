@@ -9,8 +9,7 @@ namespace handlers::v2 {
 
 RequestPost::RequestPost(const userver::components::ComponentConfig& config,
                          const userver::components::ComponentContext& context)
-    : BaseJsonHandler<gen::RequestPostBody, gen::RequestPostResponse200>(
-          config, context) {}
+    : BaseJsonHandler(config, context) {}
 
 RequestPost::Response RequestPost::HandleJson(
     RequestPost::Request&& request,

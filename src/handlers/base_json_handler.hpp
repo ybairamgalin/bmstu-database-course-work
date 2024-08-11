@@ -77,7 +77,7 @@ std::string BaseJsonHandler<RequestBody, ResponseBody>::Process(
   }
   request.SetResponseStatus(
       userver::server::http::HttpStatus(response.status_code));
-  if constexpr (!std::is_same_v<RequestBody, http::EmptyRequestBody>) {
+  if constexpr (!std::is_same_v<ResponseBody, http::EmptyResponseBody>) {
     auto json_response = utils::ToJson(response.body);
     if (json_response.IsEmpty()) {
       return {};

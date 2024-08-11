@@ -68,7 +68,6 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/services/exception.cpp
     src/utils/uuid.hpp
     src/utils/uuid.cpp
-    src/handlers/v2/handler.hpp
     src/http/request.hpp
     src/http/response.hpp
     src/handlers/v2/request_post.hpp
