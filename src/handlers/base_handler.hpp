@@ -22,7 +22,7 @@ class BaseHandler : public userver::server::handlers::HttpHandlerBase {
       userver::server::request::RequestContext& ctx) const final;
 
  protected:
-  std::unique_ptr<services::IServiceFactory> services_;
+  std::shared_ptr<services::IServiceFactory> services_;
 };
 
 }  // namespace handlers

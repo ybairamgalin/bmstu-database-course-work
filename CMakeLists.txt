@@ -104,6 +104,10 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/utils/json.hpp
     src/utils/request.hpp
     src/utils/request.cpp
+    src/middleware/auth.hpp
+    src/middleware/auth.cpp
+    src/middleware/auth_pipeline_builder.hpp
+    src/middleware/auth_pipeline_builder.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 target_include_directories(${PROJECT_NAME}_objs PUBLIC src)

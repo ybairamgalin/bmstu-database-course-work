@@ -12,6 +12,6 @@ namespace utils {
 
 services::AuthData AuthOrThrow(
     const std::unordered_map<std::string, std::string>& headers,
-    std::unique_ptr<services::IAuthService> auth_service);
+    const std::unique_ptr<services::IAuthService>& auth_service);
 
 }  // namespace utils

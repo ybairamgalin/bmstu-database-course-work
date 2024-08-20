@@ -13,6 +13,8 @@
 #include "handlers/v2/request_comment_post.hpp"
 #include "handlers/v2/request_get.hpp"
 #include "handlers/v2/request_post.hpp"
+#include "middleware/auth.hpp"
+#include "middleware/auth_pipeline_builder.hpp"
 
 userver::components::ComponentList MakeComponents() {
   return userver::components::MinimalServerComponentList()
@@ -23,6 +25,11 @@ userver::components::ComponentList MakeComponents() {
       .Append<userver::clients::dns::Component>()
       // postgres
       .Append<userver::components::Postgres>("postgres-db-1")
+      // middleware
+      .Append<middleware::AuthFactory>()
+      // pipeline builder
+      .Append<middleware::AuthMiddlewarePipelineBuilder>(
+          "auth-pipeline-builder")
       // handlers
       .Append<handlers::v2::RequestPost>()
       .Append<handlers::v2::RequestGet>()
