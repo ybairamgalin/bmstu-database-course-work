@@ -13,6 +13,8 @@ struct File {
 
 class IFileService {
  public:
+  virtual ~IFileService() = default;
+
   /*!
    @return uuid сохраненного или найденного файла
    */

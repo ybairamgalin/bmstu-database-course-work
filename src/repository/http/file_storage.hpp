@@ -1,5 +1,6 @@
 #pragma once
 
+#include <aws/s3/S3Client.h>
 #include <userver/clients/http/client.hpp>
 
 #include "../file_storage_repository.hpp"
@@ -15,6 +16,7 @@ class YandexS3FileStorage : public FileStorageRepository {
 
  private:
   userver::clients::http::Client& http_client_;
+  Aws::S3::S3Client s3_client_;
 };
 
 }  // namespace repository

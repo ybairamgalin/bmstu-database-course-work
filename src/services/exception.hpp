@@ -10,6 +10,7 @@ enum class ErrorType {
   kNotFound,
   kConflict,
   kInvalidInput,
+  kInternalError,
 };
 
 class ServiceLevelException : public std::runtime_error {

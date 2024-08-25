@@ -15,6 +15,8 @@ int ServiceLevelException::GetStatusCode() const {
       return 409;
     case ErrorType::kInvalidInput:
       return 400;
+    case ErrorType::kInternalError:
+      return 500;
   }
 }
 

@@ -6,7 +6,13 @@
 
 #include <boost/uuid/uuid.hpp>
 
+#include "repository/exception.h"
+
 namespace repository {
+
+class FileStorageException : public RepositoryLevelException {
+  using RepositoryLevelException::RepositoryLevelException;
+};
 
 class FileStorageRepository {
  public:

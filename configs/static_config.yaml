@@ -75,6 +75,10 @@ components_manager:
             path: /v2/manage/access
             method: PUT
             task_processor: main-task-processor
+        v2_file_put:
+            path: /v2/file
+            method: PUT
+            task_processor: main-task-processor
 
         postgres-db-1:
             dbconnection: $dbconnection

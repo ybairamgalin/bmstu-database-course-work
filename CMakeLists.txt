@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(pg_service_template CXX)
 
-
 # Adding userver dependency
 find_package(userver COMPONENTS core postgresql QUIET)
 if(NOT userver_FOUND)  # Fallback to subdirectory usage
@@ -22,6 +21,10 @@ if(NOT userver_FOUND)  # Fallback to subdirectory usage
 endif()
 
 userver_setup_environment()
+
+# Aws dependencies
+set(SERVICE_COMPONENTS s3)
+find_package(AWSSDK REQUIRED COMPONENTS ${SERVICE_COMPONENTS})
 
 
 # Common sources
@@ -108,8 +111,12 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/middleware/auth.cpp
     src/middleware/auth_pipeline_builder.hpp
     src/middleware/auth_pipeline_builder.cpp
+    src/handlers/v2/file_put.hpp
+    src/handlers/v2/file_put.cpp
+        src/repository/exception.h
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
+target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${AWSSDK_LINK_LIBRARIES})
 target_include_directories(${PROJECT_NAME}_objs PUBLIC src)
 
 target_include_directories(${PROJECT_NAME}_objs PUBLIC src/gen)
@@ -148,6 +155,7 @@ if(DEFINED ENV{PREFIX})
   set(CMAKE_INSTALL_PREFIX ${PREFIX_PATH})
 endif()
 
+file(GLOB CONFIGS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/configs/*.yaml ${CMAKE_CURRENT_SOURCE_DIR}/configs/*.json)
 file(GLOB CONFIGS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/configs/*.yaml ${CMAKE_CURRENT_SOURCE_DIR}/configs/*.json)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ${PROJECT_NAME})

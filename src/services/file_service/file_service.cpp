@@ -4,6 +4,9 @@
 
 #include <userver/crypto/hash.hpp>
 
+#include "repository/exception.h"
+#include "services/exception.hpp"
+
 namespace services {
 
 FileService::FileService(
@@ -20,9 +23,16 @@ boost::uuids::uuid FileService::UploadFile(File&& file) {
   }
 
   const auto file_uuid = boost::uuids::random_generator()();
-  file_storage_repository_->UploadFile(std::move(file.content), file_uuid);
-  file_meta_repository_->UpsertFileMeta(
-      repository::FileMeta{file_uuid, std::move(file.filename), hash});
+
+  try {
+    file_storage_repository_->UploadFile(std::move(file.content), file_uuid);
+    file_meta_repository_->UpsertFileMeta(
+        repository::FileMeta{file_uuid, std::move(file.filename), hash});
+  } catch (const repository::FileStorageException& ex) {
+    LOG_ERROR() << ex.what();
+    throw ServiceLevelException("Failed to upload file",
+                                ErrorType::kInternalError);
+  }
   return file_uuid;
 }
 
