@@ -35,6 +35,7 @@ struct RequestFull {
   int64_t author_id;
   std::string description;
   std::vector<RequestComment> comments;
+  std::vector<Attachment> attachments;
   userver::storages::postgres::TimePointTz created_at;
   userver::storages::postgres::TimePointTz updated_at;
 };

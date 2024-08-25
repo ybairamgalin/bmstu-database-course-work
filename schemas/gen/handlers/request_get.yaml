@@ -3,7 +3,7 @@ RequestGetResponse200:
   additionalProperties: false
   required:
     - event_id
-    - attachment_ids
+    - attachments
     - user
     - description
     - comments
@@ -14,11 +14,19 @@ RequestGetResponse200:
       description: Related event id
       type: string
       format: uuid
-    attachment_ids:
+    attachments:
       type: array
       items:
-        type: string
-        format: uuid
+        type: object
+        additionalProperties: false
+        required:
+          - download_url
+          - filename
+        properties:
+          download_url:
+            type: string
+          filename:
+            type: string
     user:
       $ref: "/etc/schemas/gen/common.yaml#/UserFullInfo"
     description:

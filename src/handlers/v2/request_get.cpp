@@ -17,10 +17,17 @@ handlers::v2::RequestGet::Response MapResponse(services::Request&& req) {
     });
   }
 
+  std::vector<gen::RequestGetResponse200::AttachmentsA> attachments;
+  attachments.reserve(req.attachments.size());
+  for (auto& attachment : req.attachments) {
+    attachments.emplace_back(gen::RequestGetResponse200::AttachmentsA{
+        attachment.download_url, attachment.filename});
+  }
+
   return handlers::v2::RequestGet::Response{
       gen::RequestGetResponse200{
           req.event_id,
-          {},
+          std::move(attachments),
           gen::UserFullInfo{
               req.author.id,
               req.author.name,

@@ -35,11 +35,16 @@ struct RequestComment {
   userver::utils::datetime::TimePointTz created_at;
 };
 
+struct AttachmentForDownload {
+  std::string download_url;
+  std::string filename;
+};
+
 struct Request {
   boost::uuids::uuid event_id;
   UserInfo author;
   std::string description;
-  std::vector<boost::uuids::uuid> attachment_ids;
+  std::vector<AttachmentForDownload> attachments;
   std::vector<RequestComment> comments;
   userver::utils::datetime::TimePointTz created_at;
   userver::utils::datetime::TimePointTz updated_at;

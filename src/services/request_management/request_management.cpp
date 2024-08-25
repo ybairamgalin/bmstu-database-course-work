@@ -1,8 +1,11 @@
 #include "request_management.hpp"
 
-#include <userver/utils/datetime/timepoint_tz.hpp>
+#include <string_view>
 
 #include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
+#include <userver/utils/datetime/timepoint_tz.hpp>
 
 #include "services/exception.hpp"
 #include "utils/map.hpp"
@@ -20,6 +23,22 @@ std::vector<repository::Attachment> MapAttachments(
   for (const auto& attachment : attachments) {
     result.emplace_back(
         repository::Attachment{attachment.id, attachment.filename});
+  }
+  return result;
+}
+
+std::vector<services::AttachmentForDownload> MapAttachments(
+    const std::vector<repository::Attachment>& attachments) {
+  static constexpr std::string_view kS3Host = "storage.yandexcloud.net";
+  static constexpr std::string_view kS3Bucket = "db-course-work";
+
+  std::vector<services::AttachmentForDownload> result;
+  result.reserve(attachments.size());
+  for (const auto& attachment : attachments) {
+    result.emplace_back(services::AttachmentForDownload{
+        fmt::format("https://{}/{}/{}", kS3Host, kS3Bucket,
+                    boost::uuids::to_string(attachment.id)),
+        attachment.filename});
   }
   return result;
 }
@@ -60,6 +79,7 @@ Request RequestManagementService::GetRequestById(
   result.author = MapUser(user_id_to_user.at(request.author_id));
   result.event_id = request.event_id;
   result.description = request.description;
+  result.attachments = MapAttachments(request.attachments);
   result.created_at =
       userver::utils::datetime::TimePointTz{request.created_at.GetUnderlying()};
   result.updated_at =

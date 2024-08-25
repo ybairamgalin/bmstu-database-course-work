@@ -75,10 +75,20 @@ std::optional<RequestFull> DbRequestsRepository::GetRequestById(
           .AsContainer<std::vector<RequestComment>>(
               userver::storages::postgres::kRowTag);
 
+  auto attachments =
+      cluster_ptr_
+          ->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                    "select file_uuid, source_name "
+                    "from service.request_file "
+                    "where request_id = $1",
+                    db_request.request_id)
+          .AsContainer<std::vector<Attachment>>(
+              userver::storages::postgres::kRowTag);
+
   return RequestFull{db_request.request_id, db_request.event_id,
                      db_request.author_id,  db_request.description,
-                     std::move(comments),   db_request.created_at,
-                     db_request.updated_at};
+                     std::move(comments),   std::move(attachments),
+                     db_request.created_at, db_request.updated_at};
 }
 
 void DbRequestsRepository::Insert(const repository::Request& request) {
