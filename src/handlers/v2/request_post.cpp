@@ -24,8 +24,12 @@ RequestPost::Response RequestPost::HandleJson(
     request_creation_request.description = request.body.description.value();
   }
   request_creation_request.event_id = request.body.event_id;
-  request_creation_request.attachment_ids =
-      std::move(request.body.attachment_ids);
+
+  request_creation_request.attachments.reserve(request.body.attachments.size());
+  for (const auto& attachment : request.body.attachments) {
+    request_creation_request.attachments.emplace_back(
+        services::Attachment{attachment.id, attachment.filename});
+  }
 
   auto uuid = services_->MakeRequestManagementService()->AddRequest(
       request_creation_request);

@@ -10,11 +10,16 @@
 
 namespace services {
 
+struct Attachment {
+  boost::uuids::uuid id;
+  std::string filename;
+};
+
 struct RequestToCreateOrUpdate {
   int64_t author_id;
   boost::uuids::uuid event_id;
   std::string description;
-  std::vector<boost::uuids::uuid> attachment_ids;
+  std::vector<Attachment> attachments;
 };
 
 struct UserInfo {

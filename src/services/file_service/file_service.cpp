@@ -27,7 +27,7 @@ boost::uuids::uuid FileService::UploadFile(File&& file) {
   try {
     file_storage_repository_->UploadFile(std::move(file.content), file_uuid);
     file_meta_repository_->UpsertFileMeta(
-        repository::FileMeta{file_uuid, std::move(file.filename), hash});
+        repository::FileMeta{file_uuid, hash});
   } catch (const repository::FileStorageException& ex) {
     LOG_ERROR() << ex.what();
     throw ServiceLevelException("Failed to upload file",
@@ -36,7 +36,8 @@ boost::uuids::uuid FileService::UploadFile(File&& file) {
   return file_uuid;
 }
 
-std::optional<File> FileService::GetFile(const boost::uuids::uuid& file_uuid) {
+std::optional<FileToDownload> FileService::GetFile(
+    const boost::uuids::uuid& file_uuid) {
   auto file_opt = file_storage_repository_->GetFile(file_uuid);
   if (!file_opt) {
     return std::nullopt;
@@ -45,7 +46,7 @@ std::optional<File> FileService::GetFile(const boost::uuids::uuid& file_uuid) {
   if (!file_meta_opt) {
     return std::nullopt;
   }
-  return File{file_meta_opt.value().source_file_name, file_opt.value()};
+  return FileToDownload{file_opt.value(), "213"};
 }
 
 }  // namespace services

@@ -113,7 +113,7 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/middleware/auth_pipeline_builder.cpp
     src/handlers/v2/file_put.hpp
     src/handlers/v2/file_put.cpp
-        src/repository/exception.h
+    src/repository/exception.h
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${AWSSDK_LINK_LIBRARIES})

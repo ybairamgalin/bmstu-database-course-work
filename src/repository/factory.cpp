@@ -13,8 +13,11 @@ namespace repository {
 
 SimpleRepositoryFactory::SimpleRepositoryFactory(
     userver::clients::http::Client& http_client,
-    userver::storages::postgres::ClusterPtr cluster_ptr)
-    : http_client_(http_client), cluster_ptr_(std::move(cluster_ptr)) {}
+    userver::storages::postgres::ClusterPtr cluster_ptr,
+    std::shared_ptr<Aws::S3::S3Client> s3_client)
+    : http_client_(http_client),
+      cluster_ptr_(std::move(cluster_ptr)),
+      s3_client_(std::move(s3_client)) {}
 
 std::unique_ptr<RequestsRepository>
 SimpleRepositoryFactory::MakeRequestsRepository() {
@@ -38,7 +41,7 @@ SimpleRepositoryFactory::MakeFileMetaRepository() {
 
 std::unique_ptr<FileStorageRepository>
 SimpleRepositoryFactory::MakeFileStorageRepository() {
-  return std::make_unique<YandexS3FileStorage>(http_client_);
+  return std::make_unique<YandexS3FileStorage>(s3_client_);
 }
 
 std::unique_ptr<EventRepository>

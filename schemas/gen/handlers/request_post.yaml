@@ -3,17 +3,26 @@ RequestPostBody:
   additionalProperties: false
   required:
     - event_id
-    - attachment_ids
+    - attachments
   properties:
     event_id:
       description: Related event id
       type: string
       format: uuid
-    attachment_ids:
+    attachments:
       type: array
       items:
-        type: string
-        format: uuid
+        type: object
+        required:
+          - id
+          - filename
+        properties:
+          id:
+            type: string
+            format: uuid
+          filename:
+            type: string
+        additionalProperties: false
     description:
       description: Description of request
       type: string

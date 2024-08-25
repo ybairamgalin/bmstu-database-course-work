@@ -39,17 +39,19 @@ create table service.requests(
 
 create table service.file_meta(
     uuid uuid not null primary key,
-    source_name text not null,
     hash text not null unique,
     created_at timestamptz not null default now()
 );
 
 create table service.request_file(
     request_id uuid not null references service.requests(request_id),
+    source_name text not null,
     file_uuid uuid not null references service.file_meta(uuid),
+    created_at timestamptz not null default now(),
 
     primary key (request_id, file_uuid)
 );
+
 
 create table service.comments(
     comment_id bigserial not null primary key,
@@ -81,9 +83,16 @@ create table service.articles(
     created_at timestamptz not null default now()
 );
 
-create table service.article_file(
-    article_id bigint not null references service.articles(article_id),
-    file_uuid uuid not null references service.file_meta(uuid),
+create table service.article_file
+(
+    article_id bigint not null references service.articles (article_id),
+    file_uuid  uuid   not null references service.file_meta (uuid),
 
     primary key (article_id, file_uuid)
-)
+);
+
+create type service.FileRequest as (
+    request_id uuid,
+    file_uuid uuid,
+    source_name text
+);

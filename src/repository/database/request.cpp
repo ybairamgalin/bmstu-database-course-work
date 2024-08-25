@@ -1,5 +1,11 @@
 #include "request.hpp"
 
+#include <boost/range/adaptor/transformed.hpp>
+
+#include <userver/storages/postgres/typed_result_set.hpp>
+
+namespace b_ranges = boost::adaptors;
+
 namespace {
 
 struct DbRequest {
@@ -11,7 +17,30 @@ struct DbRequest {
   userver::storages::postgres::TimePointTz updated_at;
 };
 
+struct FileRequest {
+  boost::uuids::uuid request_id;
+  boost::uuids::uuid file_uuid;
+  std::string source_name;
+};
+
+std::vector<FileRequest> MapAttachments(
+    const boost::uuids::uuid& request_id,
+    const std::vector<repository::Attachment>& attachments) {
+  std::vector<FileRequest> result;
+  result.reserve(attachments.size());
+  for (const auto& attachment : attachments) {
+    result.emplace_back(
+        FileRequest{request_id, attachment.id, attachment.filename});
+  }
+  return result;
+}
+
 }  // namespace
+
+template <>
+struct userver::storages::postgres::io::CppToUserPg<FileRequest> {
+  static constexpr DBTypeName postgres_name = "service.FileRequest";
+};
 
 namespace repository {
 
@@ -59,6 +88,21 @@ void DbRequestsRepository::Insert(const repository::Request& request) {
                         "values ($1, $2, $3, $4)",
                         request.request_id, request.event_id, request.author_id,
                         request.description);
+
+  std::vector<boost::uuids::uuid> file_uuids;
+  file_uuids.reserve(request.attachments.size());
+  std::vector<std::string> file_names;
+  file_names.reserve(request.attachments.size());
+  for (const auto& attachment : request.attachments) {
+    file_uuids.emplace_back(attachment.id);
+    file_names.emplace_back(attachment.filename);
+  }
+
+  cluster_ptr_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                        "insert into service.request_file "
+                        "(request_id, file_uuid, source_name) "
+                        "(select $1, unnest($2), unnest($3))",
+                        request.request_id, file_uuids, file_names);
 }
 
 void DbRequestsRepository::Update(const repository::Request& request) {

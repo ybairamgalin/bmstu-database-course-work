@@ -10,12 +10,17 @@
 
 namespace repository {
 
+struct Attachment {
+  boost::uuids::uuid id;
+  std::string filename;
+};
+
 struct Request {
   boost::uuids::uuid request_id;
   boost::uuids::uuid event_id;
   int64_t author_id;
   std::string description;
-  std::vector<boost::uuids::uuid> attachment_ids;
+  std::vector<Attachment> attachments;
 };
 
 struct RequestComment {

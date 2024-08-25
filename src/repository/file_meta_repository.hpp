@@ -10,7 +10,6 @@ namespace repository {
 
 struct FileMeta {
   boost::uuids::uuid uuid;
-  std::string source_file_name;
   std::string hash;
 };
 

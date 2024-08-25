@@ -13,6 +13,17 @@ services::UserInfo MapUser(const repository::AuthData& user) {
   return services::UserInfo{user.user_id, user.name, user.login, user.phone};
 }
 
+std::vector<repository::Attachment> MapAttachments(
+    const std::vector<services::Attachment>& attachments) {
+  std::vector<repository::Attachment> result;
+  result.reserve(attachments.size());
+  for (const auto& attachment : attachments) {
+    result.emplace_back(
+        repository::Attachment{attachment.id, attachment.filename});
+  }
+  return result;
+}
+
 }  // namespace
 
 namespace services {
@@ -75,9 +86,10 @@ boost::uuids::uuid RequestManagementService::AddRequest(
   }
 
   auto boost_uuid = boost::uuids::random_generator()();
+
   repository::Request db_request{boost_uuid, request.event_id,
                                  request.author_id, request.description,
-                                 request.attachment_ids};
+                                 MapAttachments(request.attachments)};
   request_repository_->Insert(db_request);
   return boost_uuid;
 }
@@ -86,8 +98,11 @@ void RequestManagementService::UpdateRequest(
     const boost::uuids::uuid& request_id,
     const RequestToCreateOrUpdate& request) {
   repository::Request db_request{
-      request_id,          request.event_id,       request.author_id,
-      request.description, request.attachment_ids,
+      request_id,
+      request.event_id,
+      request.author_id,
+      request.description,
+      MapAttachments(request.attachments),
   };
   request_repository_->Update(db_request);
 }

@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <aws/s3/S3Client.h>
+
 #include "event_repository.hpp"
 #include "file_meta_repository.hpp"
 #include "file_storage_repository.hpp"
@@ -25,7 +27,8 @@ class IRepositoryFactory {
 class SimpleRepositoryFactory : public IRepositoryFactory {
  public:
   SimpleRepositoryFactory(userver::clients::http::Client& http_client,
-                          userver::storages::postgres::ClusterPtr cluster_ptr);
+                          userver::storages::postgres::ClusterPtr cluster_ptr,
+                          std::shared_ptr<Aws::S3::S3Client> s3_client);
   std::unique_ptr<RequestsRepository> MakeRequestsRepository() override;
   std::unique_ptr<UserDataRepository> MakeUserDataDbRepository() override;
   std::unique_ptr<UserDataRepository> MakeUserDataHttpRepository() override;
@@ -36,6 +39,7 @@ class SimpleRepositoryFactory : public IRepositoryFactory {
  private:
   userver::clients::http::Client& http_client_;
   userver::storages::postgres::ClusterPtr cluster_ptr_;
+  std::shared_ptr<Aws::S3::S3Client> s3_client_;
 };
 
 }  // namespace repository

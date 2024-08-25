@@ -15,7 +15,8 @@ class FileService : public IFileService {
                            repository_factory);
 
   boost::uuids::uuid UploadFile(File&& file) override;
-  std::optional<File> GetFile(const boost::uuids::uuid& file_uuid) override;
+  std::optional<FileToDownload> GetFile(
+      const boost::uuids::uuid& file_uuid) override;
 
  private:
   std::unique_ptr<repository::FileMetaRepository> file_meta_repository_;

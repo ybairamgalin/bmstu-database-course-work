@@ -9,14 +9,13 @@ namespace repository {
 
 class YandexS3FileStorage : public FileStorageRepository {
  public:
-  explicit YandexS3FileStorage(userver::clients::http::Client& http_client);
+  explicit YandexS3FileStorage(std::shared_ptr<Aws::S3::S3Client> s3_client);
 
   void UploadFile(std::string&& file_content, boost::uuids::uuid uuid) override;
   std::optional<std::string> GetFile(boost::uuids::uuid uuid) override;
 
  private:
-  userver::clients::http::Client& http_client_;
-  Aws::S3::S3Client s3_client_;
+  std::shared_ptr<Aws::S3::S3Client> s3_client_;
 };
 
 }  // namespace repository
