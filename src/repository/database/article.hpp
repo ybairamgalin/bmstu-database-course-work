@@ -13,7 +13,9 @@ class DbArticleRepository : public ArticleRepository {
   explicit DbArticleRepository(
       userver::storages::postgres::ClusterPtr cluster_ptr);
 
-  void AddArticle(const DbArticle& article) override;
+  void UpsertArticle(const DbArticle& article) override;
+  std::optional<DbArticleFull> GetArticle(
+      const boost::uuids::uuid& id) override;
 
  private:
   userver::storages::postgres::ClusterPtr cluster_ptr_;

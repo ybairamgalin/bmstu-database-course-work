@@ -84,14 +84,6 @@ create table service.articles(
     created_at timestamptz not null default now()
 );
 
-create table service.article_file
-(
-    article_id uuid not null references service.articles (article_id),
-    file_uuid  uuid   not null references service.file_meta (uuid),
-
-    primary key (article_id, file_uuid)
-);
-
 create type service.FileRequest as (
     request_id uuid,
     file_uuid uuid,

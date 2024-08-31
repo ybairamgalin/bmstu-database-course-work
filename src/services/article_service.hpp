@@ -17,6 +17,8 @@ class IArticleService {
  public:
   virtual ~IArticleService() = default;
   virtual boost::uuids::uuid CreateArticle(const Article& article) = 0;
+  virtual void UpdateArticle(const boost::uuids::uuid& id,
+                             const Article& article) = 0;
 };
 
 }  // namespace services
