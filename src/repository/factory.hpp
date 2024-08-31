@@ -9,6 +9,7 @@
 #include "file_storage_repository.hpp"
 #include "requests_repository.hpp"
 #include "user_data_repository.hpp"
+#include "articles_repository.hpp"
 
 namespace repository {
 
@@ -22,6 +23,7 @@ class IRepositoryFactory {
   virtual std::unique_ptr<EventRepository> MakeEventsRepository() = 0;
   virtual std::unique_ptr<FileStorageRepository>
   MakeFileStorageRepository() = 0;
+  virtual std::unique_ptr<ArticleRepository> MakeArticleRepository() = 0;
 };
 
 class SimpleRepositoryFactory : public IRepositoryFactory {
@@ -35,6 +37,7 @@ class SimpleRepositoryFactory : public IRepositoryFactory {
   std::unique_ptr<FileMetaRepository> MakeFileMetaRepository() override;
   std::unique_ptr<FileStorageRepository> MakeFileStorageRepository() override;
   std::unique_ptr<EventRepository> MakeEventsRepository() override;
+  std::unique_ptr<ArticleRepository> MakeArticleRepository() override;
 
  private:
   userver::clients::http::Client& http_client_;

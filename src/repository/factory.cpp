@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "database/article.hpp"
 #include "database/event.hpp"
 #include "database/file_meta.hpp"
 #include "database/request.hpp"
@@ -47,6 +48,11 @@ SimpleRepositoryFactory::MakeFileStorageRepository() {
 std::unique_ptr<EventRepository>
 SimpleRepositoryFactory::MakeEventsRepository() {
   return std::make_unique<DbEventRepository>(cluster_ptr_);
+}
+
+std::unique_ptr<ArticleRepository>
+SimpleRepositoryFactory::MakeArticleRepository() {
+  return std::make_unique<DbArticleRepository>(cluster_ptr_);
 }
 
 }  // namespace repository

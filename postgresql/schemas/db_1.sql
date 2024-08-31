@@ -76,8 +76,9 @@ for each row
 execute function service.update_updated_at();
 
 create table service.articles(
-    article_id bigserial not null primary key,
-    description text,
+    article_id uuid not null primary key,
+    title text,
+    content text,
     author_id bigint not null references service.users(yandex_id),
     event_id uuid not null references service.events(event_id),
     created_at timestamptz not null default now()
@@ -85,7 +86,7 @@ create table service.articles(
 
 create table service.article_file
 (
-    article_id bigint not null references service.articles (article_id),
+    article_id uuid not null references service.articles (article_id),
     file_uuid  uuid   not null references service.file_meta (uuid),
 
     primary key (article_id, file_uuid)

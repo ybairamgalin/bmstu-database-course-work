@@ -75,6 +75,13 @@ components_manager:
             path: /v2/manage/access
             method: PUT
             task_processor: main-task-processor
+        v2_article_post:
+            path: /v2/article
+            method: POST
+            task_processor: main-task-processor
+            middlewares:
+                pipeline-builder: auth-pipeline-builder
+                auth-middleware: {}
         v2_file_put:
             path: /v2/file
             method: PUT

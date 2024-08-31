@@ -1,0 +1,24 @@
+ArticlePostBody:
+  type: object
+  additionalProperties: false
+  required:
+    - title
+    - content
+    - event_id
+  properties:
+    title:
+      type: string
+    content:
+      type: string
+    event_id:
+      type: string
+      format: uuid
+ArticlePostResponse201:
+  additionalProperties: false
+  type: object
+  required:
+    - article_id
+  properties:
+    article_id:
+      type: string
+      format: uuid

@@ -56,7 +56,6 @@ RequestGet::Response RequestGet::HandleJson(
     RequestGet::Request&& request,
     userver::server::request::RequestContext& ctx) const {
   auto& auth = ctx.GetData<services::AuthData>("auth");
-  LOG_ERROR() << "YAROSLAV" << auth.login;
 
   auto request_id = http::GetRequiredQueryParamOtThrow<boost::uuids::uuid>(
       request.query_params, "request_id");

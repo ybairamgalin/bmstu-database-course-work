@@ -7,6 +7,7 @@ ServiceLevelException::ServiceLevelException(const std::string& text,
     : std::runtime_error(text), error_type(error_type) {}
 
 ErrorType ServiceLevelException::GetErrorType() const { return error_type; }
+
 int ServiceLevelException::GetStatusCode() const {
   switch (error_type) {
     case ErrorType::kNotFound:
@@ -18,6 +19,7 @@ int ServiceLevelException::GetStatusCode() const {
     case ErrorType::kInternalError:
       return 500;
   }
+  throw std::runtime_error("Unknown status code");
 }
 
 }  // namespace services

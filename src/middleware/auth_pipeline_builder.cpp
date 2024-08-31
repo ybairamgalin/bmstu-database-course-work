@@ -1,5 +1,4 @@
 #include "auth_pipeline_builder.hpp"
-
 #include "middleware/auth.hpp"
 
 namespace middleware {

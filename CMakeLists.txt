@@ -114,6 +114,14 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/handlers/v2/file_put.hpp
     src/handlers/v2/file_put.cpp
     src/repository/exception.h
+        src/handlers/v2/article_post.hpp
+        src/services/article/article.hpp
+        src/services/article_service.hpp
+        src/services/article/article.cpp
+        src/repository/database/article.hpp
+        src/repository/database/article.cpp
+        src/handlers/v2/article_post.cpp
+        src/handlers/v2/article_get.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${AWSSDK_LINK_LIBRARIES})
