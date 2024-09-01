@@ -8,8 +8,10 @@ namespace services {
 
 enum class ErrorType {
   kNotFound,
-  kConflict,
+  kUnauthorized,
   kInvalidInput,
+  kConflict,
+  kPermissionDenied,
   kInternalError,
 };
 

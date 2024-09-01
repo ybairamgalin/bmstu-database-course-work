@@ -12,14 +12,15 @@ class RequestManagementService : public IRequestManagementService {
   explicit RequestManagementService(
       const std::shared_ptr<repository::IRepositoryFactory>&
           repository_factory);
-  Request GetRequestById(const boost::uuids::uuid& request_id) override;
+  Request GetRequestById(const boost::uuids::uuid& request_id,
+                         const AuthData& auth) override;
   boost::uuids::uuid AddRequest(
       const services::RequestToCreateOrUpdate& request) override;
   void UpdateRequest(const boost::uuids::uuid& request_id,
                      const services::RequestToCreateOrUpdate& request) override;
   void AddComment(const boost::uuids::uuid& request_id,
-                  const std::string& content, int64_t author_id) override;
-  std::vector<RequestShort> GetAll() override;
+                  const std::string& content, const AuthData& auth) override;
+  std::vector<RequestShort> GetAll(const AuthData& auth) override;
 
  private:
   std::unique_ptr<repository::RequestsRepository> request_repository_;

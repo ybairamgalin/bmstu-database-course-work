@@ -55,14 +55,15 @@ struct RequestShort {
 class IRequestManagementService {
  public:
   virtual ~IRequestManagementService() = default;
-  virtual Request GetRequestById(const boost::uuids::uuid& request_id) = 0;
+  virtual Request GetRequestById(const boost::uuids::uuid& request_id,
+                                 const AuthData& auth) = 0;
   virtual boost::uuids::uuid AddRequest(
       const RequestToCreateOrUpdate& request) = 0;
   virtual void AddComment(const boost::uuids::uuid& request_id,
-                          const std::string& content, int64_t author_id) = 0;
+                          const std::string& content, const AuthData& auth) = 0;
   virtual void UpdateRequest(const boost::uuids::uuid& request_id,
                              const RequestToCreateOrUpdate& request) = 0;
-  virtual std::vector<RequestShort> GetAll() = 0;
+  virtual std::vector<RequestShort> GetAll(const AuthData& auth) = 0;
 };
 
 }  // namespace services

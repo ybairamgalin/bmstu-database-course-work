@@ -6,13 +6,14 @@
 
 #include "models/user.hpp"
 #include "services/event_service.hpp"
+#include "services/auth_service.hpp"
 
 namespace services {
 
 struct Article {
   std::string title;
   std::string content;
-  int64_t author_id;
+  AuthData author;
   boost::uuids::uuid event_id;
 };
 

@@ -11,14 +11,14 @@ RequestCommentPost::RequestCommentPost(
 
 RequestCommentPost::Response RequestCommentPost::HandleJson(
     RequestCommentPost::Request&& request,
-    userver::server::request::RequestContext&) const {
-  auto auth_data =
-      utils::AuthOrThrow(request.headers, services_->MakeAuthService());
+    userver::server::request::RequestContext& ctx) const {
+  auto& auth = ctx.GetData<services::AuthData>("auth");
+
   auto request_id = http::GetRequiredQueryParamOtThrow<boost::uuids::uuid>(
       request.query_params, "request_id");
 
   services_->MakeRequestManagementService()->AddComment(
-      request_id, request.body.content, auth_data.user_id);
+      request_id, request.body.content, auth);
   return RequestCommentPost::Response{201, {}};
 }
 

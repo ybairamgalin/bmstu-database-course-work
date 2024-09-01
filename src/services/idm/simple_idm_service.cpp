@@ -26,8 +26,12 @@ SimpleIdmService::SimpleIdmService(
     : user_data_repository_(repository_factory->MakeUserDataDbRepository()) {}
 
 void SimpleIdmService::HandleIdmRequest(IdmRequest&& request) {
+  if (request.request_author.role != AuthRole::kAdmin) {
+    throw ServiceLevelException("You cannot manage users permissions");
+  }
+
   if (!user_data_repository_->GetUserDataByLogin(request.login).has_value()) {
-    throw services::ServiceLevelException(
+    throw ServiceLevelException(
         fmt::format("User with login {} does not exist", request.login));
   }
 

@@ -26,8 +26,10 @@ ManageAccessPut::ManageAccessPut(
 ManageAccessPut::Response ManageAccessPut::HandleJson(
     ManageAccessPut::Request&& request,
     userver::server::request::RequestContext& ctx) const {
-  services_->MakeIdmService()->HandleIdmRequest(
-      services::IdmRequest{request.body.login, MapRole(request.body.new_role)});
+  auto& auth = ctx.GetData<services::AuthData>("auth");
+
+  services_->MakeIdmService()->HandleIdmRequest(services::IdmRequest{
+      request.body.login, MapRole(request.body.new_role), auth});
   return {200, {}};
 }
 

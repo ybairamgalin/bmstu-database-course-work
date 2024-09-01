@@ -10,7 +10,9 @@ RequestListGet::RequestListGet(
 RequestListGet::Response RequestListGet::HandleJson(
     RequestListGet::Request&&,
     userver::server::request::RequestContext& ctx) const {
-  auto requests = services_->MakeRequestManagementService()->GetAll();
+  auto auth = ctx.GetData<services::AuthData>("auth");
+
+  auto requests = services_->MakeRequestManagementService()->GetAll(auth);
 
   gen::RequestListGetResponse200 response{};
   response.requests.reserve(requests.size());

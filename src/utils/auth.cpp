@@ -7,7 +7,7 @@ services::AuthData AuthOrThrow(
     const std::unique_ptr<services::IAuthService>& auth_service) {
   const auto it = headers.find("Token");
   if (it == headers.end()) {
-    throw http::HttpException{403, "Missing auth token"};
+    throw http::HttpException{401, "Missing auth token"};
   }
   auto auth_data = auth_service->GetAuthDataByToken(it->second);
   if (!auth_data.has_value()) {

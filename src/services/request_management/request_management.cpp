@@ -50,12 +50,16 @@ RequestManagementService::RequestManagementService(
       user_data_repository_(repository_factory->MakeUserDataDbRepository()) {}
 
 Request RequestManagementService::GetRequestById(
-    const boost::uuids::uuid& request_id) {
+    const boost::uuids::uuid& request_id, const AuthData& auth) {
   auto request_opt = request_repository_->GetRequestById(request_id);
   if (!request_opt) {
     throw ServiceLevelException("Request not found");
   }
   auto& request = request_opt.value();
+
+  if (auth.role == AuthRole::kUser && auth.user_id != request.author_id) {
+    throw ServiceLevelException("You cannot view this request");
+  }
 
   std::vector<int64_t> user_ids_to_request;
   user_ids_to_request.emplace_back(request.author_id);
@@ -133,15 +137,25 @@ void RequestManagementService::UpdateRequest(
 
 void RequestManagementService::AddComment(const boost::uuids::uuid& request_id,
                                           const std::string& content,
-                                          int64_t author_id) {
+                                          const AuthData& auth) {
   auto request_opt = request_repository_->GetRequestById(request_id);
   if (!request_opt.has_value()) {
     throw ServiceLevelException("Request does not exist");
   }
-  request_repository_->AddComment(request_id, content, author_id);
+  if (auth.role == AuthRole::kUser &&
+      auth.user_id != request_opt.value().author_id) {
+    throw ServiceLevelException("You cannot add comment to this request");
+  }
+
+  request_repository_->AddComment(request_id, content, auth.user_id);
 }
 
-std::vector<RequestShort> RequestManagementService::GetAll() {
+std::vector<RequestShort> RequestManagementService::GetAll(
+    const AuthData& auth) {
+  if (auth.role == AuthRole::kUser) {
+    throw ServiceLevelException("Forbidden");
+  }
+
   auto db_requests = request_repository_->GetAll();
 
   std::vector<int64_t> user_ids;

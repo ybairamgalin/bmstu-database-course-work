@@ -60,8 +60,8 @@ RequestGet::Response RequestGet::HandleJson(
   auto request_id = http::GetRequiredQueryParamOtThrow<boost::uuids::uuid>(
       request.query_params, "request_id");
 
-  auto request_full =
-      services_->MakeRequestManagementService()->GetRequestById(request_id);
+  auto request_full = services_->MakeRequestManagementService()->GetRequestById(
+      request_id, auth);
 
   return MapResponse(std::move(request_full));
 }

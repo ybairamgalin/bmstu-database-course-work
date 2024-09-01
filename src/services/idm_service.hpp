@@ -22,6 +22,7 @@ enum class UserRole { kUser, kModerator, kAdmin };
 struct IdmRequest {
   std::string login;
   UserRole target_role;
+  AuthData request_author;
 };
 
 class IIdmService {

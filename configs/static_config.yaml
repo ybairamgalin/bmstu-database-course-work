@@ -56,6 +56,9 @@ components_manager:
             path: /v2/request
             method: POST
             task_processor: main-task-processor
+            middlewares:
+                pipeline-builder: auth-pipeline-builder
+                auth-middleware: { }
         v2_request_get:
             path: /v2/request
             method: GET
@@ -82,10 +85,16 @@ components_manager:
             path: /v2/request/comment
             method: POST
             task_processor: main-task-processor
+            middlewares:
+                pipeline-builder: auth-pipeline-builder
+                auth-middleware: { }
         v2_manage_access_put:
             path: /v2/manage/access
             method: PUT
             task_processor: main-task-processor
+            middlewares:
+                pipeline-builder: auth-pipeline-builder
+                auth-middleware: { }
         v2_article_get:
             path: /v2/article
             method: GET
@@ -101,6 +110,9 @@ components_manager:
             path: /v2/file
             method: PUT
             task_processor: main-task-processor
+            middlewares:
+                pipeline-builder: auth-pipeline-builder
+                auth-middleware: { }
 
         postgres-db-1:
             dbconnection: $dbconnection

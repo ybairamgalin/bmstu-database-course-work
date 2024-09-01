@@ -16,8 +16,8 @@ ArticlePost::Response ArticlePost::HandleJson(
   auto article_id_opt = http::GetQueryParamOpt<boost::uuids::uuid>(
       request.query_params, "article_id");
 
-  services::Article article{request.body.title, request.body.content,
-                            auth.user_id, request.body.event_id};
+  services::Article article{request.body.title, request.body.content, auth,
+                            request.body.event_id};
   if (article_id_opt.has_value()) {
     services_->MakeArticleService()->UpdateArticle(article_id_opt.value(),
                                                    article);
