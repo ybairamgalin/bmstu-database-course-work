@@ -27,3 +27,14 @@ UserFullInfo:
       type: string
     phone:
       type: string
+Event:
+  type: object
+  additionalProperties: false
+  required:
+    - name
+    - description
+  properties:
+    name:
+      type: string
+    description:
+      type: string

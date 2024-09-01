@@ -75,6 +75,10 @@ components_manager:
             path: /v2/manage/access
             method: PUT
             task_processor: main-task-processor
+        v2_article_get:
+            path: /v2/article
+            method: GET
+            task_processor: main-task-processor
         v2_article_post:
             path: /v2/article
             method: POST

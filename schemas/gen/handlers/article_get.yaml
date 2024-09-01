@@ -1,0 +1,17 @@
+ArticleGetResponse200:
+  type: object
+  additionalProperties: false
+  required:
+    - title
+    - content
+    - event
+    - author
+  properties:
+    title:
+      type: string
+    content:
+      type: string
+    event:
+      $ref: "/etc/schemas/gen/common.yaml#/Event"
+    author:
+      $ref: "/etc/schemas/gen/common.yaml#/UserFullInfo"

@@ -12,10 +12,6 @@
 
 namespace {
 
-services::UserInfo MapUser(const repository::AuthData& user) {
-  return services::UserInfo{user.user_id, user.name, user.login, user.phone};
-}
-
 std::vector<repository::Attachment> MapAttachments(
     const std::vector<services::Attachment>& attachments) {
   std::vector<repository::Attachment> result;

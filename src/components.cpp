@@ -8,6 +8,7 @@
 #include <userver/storages/postgres/component.hpp>
 #include <userver/testsuite/testsuite_support.hpp>
 
+#include "handlers/v2/article_get.hpp"
 #include "handlers/v2/article_post.hpp"
 #include "handlers/v2/event_post.hpp"
 #include "handlers/v2/file_put.hpp"
@@ -39,5 +40,6 @@ userver::components::ComponentList MakeComponents() {
       .Append<handlers::v2::RequestCommentPost>()
       .Append<handlers::v2::ManageAccessPut>()
       .Append<handlers::v2::FilePut>()
+      .Append<handlers::v2::ArticleGet>()
       .Append<handlers::v2::ArticlePost>();
 }

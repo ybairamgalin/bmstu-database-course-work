@@ -8,6 +8,8 @@
 
 #include <boost/uuid/uuid.hpp>
 
+#include "models/user.hpp"
+
 namespace services {
 
 struct Attachment {
@@ -20,13 +22,6 @@ struct RequestToCreateOrUpdate {
   boost::uuids::uuid event_id;
   std::string description;
   std::vector<Attachment> attachments;
-};
-
-struct UserInfo {
-  int64_t id;
-  std::string name;
-  std::string login;
-  std::string phone;
 };
 
 struct RequestComment {
