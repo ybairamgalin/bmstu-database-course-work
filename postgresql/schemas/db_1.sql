@@ -84,8 +84,7 @@ create table service.articles(
     created_at timestamptz not null default now()
 );
 
-create type service.FileRequest as (
-    request_id uuid,
-    file_uuid uuid,
-    source_name text
+create type service.attachment_v1 as (
+    id uuid,
+    filename text
 );

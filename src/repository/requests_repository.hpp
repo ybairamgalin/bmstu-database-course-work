@@ -4,6 +4,9 @@
 #include <vector>
 
 #include <userver/storages/postgres/io/chrono.hpp>
+#include <userver/storages/postgres/io/pg_types.hpp>
+#include <userver/storages/postgres/io/type_mapping.hpp>
+#include <userver/storages/postgres/io/user_types.hpp>
 #include <userver/utils/datetime/timepoint_tz.hpp>
 
 #include <boost/uuid/uuid.hpp>
@@ -13,6 +16,12 @@ namespace repository {
 struct Attachment {
   boost::uuids::uuid id;
   std::string filename;
+
+  bool operator<(const Attachment& other) const noexcept {
+    if (id < other.id) return true;
+    if (id > other.id) return false;
+    return filename < other.filename;
+  }
 };
 
 struct Request {
@@ -59,3 +68,8 @@ class RequestsRepository {
 };
 
 }  // namespace repository
+
+template <>
+struct userver::storages::postgres::io::CppToUserPg<repository::Attachment> {
+  static constexpr DBTypeName postgres_name = "service.attachment_v1";
+};

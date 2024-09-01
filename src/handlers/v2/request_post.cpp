@@ -2,6 +2,7 @@
 
 #include <boost/uuid/nil_generator.hpp>
 
+#include "http/query.hpp"
 #include "services/request_management_service.hpp"
 #include "utils/auth.hpp"
 
@@ -14,6 +15,9 @@ RequestPost::RequestPost(const userver::components::ComponentConfig& config,
 RequestPost::Response RequestPost::HandleJson(
     RequestPost::Request&& request,
     userver::server::request::RequestContext& ctx) const {
+  const auto request_id_opt = http::GetQueryParamOpt<boost::uuids::uuid>(
+      request.query_params, "request_id");
+
   auto auth_data =
       utils::AuthOrThrow(request.headers, services_->MakeAuthService());
 
@@ -31,9 +35,14 @@ RequestPost::Response RequestPost::HandleJson(
         services::Attachment{attachment.id, attachment.filename});
   }
 
+  if (request_id_opt.has_value()) {
+    services_->MakeRequestManagementService()->UpdateRequest(
+        request_id_opt.value(), request_creation_request);
+    return Response{gen::RequestPostResponse200{request_id_opt.value()}, 200, {}};
+  }
+
   auto uuid = services_->MakeRequestManagementService()->AddRequest(
       request_creation_request);
-
   return Response{gen::RequestPostResponse200{uuid}, 201, {}};
 }
 

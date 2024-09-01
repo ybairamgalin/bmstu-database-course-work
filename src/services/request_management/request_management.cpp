@@ -113,6 +113,14 @@ boost::uuids::uuid RequestManagementService::AddRequest(
 void RequestManagementService::UpdateRequest(
     const boost::uuids::uuid& request_id,
     const RequestToCreateOrUpdate& request) {
+  auto db_request_opt = request_repository_->GetRequestById(request_id);
+  if (!db_request_opt.has_value()) {
+    throw ServiceLevelException("Request not found");
+  }
+  if (db_request_opt->author_id != request.author_id) {
+    throw ServiceLevelException("Cannot edit other users' requests",
+                                ErrorType::kInvalidInput);
+  }
   repository::Request db_request{
       request_id,
       request.event_id,

@@ -30,6 +30,7 @@ SimpleServiceFactory::MakeRequestManagementService() {
 std::unique_ptr<IEventService> SimpleServiceFactory::MakeEventService() {
   return std::make_unique<EventService>(repository_factory_);
 }
+
 std::unique_ptr<IFileService> SimpleServiceFactory::MakeFileService() {
   return std::make_unique<FileService>(repository_factory_);
 }

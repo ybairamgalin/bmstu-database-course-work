@@ -4,6 +4,8 @@
 
 #include <userver/storages/postgres/typed_result_set.hpp>
 
+#include "utils/merge_utils.hpp"
+
 namespace b_ranges = boost::adaptors;
 
 namespace {
@@ -17,30 +19,7 @@ struct DbRequest {
   userver::storages::postgres::TimePointTz updated_at;
 };
 
-struct FileRequest {
-  boost::uuids::uuid request_id;
-  boost::uuids::uuid file_uuid;
-  std::string source_name;
-};
-
-std::vector<FileRequest> MapAttachments(
-    const boost::uuids::uuid& request_id,
-    const std::vector<repository::Attachment>& attachments) {
-  std::vector<FileRequest> result;
-  result.reserve(attachments.size());
-  for (const auto& attachment : attachments) {
-    result.emplace_back(
-        FileRequest{request_id, attachment.id, attachment.filename});
-  }
-  return result;
-}
-
 }  // namespace
-
-template <>
-struct userver::storages::postgres::io::CppToUserPg<FileRequest> {
-  static constexpr DBTypeName postgres_name = "service.FileRequest";
-};
 
 namespace repository {
 
@@ -116,14 +95,44 @@ void DbRequestsRepository::Insert(const repository::Request& request) {
 }
 
 void DbRequestsRepository::Update(const repository::Request& request) {
-  cluster_ptr_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                        "update service.requests set "
-                        "description = $2 "
-                        "event_id = $3 "
-                        "where request_id = $1 "
-                        "description = excluded.description ",
-                        request.request_id, request.description,
-                        request.event_id);
+  auto trx = cluster_ptr_->Begin(
+      userver::storages::postgres::ClusterHostType::kMaster, {});
+
+  trx.Execute(
+      "update service.requests set "
+      "description = $2, "
+      "event_id = $3 "
+      "where request_id = $1 ",
+      request.request_id, request.description, request.event_id);
+
+  auto attachments = trx.Execute(
+                            "select file_uuid, source_name "
+                            "from service.request_file "
+                            "where request_id = $1",
+                            request.request_id)
+                         .AsContainer<std::set<Attachment>>(
+                             userver::storages::postgres::kRowTag);
+  auto merge_result = utils::Merge(
+      attachments,
+      std::set(request.attachments.begin(), request.attachments.end()));
+
+  if (!merge_result.deleted.empty()) {
+    trx.Execute(
+        "delete from service.request_file "
+        "where (request_id, file_uuid, source_name) "
+        "in (select $2, id, filename from unnest($1::service.attachment_v1[]))",
+        merge_result.deleted, request.request_id);
+  }
+
+  if (!merge_result.added.empty()) {
+    trx.Execute(
+        "insert into service.request_file ("
+        "    request_id, file_uuid, source_name) "
+        "select $2, id, filename from unnest($1::service.attachment_v1[])",
+        merge_result.added, request.request_id);
+  }
+
+  trx.Commit();
 }
 void DbRequestsRepository::AddComment(const boost::uuids::uuid& id,
                                       const std::string& content,

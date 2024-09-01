@@ -1,6 +1,7 @@
 #include "user_data.hpp"
-#include "../../utils/merge_utils.hpp"
-#include "../http/user_data.hpp"
+
+#include "utils/merge_utils.hpp"
+#include "repository/http/user_data.hpp"
 
 namespace {
 
@@ -77,10 +78,7 @@ void DbUserDataRepository::SaveUserData(const repository::AuthData& auth_data) {
       db_permissions.AsContainer<std::set<std::string>>();
   const auto merged_result =
       utils::Merge(permissions_set, auth_data.permission_group);
-  LOG_ERROR() << merged_result.added.size();
-  LOG_ERROR() << merged_result.deleted.size();
-  LOG_ERROR() << auth_data.permission_group.size();
-  LOG_ERROR() << permissions_set.size();
+
   if (!merged_result.added.empty()) {
     trx.Execute(
         "insert into service.permissions (slug, user_id) "
