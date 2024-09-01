@@ -51,15 +51,21 @@
 \begin{table}[ht!]
 	\centering
 	\caption{\label{tab:trigger_tests} Сценарии тестирования триггера}
-	\begin{tabular}{|l|l|l|l|l|}
+	\begin{tabular}{|p{7.5cm}|p{4cm}|p{4cm}|}
 		\hline
-		\textbf{Событие} & \textbf{Ожидаемый результат} & \textbf{Рельный результат}\\
+		\textbf{Событие} & \textbf{Ожидание} & \textbf{Результат}\\
 		\hline
 		Изменилось поле description & updated{\_}at = now() & updated{\_}at = now() \\
 		\hline
 		Изменилось поле status & updated{\_}at = now() & updated{\_}at =  now() \\
 		\hline
 		Попытка изменить updated{\_}at & updated{\_}at = now() & updated{\_}at =now() \\
+		\hline
+		Добавление записи в request{\_}files & updated{\_}at = now() & updated{\_}at =now() \\
+		\hline
+		Удаление записи в request{\_}files & updated{\_}at = now() & updated{\_}at =now() \\
+		\hline
+		Обновление записи в request{\_}files & updated{\_}at = now() & updated{\_}at =now() \\
 \hline
 		
 	\end{tabular}
@@ -67,36 +73,8 @@
 
 \subsubsection{Роли}
 
-Помимо ролевой модели на уровне приложения разработана для дополнительных гарантий безопасности дополнительно разраотана ролевая модель на уровне приложения.  Права пользователей представлены в таблице \ref{tab:roles}.
-
-\begin{table}[ht!]
-	\centering
-	\caption{\label{tab:roles} Ролевая модель на уровне базы данных}
-	\begin{tabular}{|l|l|l|l|l|}
-		\hline
-		\textbf{Действие} & \textbf{Таблица} & \textbf{everybody} & \textbf{modarator} &  \textbf{admin}\\
-		\hline
-		select & все таблицы & да & да & да \\
-		\hline
-		insert, update & requests & да & да & да \\
-		\hline
-		insert, update, delete & events & нет & да & да \\
-		\hline
-		insert, update & users & да & да & да \\
-		\hline
-		insert, update, & requests{\_}file{\_}meta & да & да & да \\
-		\hline
-		insert, update & file{\_}meta & да & да & да \\
-		\hline
-		insert, update, delete & permisisions & нет & нет & да \\
-		\hline
-		insert, update & comments & да & да & да \\
-		\hline
-
-	\end{tabular}
-\end{table}
-
-Такая ролевая модель на уровне базы данных обеспечит пользователей минимальными необходимыми правами для доступа к просмотру и модификации данных.
+Ролевая модель а также соблюдение ролей реализовано на уровне приложения и включает в себя
+роли пользователя, модератора, администратора.
 
 \subsection{Обеспечение целостности данных}
 
@@ -104,7 +82,7 @@
 \begin{enumerate}
 	\item добавлены внешние ключи (полный список можно увидеть на er-диаграмме на рисунке \ref{fig:dr-er});
 	\item доавлено ограничение на уникальность хеша файла, это позволит гарантировать отсутсвие в системе двух одинаковых файлов;
-	\item создан и протестирован триггер на поле updated{\_}at таблицы requests.
+	\item создан и протестирован триггер на поле updated{\_}at таблицы requests и таблицы связей request{\_}files
 \end{enumerate}
 
 
@@ -113,16 +91,14 @@
 Доступ к данным осуществляется методом отправки http запроса на сервер, на котором развернуто приложение. Ниже приведено опсание эндпоинтов.
 
 \begin{enumerate}
-	\item /v1/request GET --- получение информации о запросе по его идентификатору. 
-	\item /v1/requests GET --- получение информации о всех запросах, доступных для просмотра.
-	\item /v1/requests POST --- создание/обновление запроса.
-	\item /v1/request/status PATCH --- обновление статуса заявки.
-	\item /v1/request/comment POST --- добавление комментария к заявке.
-	\item /v1/file GET --- получение файла по его идентификтору.
-	\item /v1/file POST --- добавление файла (приложения).
-	\item /v1/events GET --- просмотр списка мероприятий.
-	\item /v1/event POST --- создание мероприятия.
-	\item /v1/event DELETE --- удаление мероприятия.
+	\item /article GET --- получение статьи по идентификатору.
+	\item /article POST --- создание, обновление статьи.
+	\item /event/list GET --- получение списка мероприятий.
+	\item /event POST --- создание мероприятия.
+	\item /file PUT --- добавление файла.
+	\item /manage/access PUT --- управление доступом.
+	\item /request/comment POST --- добавление комментария к заявке.
+	\item /request POST создание заявки.
 \end{enumerate}
 
 \subsection{Вывод}

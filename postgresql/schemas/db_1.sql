@@ -5,19 +5,11 @@ create schema service;
 create table service.users(
     yandex_id bigint primary key,
     token text not null unique,
-    login text unique not null,
+    login text not null unique,
     name text not null,
     phone text unique not null,
     role text not null default 'user',
     created_at timestamptz not null default now()
-);
-
-create table service.permissions(
-    slug text not null,
-    user_id bigint not null references service.users(yandex_id),
-    created_at timestamptz not null default now(),
-
-    primary key (user_id, slug)
 );
 
 create table service.events(
