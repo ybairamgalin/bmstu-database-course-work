@@ -77,6 +77,7 @@ Request RequestManagementService::GetRequestById(
   Request result{};
 
   result.author = MapUser(user_id_to_user.at(request.author_id));
+  result.status = request.status;
   result.event_id = request.event_id;
   result.description = request.description;
   result.attachments = MapAttachments(request.attachments);
@@ -107,30 +108,43 @@ boost::uuids::uuid RequestManagementService::AddRequest(
 
   auto boost_uuid = boost::uuids::random_generator()();
 
-  repository::Request db_request{boost_uuid, request.event_id,
-                                 request.author_id, request.description,
-                                 MapAttachments(request.attachments)};
+  repository::Request db_request{boost_uuid,
+                                 request.event_id,
+                                 request.author.user_id,
+                                 request.description,
+                                 MapAttachments(request.attachments),
+                                 "new"};
   request_repository_->Insert(db_request);
   return boost_uuid;
 }
 
 void RequestManagementService::UpdateRequest(
     const boost::uuids::uuid& request_id,
-    const RequestToCreateOrUpdate& request) {
+    const RequestToCreateOrUpdate& orig_request) {
+  auto request = orig_request;
   auto db_request_opt = request_repository_->GetRequestById(request_id);
   if (!db_request_opt.has_value()) {
     throw ServiceLevelException("Request not found");
   }
-  if (db_request_opt->author_id != request.author_id) {
+  if (db_request_opt->author_id != request.author.user_id) {
     throw ServiceLevelException("Cannot edit other users' requests",
                                 ErrorType::kInvalidInput);
+  }
+  if (request.status.empty()) {
+    request.status = db_request_opt.value().status;
+  }
+  if (db_request_opt.value().status != request.status &&
+      request.author.role == AuthRole::kUser) {
+    throw ServiceLevelException("Cannot edit request status",
+                                ErrorType::kPermissionDenied);
   }
   repository::Request db_request{
       request_id,
       request.event_id,
-      request.author_id,
+      request.author.user_id,
       request.description,
       MapAttachments(request.attachments),
+      request.status,
   };
   request_repository_->Update(db_request);
 }

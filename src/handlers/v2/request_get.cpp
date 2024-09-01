@@ -35,6 +35,7 @@ handlers::v2::RequestGet::Response MapResponse(services::Request&& req) {
               req.author.phone,
           },
           req.description,
+          req.status,
           std::move(comments),
           req.created_at,
           req.updated_at,

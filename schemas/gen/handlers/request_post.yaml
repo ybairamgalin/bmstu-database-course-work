@@ -26,6 +26,14 @@ RequestPostBody:
     description:
       description: Description of request
       type: string
+    status:
+      type: string
+      enum:
+        - new
+        - moderating
+        - info_required
+        - accepted
+        - declined
 RequestPostResponse200:
   additionalProperties: false
   type: object

@@ -15,14 +15,13 @@ RequestPost::RequestPost(const userver::components::ComponentConfig& config,
 RequestPost::Response RequestPost::HandleJson(
     RequestPost::Request&& request,
     userver::server::request::RequestContext& ctx) const {
+  auto auth = ctx.GetData<services::AuthData>("auth");
+
   const auto request_id_opt = http::GetQueryParamOpt<boost::uuids::uuid>(
       request.query_params, "request_id");
 
-  auto auth_data =
-      utils::AuthOrThrow(request.headers, services_->MakeAuthService());
-
   services::RequestToCreateOrUpdate request_creation_request{};
-  request_creation_request.author_id = auth_data.user_id;
+  request_creation_request.author = auth;
 
   if (request.body.description.has_value()) {
     request_creation_request.description = request.body.description.value();
@@ -35,10 +34,16 @@ RequestPost::Response RequestPost::HandleJson(
         services::Attachment{attachment.id, attachment.filename});
   }
 
+  if (request.body.status.has_value()) {
+    request_creation_request.status =
+        gen::ToString(request.body.status.value());
+  }
+
   if (request_id_opt.has_value()) {
     services_->MakeRequestManagementService()->UpdateRequest(
         request_id_opt.value(), request_creation_request);
-    return Response{gen::RequestPostResponse200{request_id_opt.value()}, 200, {}};
+    return Response{
+        gen::RequestPostResponse200{request_id_opt.value()}, 200, {}};
   }
 
   auto uuid = services_->MakeRequestManagementService()->AddRequest(

@@ -4,6 +4,7 @@ RequestGetResponse200:
   required:
     - event_id
     - attachments
+    - status
     - user
     - description
     - comments
@@ -30,6 +31,8 @@ RequestGetResponse200:
     user:
       $ref: "/etc/schemas/gen/common.yaml#/UserFullInfo"
     description:
+      type: string
+    status:
       type: string
     comments:
       type: array

@@ -15,6 +15,7 @@ struct DbRequest {
   boost::uuids::uuid event_id;
   int64_t author_id;
   std::string description;
+  std::string status;
   userver::storages::postgres::TimePointTz created_at;
   userver::storages::postgres::TimePointTz updated_at;
 };
@@ -32,7 +33,7 @@ std::optional<RequestFull> DbRequestsRepository::GetRequestById(
   auto result = cluster_ptr_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       "select request_id, event_id, user_id, "
-      "    description, created_at, updated_at "
+      "    description, status, created_at, updated_at "
       "from service.requests "
       "where request_id = $1",
       uuid);
@@ -64,10 +65,10 @@ std::optional<RequestFull> DbRequestsRepository::GetRequestById(
           .AsContainer<std::vector<Attachment>>(
               userver::storages::postgres::kRowTag);
 
-  return RequestFull{db_request.request_id, db_request.event_id,
-                     db_request.author_id,  db_request.description,
-                     std::move(comments),   std::move(attachments),
-                     db_request.created_at, db_request.updated_at};
+  return RequestFull{
+      db_request.request_id,  db_request.event_id,   db_request.author_id,
+      db_request.description, db_request.status,     std::move(comments),
+      std::move(attachments), db_request.created_at, db_request.updated_at};
 }
 
 void DbRequestsRepository::Insert(const repository::Request& request) {
@@ -101,9 +102,11 @@ void DbRequestsRepository::Update(const repository::Request& request) {
   trx.Execute(
       "update service.requests set "
       "description = $2, "
-      "event_id = $3 "
+      "event_id = $3,"
+      "status = $4 "
       "where request_id = $1 ",
-      request.request_id, request.description, request.event_id);
+      request.request_id, request.description, request.event_id,
+      request.status);
 
   auto attachments = trx.Execute(
                             "select file_uuid, source_name "

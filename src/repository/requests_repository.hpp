@@ -30,6 +30,7 @@ struct Request {
   int64_t author_id;
   std::string description;
   std::vector<Attachment> attachments;
+  std::string status;
 };
 
 struct RequestComment {
@@ -43,6 +44,7 @@ struct RequestFull {
   boost::uuids::uuid event_id;
   int64_t author_id;
   std::string description;
+  std::string status;
   std::vector<RequestComment> comments;
   std::vector<Attachment> attachments;
   userver::storages::postgres::TimePointTz created_at;

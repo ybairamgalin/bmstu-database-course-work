@@ -19,10 +19,11 @@ struct Attachment {
 };
 
 struct RequestToCreateOrUpdate {
-  int64_t author_id;
+  AuthData author;
   boost::uuids::uuid event_id;
   std::string description;
   std::vector<Attachment> attachments;
+  std::string status;
 };
 
 struct RequestComment {
@@ -39,6 +40,7 @@ struct AttachmentForDownload {
 struct Request {
   boost::uuids::uuid event_id;
   UserInfo author;
+  std::string status;
   std::string description;
   std::vector<AttachmentForDownload> attachments;
   std::vector<RequestComment> comments;
