@@ -19,6 +19,7 @@ class RequestManagementService : public IRequestManagementService {
                      const services::RequestToCreateOrUpdate& request) override;
   void AddComment(const boost::uuids::uuid& request_id,
                   const std::string& content, int64_t author_id) override;
+  std::vector<RequestShort> GetAll() override;
 
  private:
   std::unique_ptr<repository::RequestsRepository> request_repository_;

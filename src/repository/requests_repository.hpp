@@ -40,6 +40,12 @@ struct RequestFull {
   userver::storages::postgres::TimePointTz updated_at;
 };
 
+struct RequestShort {
+  boost::uuids::uuid request_id{};
+  int64_t author_id{};
+  userver::storages::postgres::TimePointTz created_at{};
+};
+
 class RequestsRepository {
  public:
   virtual ~RequestsRepository() = default;
@@ -49,6 +55,7 @@ class RequestsRepository {
   virtual void Update(const Request& request) = 0;
   virtual void AddComment(const boost::uuids::uuid& id,
                           const std::string& content, int64_t author_id) = 0;
+  virtual std::vector<RequestShort> GetAll() = 0;
 };
 
 }  // namespace repository

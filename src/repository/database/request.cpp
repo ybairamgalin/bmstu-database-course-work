@@ -135,4 +135,14 @@ void DbRequestsRepository::AddComment(const boost::uuids::uuid& id,
       id, author_id, content);
 }
 
+std::vector<RequestShort> DbRequestsRepository::GetAll() {
+  auto result = cluster_ptr_->Execute(
+      userver::storages::postgres::ClusterHostType::kSlave,
+      "select request_id, user_id, created_at "
+      "from service.requests "
+      "order by created_at desc");
+  return result.AsContainer<std::vector<RequestShort>>(
+      userver::storages::postgres::kRowTag);
+}
+
 }  // namespace repository

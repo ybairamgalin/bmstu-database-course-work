@@ -3,6 +3,7 @@
 
 #include <optional>
 #include <string>
+#include <vector>
 
 #include <userver/utils/datetime/timepoint_tz.hpp>
 
@@ -45,6 +46,12 @@ struct Request {
   userver::utils::datetime::TimePointTz updated_at;
 };
 
+struct RequestShort {
+  boost::uuids::uuid id;
+  UserInfo author;
+  userver::utils::datetime::TimePointTz created_at;
+};
+
 class IRequestManagementService {
  public:
   virtual ~IRequestManagementService() = default;
@@ -55,6 +62,7 @@ class IRequestManagementService {
                           const std::string& content, int64_t author_id) = 0;
   virtual void UpdateRequest(const boost::uuids::uuid& request_id,
                              const RequestToCreateOrUpdate& request) = 0;
+  virtual std::vector<RequestShort> GetAll() = 0;
 };
 
 }  // namespace services

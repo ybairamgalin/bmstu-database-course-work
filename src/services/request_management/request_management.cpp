@@ -133,4 +133,29 @@ void RequestManagementService::AddComment(const boost::uuids::uuid& request_id,
   request_repository_->AddComment(request_id, content, author_id);
 }
 
+std::vector<RequestShort> RequestManagementService::GetAll() {
+  auto db_requests = request_repository_->GetAll();
+
+  std::vector<int64_t> user_ids;
+  user_ids.reserve(db_requests.size());
+  for (const auto& db_request : db_requests) {
+    user_ids.emplace_back(db_request.author_id);
+  }
+  auto user_id_to_user = utils::AsMap(
+      user_data_repository_->GetUserDataByIds(user_ids),
+      [](const repository::AuthData& elem) -> int64_t { return elem.user_id; });
+
+  std::vector<RequestShort> result;
+  result.reserve(db_requests.size());
+  for (const auto& db_request : db_requests) {
+    result.emplace_back(RequestShort{
+        db_request.request_id,
+        MapUser(user_id_to_user.at(db_request.author_id)),
+        userver::utils::datetime::TimePointTz{db_request.created_at},
+    });
+  }
+
+  return result;
+}
+
 }  // namespace services

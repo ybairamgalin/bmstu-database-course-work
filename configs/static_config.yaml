@@ -63,6 +63,13 @@ components_manager:
             middlewares:
                 pipeline-builder: auth-pipeline-builder
                 auth-middleware: {}
+        v2_request_list_get:
+            path: /v2/request/list
+            method: GET
+            task_processor: main-task-processor
+            middlewares:
+                pipeline-builder: auth-pipeline-builder
+                auth-middleware: { }
         v2_event_post:
             path: /v2/event
             method: POST

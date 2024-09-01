@@ -16,6 +16,7 @@
 #include "handlers/v2/manage_access_put.hpp"
 #include "handlers/v2/request_comment_post.hpp"
 #include "handlers/v2/request_get.hpp"
+#include "handlers/v2/request_list_get.hpp"
 #include "handlers/v2/request_post.hpp"
 #include "middleware/auth.hpp"
 #include "middleware/auth_pipeline_builder.hpp"
@@ -37,9 +38,10 @@ userver::components::ComponentList MakeComponents() {
       // handlers
       .Append<handlers::v2::RequestPost>()
       .Append<handlers::v2::RequestGet>()
+      .Append<handlers::v2::RequestCommentPost>()
+      .Append<handlers::v2::RequestListGet>()
       .Append<handlers::v2::EventPost>()
       .Append<handlers::v2::EventListGet>()
-      .Append<handlers::v2::RequestCommentPost>()
       .Append<handlers::v2::ManageAccessPut>()
       .Append<handlers::v2::FilePut>()
       .Append<handlers::v2::ArticleGet>()
