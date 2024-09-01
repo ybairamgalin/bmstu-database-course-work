@@ -29,4 +29,13 @@ void DbEventRepository::AddEvent(const Event& event) {
       event.uuid, event.name, event.description);
 }
 
+std::vector<Event> DbEventRepository::GetAll() {
+  auto result = cluster_ptr_->Execute(
+      userver::storages::postgres::ClusterHostType::kSlaveOrMaster,
+      "select event_id, name, description "
+      "from service.events ");
+  return result.AsContainer<std::vector<Event>>(
+      userver::storages::postgres::kRowTag);
+}
+
 }  // namespace repository

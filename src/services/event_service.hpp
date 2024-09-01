@@ -25,6 +25,7 @@ class IEventService {
   virtual boost::uuids::uuid AddEvent(const Event& event) = 0;
   virtual boost::uuids::uuid UpdateEvent(const Event& event,
                                          const boost::uuids::uuid& id) = 0;
+  virtual std::vector<Event> GetAllEvents() = 0;
 };
 
 }  // namespace services

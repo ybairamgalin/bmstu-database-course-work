@@ -19,6 +19,7 @@ class EventRepository {
   virtual std::vector<Event> GetEventsByIds(
       const std::vector<boost::uuids::uuid>& event_id) = 0;
   virtual void AddEvent(const Event& event) = 0;
+  virtual std::vector<Event> GetAll() = 0;
 };
 
 }  // namespace repository

@@ -25,4 +25,15 @@ boost::uuids::uuid EventService::UpdateEvent(const Event& event,
   return {};
 }
 
+std::vector<Event> EventService::GetAllEvents() {
+  auto events = event_repository_->GetAll();
+  std::vector<Event> result;
+  result.reserve(events.size());
+  for (auto& event : events) {
+    result.emplace_back(
+        Event{std::move(event.name), std::move(event.description)});
+  }
+  return result;
+}
+
 }  // namespace services

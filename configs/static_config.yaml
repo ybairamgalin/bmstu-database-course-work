@@ -67,6 +67,10 @@ components_manager:
             path: /v2/event
             method: POST
             task_processor: main-task-processor
+        v2_event_list_get:
+            path: /v2/event/list
+            method: GET
+            task_processor: main-task-processor
         v2_request_comment_post:
             path: /v2/request/comment
             method: POST

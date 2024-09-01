@@ -1,19 +1,20 @@
 #pragma once
 
-#include "gen/handlers/request_post.hpp"
+#include "gen/handlers/event_list_get.hpp"
 #include "handlers/base_json_handler.hpp"
+#include "http/request.hpp"
 
 namespace handlers::v2 {
 
-class RequestPost : public BaseJsonHandler<gen::RequestPostBody,
-                                           gen::RequestPostResponse200> {
+class EventListGet : public BaseJsonHandler<http::EmptyRequestBody,
+                                           gen::EventListGet200Response> {
  public:
-  static constexpr std::string_view kName = "v2_request_post";
+  static constexpr std::string_view kName = "v2_event_list_get";
 
   using BaseJsonHandler::Request;
   using BaseJsonHandler::Response;
 
-  RequestPost(const userver::components::ComponentConfig& config,
+  EventListGet(const userver::components::ComponentConfig& config,
               const userver::components::ComponentContext& context);
 
   Response HandleJson(

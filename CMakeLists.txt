@@ -87,7 +87,7 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/http/query.hpp
     src/utils/meta.hpp
     src/http/query.cpp
-    src/handlers/v2/event.post.cpp
+    src/handlers/v2/event_post.cpp
     src/handlers/v2/event_post.hpp
     src/services/event_service.hpp
     src/services/event/event.cpp
@@ -123,9 +123,11 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/handlers/v2/article_post.cpp
     src/handlers/v2/article_get.hpp
     src/repository/articles_repository.hpp
-        src/handlers/v2/article_get.cpp
-        src/services/models/user.hpp
-        src/services/models/user.cpp
+    src/handlers/v2/article_get.cpp
+    src/services/models/user.hpp
+    src/services/models/user.cpp
+        src/handlers/v2/event_list_get.cpp
+        src/handlers/v2/event_list_get.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${AWSSDK_LINK_LIBRARIES})
