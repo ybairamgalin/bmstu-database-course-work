@@ -145,10 +145,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs ${PROJECT_NAM
 
 
 add_executable(${PROJECT_NAME}_unittest
-    src/tests/test_auth_service.cpp
-    src/tests/mock_repositories.hpp
-    src/tests/mock_repositories.cpp
-    src/tests/test_idm_service.cpp
+    src/tests/mock.hpp
+        #    src/tests/test_auth_service.cpp
+#    src/tests/mock_repositories.hpp
+#    src/tests/mock_repositories.cpp
+#    src/tests/test_idm_service.cpp
 )
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE
     ${PROJECT_NAME}_objs

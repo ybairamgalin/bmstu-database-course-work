@@ -5,6 +5,8 @@ src/gen
 *.bkp
 *.dtmp
 
+cli/token
+
 __pycache__
 build*
 compile_commands.json

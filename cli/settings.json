@@ -1,0 +1,17 @@
+{
+  "request": {
+    "handler": "v2/request",
+    "method": "POST",
+    "body_required": true
+  },
+  "event": {
+    "handler": "v2/event",
+    "method": "POST",
+    "body_required": true
+  },
+  "get_request": {
+    "handler": "v2/request",
+    "method": "GET",
+    "body_required": false
+  }
+}

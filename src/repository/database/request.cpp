@@ -137,6 +137,7 @@ void DbRequestsRepository::Update(const repository::Request& request) {
 
   trx.Commit();
 }
+
 void DbRequestsRepository::AddComment(const boost::uuids::uuid& id,
                                       const std::string& content,
                                       int64_t author_id) {
