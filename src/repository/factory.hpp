@@ -2,14 +2,16 @@
 
 #include <memory>
 
-#include <aws/s3/S3Client.h>
-
+#include "articles_repository.hpp"
 #include "event_repository.hpp"
 #include "file_meta_repository.hpp"
 #include "file_storage_repository.hpp"
 #include "requests_repository.hpp"
 #include "user_data_repository.hpp"
-#include "articles_repository.hpp"
+
+namespace Aws::S3 {
+class S3Client;
+}
 
 namespace repository {
 
@@ -31,6 +33,8 @@ class SimpleRepositoryFactory : public IRepositoryFactory {
   SimpleRepositoryFactory(userver::clients::http::Client& http_client,
                           userver::storages::postgres::ClusterPtr cluster_ptr,
                           std::shared_ptr<Aws::S3::S3Client> s3_client);
+  ~SimpleRepositoryFactory() override;
+
   std::unique_ptr<RequestsRepository> MakeRequestsRepository() override;
   std::unique_ptr<UserDataRepository> MakeUserDataDbRepository() override;
   std::unique_ptr<UserDataRepository> MakeUserDataHttpRepository() override;
@@ -40,9 +44,8 @@ class SimpleRepositoryFactory : public IRepositoryFactory {
   std::unique_ptr<ArticleRepository> MakeArticleRepository() override;
 
  private:
-  userver::clients::http::Client& http_client_;
-  userver::storages::postgres::ClusterPtr cluster_ptr_;
-  std::shared_ptr<Aws::S3::S3Client> s3_client_;
+  struct Impl;
+  std::unique_ptr<Impl> impl_;
 };
 
 }  // namespace repository

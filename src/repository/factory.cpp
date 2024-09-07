@@ -1,5 +1,7 @@
 #include "factory.hpp"
 
+#include <aws/s3/S3Client.h>
+
 #include <memory>
 
 #include "database/article.hpp"
@@ -12,47 +14,61 @@
 
 namespace repository {
 
+struct SimpleRepositoryFactory::Impl {
+  Impl(userver::clients::http::Client& http_client,
+       userver::storages::postgres::ClusterPtr cluster_ptr,
+       std::shared_ptr<Aws::S3::S3Client> s3_client)
+      : http_client(http_client),
+        cluster_ptr(cluster_ptr),
+        s3_client(s3_client) {}
+
+  userver::clients::http::Client& http_client;
+  userver::storages::postgres::ClusterPtr cluster_ptr;
+  std::shared_ptr<Aws::S3::S3Client> s3_client;
+};
+
 SimpleRepositoryFactory::SimpleRepositoryFactory(
     userver::clients::http::Client& http_client,
     userver::storages::postgres::ClusterPtr cluster_ptr,
     std::shared_ptr<Aws::S3::S3Client> s3_client)
-    : http_client_(http_client),
-      cluster_ptr_(std::move(cluster_ptr)),
-      s3_client_(std::move(s3_client)) {}
+    : impl_(std::make_unique<Impl>(
+          Impl(http_client, std::move(cluster_ptr), std::move(s3_client)))) {}
 
 std::unique_ptr<RequestsRepository>
 SimpleRepositoryFactory::MakeRequestsRepository() {
-  return std::make_unique<DbRequestsRepository>(cluster_ptr_);
+  return std::make_unique<DbRequestsRepository>(impl_->cluster_ptr);
 }
 
 std::unique_ptr<UserDataRepository>
 SimpleRepositoryFactory::MakeUserDataHttpRepository() {
-  return std::make_unique<YandexLoginDataProvider>(http_client_);
+  return std::make_unique<YandexLoginDataProvider>(impl_->http_client);
 }
 
 std::unique_ptr<UserDataRepository>
 SimpleRepositoryFactory::MakeUserDataDbRepository() {
-  return std::make_unique<DbUserDataRepository>(cluster_ptr_);
+  return std::make_unique<DbUserDataRepository>(impl_->cluster_ptr);
 }
 
 std::unique_ptr<FileMetaRepository>
 SimpleRepositoryFactory::MakeFileMetaRepository() {
-  return std::make_unique<DbMetaRepository>(cluster_ptr_);
+  return std::make_unique<DbMetaRepository>(impl_->cluster_ptr);
 }
 
 std::unique_ptr<FileStorageRepository>
 SimpleRepositoryFactory::MakeFileStorageRepository() {
-  return std::make_unique<YandexS3FileStorage>(s3_client_);
+  return std::make_unique<YandexS3FileStorage>(impl_->s3_client);
 }
 
 std::unique_ptr<EventRepository>
 SimpleRepositoryFactory::MakeEventsRepository() {
-  return std::make_unique<DbEventRepository>(cluster_ptr_);
+  return std::make_unique<DbEventRepository>(impl_->cluster_ptr);
 }
 
 std::unique_ptr<ArticleRepository>
 SimpleRepositoryFactory::MakeArticleRepository() {
-  return std::make_unique<DbArticleRepository>(cluster_ptr_);
+  return std::make_unique<DbArticleRepository>(impl_->cluster_ptr);
 }
+
+SimpleRepositoryFactory::~SimpleRepositoryFactory() = default;
 
 }  // namespace repository

@@ -1,5 +1,9 @@
 #pragma once
 
+#include <boost/uuid/uuid.hpp>
+
+#include <userver/storages/postgres/io/chrono.hpp>
+
 namespace repository {
 
 struct DbArticle {

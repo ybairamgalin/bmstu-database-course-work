@@ -58,7 +58,8 @@ Request RequestManagementService::GetRequestById(
   auto& request = request_opt.value();
 
   if (auth.role == AuthRole::kUser && auth.user_id != request.author_id) {
-    throw ServiceLevelException("You cannot view this request");
+    throw ServiceLevelException("You cannot view this request",
+                                ErrorType::kPermissionDenied);
   }
 
   std::vector<int64_t> user_ids_to_request;

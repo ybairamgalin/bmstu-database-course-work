@@ -10,6 +10,8 @@
 #include <userver/components/component.hpp>
 #include <userver/storages/postgres/component.hpp>
 
+#include "repository/factory.hpp"
+
 namespace di {
 
 std::unique_ptr<services::IServiceFactory> InitFactories(
