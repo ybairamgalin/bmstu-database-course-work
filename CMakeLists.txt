@@ -166,14 +166,23 @@ target_link_libraries(
 
 
 add_executable(${PROJECT_NAME}_unittest
-        src/tests/mock.hpp
-        src/tests/test_request_service.cpp
+        src/tests/unit/mock.hpp
+        src/tests/unit/test_request_service.cpp
 )
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE
         ${PROJECT_NAME}_service_layer
         userver::utest
 )
 add_google_tests(${PROJECT_NAME}_unittest)
+
+add_executable(${PROJECT_NAME}_inttest
+        src/tests/integration/test_request_repository.cpp
+        src/tests/integration/test_request_repository.hpp
+        src/tests/integration/main.cpp
+)
+target_link_libraries(${PROJECT_NAME}_inttest PRIVATE
+        ${PROJECT_NAME}_data_access_layer
+)
 
 # Functional Tests
 include(UserverTestsuite)

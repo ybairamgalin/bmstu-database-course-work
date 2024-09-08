@@ -48,4 +48,6 @@ class SimpleRepositoryFactory : public IRepositoryFactory {
   std::unique_ptr<Impl> impl_;
 };
 
+class RequestMongoRepositoryFactory : public SimpleRepositoryFactory {};
+
 }  // namespace repository

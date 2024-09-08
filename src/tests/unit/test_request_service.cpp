@@ -5,7 +5,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 
-#include "tests/mock.hpp"
+#include "mock.hpp"
 
 #include "services/auth_service.hpp"
 #include "services/exception.hpp"

@@ -38,6 +38,13 @@ test-debug test-release: test-%: build-%
 	cd build_$* && ((test -t 1 && GTEST_COLOR=1 PYTEST_ADDOPTS="--color=yes" ctest -V) || ctest -V)
 	pycodestyle tests
 
+.PHONY: test-int
+test-int: test-%: build-debug
+	cmake --build build_debug -j $(NPROCS) --target pg_service_template_inttest
+	build_debug/pg_service_template_inttest \
+		--config /pg_service_template/configs/int_test_config.yaml \
+		--config_vars /pg_service_template/configs/config_vars.docker.yaml
+
 # Start the service (via testsuite service runner)
 .PHONY: service-start-debug service-start-release
 service-start-debug service-start-release: service-start-%: build-%
@@ -81,8 +88,8 @@ docker-start-service-debug docker-start-service-release: docker-start-service-%:
 	$(DOCKER_COMPOSE) run -p 8080:8080 --rm pg_service_template-container make -- --in-docker-start-$*
 
 # Start targets makefile in docker environment
-.PHONY: docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release
-docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release: docker-%:
+.PHONY: docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release docker-test-int
+docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release docker-test-int: docker-%:
 	$(DOCKER_COMPOSE) run --rm pg_service_template-container make $*
 
 .PHONY: gen
