@@ -6,6 +6,7 @@
 #include <userver/server/handlers/ping.hpp>
 #include <userver/server/handlers/tests_control.hpp>
 #include <userver/storages/postgres/component.hpp>
+#include <userver/storages/mongo/component.hpp>
 #include <userver/testsuite/testsuite_support.hpp>
 
 #include "handlers/v2/article_get.hpp"
@@ -30,6 +31,8 @@ userver::components::ComponentList MakeComponents() {
       .Append<userver::clients::dns::Component>()
       // postgres
       .Append<userver::components::Postgres>("postgres-db-1")
+      // mongo
+      .Append<userver::components::Mongo>("mongo-db")
       // middleware
       .Append<middleware::AuthFactory>()
       // pipeline builder

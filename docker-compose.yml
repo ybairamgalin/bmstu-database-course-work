@@ -15,6 +15,13 @@ services:
           - ./.pgdata:/var/lib/postgresql/data
         networks:
           - postgres
+    mongo:
+        container_name: service-mongo
+        image: mongodb/mongodb-community-server
+        ports:
+          - 27017:27017
+        networks:
+          - postgres
 
     pg_service_template-container:
         image: db_course_work
@@ -36,6 +43,7 @@ services:
           - ./tests/run_as_user.sh
         depends_on:
           - postgres
+          - mongo
         networks:
           - postgres
 

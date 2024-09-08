@@ -7,8 +7,10 @@
 #include <fmt/format.h>
 #include <boost/uuid/uuid_generators.hpp>
 
+#include <userver/storages/mongo/component.hpp>
 #include <userver/utils/assert.hpp>
 
+#include "repository/database/mongo_request.hpp"
 #include "repository/database/request.hpp"
 #include "repository/requests_repository.hpp"
 
@@ -91,8 +93,8 @@ void TestAddComment(const std::shared_ptr<repository::RequestsRepository>&
           comment_content);
 }
 
-void TestGetAll(
-    const std::shared_ptr<repository::RequestsRepository>& requests_repository) {
+void TestGetAll(const std::shared_ptr<repository::RequestsRepository>&
+                    requests_repository) {
   const auto request_id = boost::uuids::random_generator()();
 
   repository::Request request{};
@@ -117,7 +119,9 @@ RequestRepositoryIntTestComponent::RequestRepositoryIntTestComponent(
     : ComponentBase(config, context),
       cluster_ptr_(
           context.FindComponent<userver::components::Postgres>("postgres-db-1")
-              .GetCluster()) {
+              .GetCluster()),
+      pool_(context.FindComponent<userver::components::Mongo>("mongo-db")
+                .GetPool()) {
   RunTests();
   std::terminate();
 }
@@ -164,10 +168,17 @@ void RequestRepositoryIntTestComponent::RunTests() {
   std::string run_log{"Running pg tests\n"};
   run_log +=
       runner(std::make_shared<repository::DbRequestsRepository>(cluster_ptr_));
+
+  run_log += "Running mongo tests\n";
+  run_log +=
+      runner(std::make_shared<repository::MongoRequestRepository>(pool_));
   std::cerr << run_log;
 }
 
 void RequestRepositoryIntTestComponent::Cleanup() {
   cluster_ptr_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
                         "delete from service.requests");
+
+  auto mongo_requests = pool_->GetCollection("requests");
+  mongo_requests.Drop();
 }

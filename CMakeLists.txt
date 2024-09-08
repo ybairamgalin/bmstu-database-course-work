@@ -26,6 +26,12 @@ userver_setup_environment()
 set(SERVICE_COMPONENTS s3)
 find_package(AWSSDK REQUIRED COMPONENTS ${SERVICE_COMPONENTS})
 
+include_directories("/usr/include/libbson-1.0/")
+link_directories("/lib/x86_64-linux-gnu/")
+
+pkg_check_modules(LIBBSON REQUIRED libbson-1.0)
+include_directories(${LIBBSON_INCLUDE_DIRS})
+
 add_library(${PROJECT_NAME}_service_layer
         src/services/article/article.cpp
         src/services/article/article.hpp
@@ -56,7 +62,10 @@ add_library(${PROJECT_NAME}_service_layer
         src/services/request_management/request_management.hpp
         src/services/request_management_service.hpp
 )
-target_link_libraries(${PROJECT_NAME}_service_layer PUBLIC userver::postgresql)
+target_link_libraries(${PROJECT_NAME}_service_layer PUBLIC
+        userver::postgresql
+        userver::mongo
+)
 target_include_directories(${PROJECT_NAME}_service_layer PUBLIC src)
 target_include_directories(${PROJECT_NAME}_service_layer PUBLIC src/gen)
 
@@ -83,8 +92,14 @@ add_library(${PROJECT_NAME}_data_access_layer
         src/repository/requests_repository.cpp
         src/repository/requests_repository.hpp
         src/repository/user_data_repository.hpp
+        src/repository/database/mongo_request.cpp
+        src/repository/database/mongo_request.hpp
 )
-target_link_libraries(${PROJECT_NAME}_data_access_layer PUBLIC userver::postgresql ${AWSSDK_LINK_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_data_access_layer PUBLIC
+        userver::postgresql
+        userver::mongo
+        ${AWSSDK_LINK_LIBRARIES}
+)
 target_include_directories(${PROJECT_NAME}_data_access_layer PUBLIC src)
 target_include_directories(${PROJECT_NAME}_data_access_layer PUBLIC src/gen)
 
@@ -144,6 +159,7 @@ add_library(${PROJECT_NAME}_rest_api_layer
 target_link_libraries(
         ${PROJECT_NAME}_rest_api_layer PUBLIC
         userver::postgresql
+        userver::mongo
         ${PROJECT_NAME}_service_layer
         ${PROJECT_NAME}_data_access_layer
 )
@@ -176,11 +192,14 @@ target_link_libraries(${PROJECT_NAME}_unittest PRIVATE
 add_google_tests(${PROJECT_NAME}_unittest)
 
 add_executable(${PROJECT_NAME}_inttest
+        src/utils/uuid.cpp
+        src/utils/uuid.hpp
         src/tests/integration/test_request_repository.cpp
         src/tests/integration/test_request_repository.hpp
         src/tests/integration/main.cpp
 )
 target_link_libraries(${PROJECT_NAME}_inttest PRIVATE
+        userver::mongo
         ${PROJECT_NAME}_data_access_layer
 )
 

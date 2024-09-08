@@ -121,5 +121,8 @@ components_manager:
             sync-start: false
             connlimit_mode: manual
 
+        mongo-db:
+            dbconnection: $mongoconnection
+
         dns-client:
             fs-task-processor: fs-task-processor
