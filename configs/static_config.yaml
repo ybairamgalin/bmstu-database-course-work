@@ -118,6 +118,14 @@ components_manager:
                 pipeline-builder: auth-pipeline-builder
                 auth-middleware: { }
 
+        v2_permission_group_post:
+            path: /v2/permission-group
+            method: POST
+            task_processor: main-task-processor
+            middlewares:
+                pipeline-builder: auth-pipeline-builder
+                auth-middleware: { }
+
         postgres-db-1:
             dbconnection: $dbconnection
             blocking_task_processor: fs-task-processor

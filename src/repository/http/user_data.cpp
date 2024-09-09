@@ -59,4 +59,7 @@ std::vector<AuthData> YandexLoginDataProvider::GetUserDataByIds(
 void YandexLoginDataProvider::SerUserRole(const std::string&,
                                           const std::string&) {}
 
+void YandexLoginDataProvider::AddUserToPermissionGroups(
+    int64_t user_id, const std::vector<std::string>& permission_group) {}
+
 }  // namespace repository

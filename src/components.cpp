@@ -16,6 +16,7 @@
 #include "handlers/v2/event_post.hpp"
 #include "handlers/v2/file_put.hpp"
 #include "handlers/v2/manage_access_put.hpp"
+#include "handlers/v2/permission_group_post.hpp"
 #include "handlers/v2/request_comment_post.hpp"
 #include "handlers/v2/request_get.hpp"
 #include "handlers/v2/request_list_get.hpp"
@@ -51,5 +52,6 @@ userver::components::ComponentList MakeComponents() {
       .Append<handlers::v2::ManageAccessPut>()
       .Append<handlers::v2::FilePut>()
       .Append<handlers::v2::ArticleGet>()
+      .Append<handlers::v2::PermissionGroupPost>()
       .Append<handlers::v2::ArticlePost>();
 }

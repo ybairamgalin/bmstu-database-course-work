@@ -61,6 +61,9 @@ add_library(${PROJECT_NAME}_service_layer
         src/services/request_management/request_management.cpp
         src/services/request_management/request_management.hpp
         src/services/request_management_service.hpp
+        src/services/permission_service.hpp
+        src/services/permission/permission.hpp
+        src/services/permission/permission.cpp
 )
 target_link_libraries(${PROJECT_NAME}_service_layer PUBLIC
         userver::postgresql
@@ -94,6 +97,9 @@ add_library(${PROJECT_NAME}_data_access_layer
         src/repository/user_data_repository.hpp
         src/repository/database/mongo_request.cpp
         src/repository/database/mongo_request.hpp
+        src/repository/permission.hpp
+        src/repository/database/permission.hpp
+        src/repository/database/permission.cpp
 )
 target_link_libraries(${PROJECT_NAME}_data_access_layer PUBLIC
         userver::postgresql
@@ -155,6 +161,8 @@ add_library(${PROJECT_NAME}_rest_api_layer
         src/repository/factory.cpp
         src/services/factory.cpp
         src/services/factory.hpp
+        src/handlers/v2/permission_group_post.hpp
+        src/handlers/v2/permission_group_post.cpp
 )
 target_link_libraries(
         ${PROJECT_NAME}_rest_api_layer PUBLIC

@@ -7,6 +7,7 @@
 #include "idm/idm.hpp"
 #include "idm/simple_idm_service.hpp"
 #include "request_management/request_management.hpp"
+#include "services/permission/permission.hpp"
 
 namespace services {
 
@@ -37,6 +38,11 @@ std::unique_ptr<IFileService> SimpleServiceFactory::MakeFileService() {
 
 std::unique_ptr<IArticleService> SimpleServiceFactory::MakeArticleService() {
   return std::make_unique<ArticleService>(repository_factory_);
+}
+
+std::unique_ptr<IPermissionService>
+SimpleServiceFactory::MakePermissionService() {
+  return std::make_unique<PermissionService>(repository_factory_);
 }
 
 }  // namespace services

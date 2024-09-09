@@ -23,6 +23,7 @@ struct IdmRequest {
   std::string login;
   UserRole target_role;
   AuthData request_author;
+  std::vector<std::string> permission_groups;
 };
 
 class IIdmService {

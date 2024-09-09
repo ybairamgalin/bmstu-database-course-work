@@ -76,6 +76,19 @@ create table service.articles(
      created_at timestamptz not null default now()
 );
 
+create table service.permissions(
+    name text not null primary key,
+    description text not null default '',
+    created_at timestamptz not null default now()
+);
+
+create table service.user_permission(
+    user_id bigint not null,
+    permission text not null,
+
+    primary key (user_id, permission)
+);
+
 create type service.attachment_v1 as (
     id uuid,
     filename text

@@ -12,6 +12,7 @@
 #include "idm_service.hpp"
 #include "repository/factory.hpp"
 #include "request_management_service.hpp"
+#include "permission_service.hpp"
 
 namespace services {
 
@@ -25,6 +26,7 @@ class IServiceFactory {
   virtual std::unique_ptr<IEventService> MakeEventService() = 0;
   virtual std::unique_ptr<IFileService> MakeFileService() = 0;
   virtual std::unique_ptr<IArticleService> MakeArticleService() = 0;
+  virtual std::unique_ptr<IPermissionService> MakePermissionService() = 0;
 };
 
 class SimpleServiceFactory : public IServiceFactory {
@@ -38,6 +40,7 @@ class SimpleServiceFactory : public IServiceFactory {
   std::unique_ptr<IEventService> MakeEventService() override;
   std::unique_ptr<IFileService> MakeFileService() override;
   std::unique_ptr<IArticleService> MakeArticleService() override;
+  std::unique_ptr<IPermissionService> MakePermissionService() override;
 
  private:
   std::shared_ptr<repository::IRepositoryFactory> repository_factory_;

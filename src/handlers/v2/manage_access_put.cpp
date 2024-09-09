@@ -28,8 +28,15 @@ ManageAccessPut::Response ManageAccessPut::HandleJson(
     userver::server::request::RequestContext& ctx) const {
   auto& auth = ctx.GetData<services::AuthData>("auth");
 
-  services_->MakeIdmService()->HandleIdmRequest(services::IdmRequest{
-      request.body.login, MapRole(request.body.new_role), auth});
+  const auto new_role = request.body.new_role.has_value()
+                            ? MapRole(request.body.new_role.value())
+                            : services::UserRole::kUser;
+
+  services_->MakeIdmService()->HandleIdmRequest(
+      services::IdmRequest{request.body.login, new_role, auth,
+                           request.body.permission_groups.has_value()
+                               ? request.body.permission_groups.value()
+                               : std::vector<std::string>()});
   return {200, {}};
 }
 
