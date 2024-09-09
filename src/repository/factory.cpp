@@ -7,6 +7,7 @@
 #include "database/article.hpp"
 #include "database/event.hpp"
 #include "database/file_meta.hpp"
+#include "database/mongo_request.hpp"
 #include "database/request.hpp"
 #include "database/user_data.hpp"
 #include "http/file_storage.hpp"
@@ -71,4 +72,19 @@ SimpleRepositoryFactory::MakeArticleRepository() {
 
 SimpleRepositoryFactory::~SimpleRepositoryFactory() = default;
 
+RequestMongoRepositoryFactory::RequestMongoRepositoryFactory(
+    userver::clients::http::Client& http_client,
+    userver::storages::postgres::ClusterPtr cluster_ptr,
+    userver::storages::mongo::PoolPtr mongo_pool,
+    std::shared_ptr<Aws::S3::S3Client> s3_client)
+    : SimpleRepositoryFactory(http_client, std::move(cluster_ptr),
+                              std::move(s3_client)),
+      mongo_pool_(std::move(mongo_pool)) {}
+
+RequestMongoRepositoryFactory::~RequestMongoRepositoryFactory() = default;
+
+std::unique_ptr<RequestsRepository>
+RequestMongoRepositoryFactory::MakeRequestsRepository() {
+  return std::make_unique<MongoRequestRepository>(mongo_pool_);
+}
 }  // namespace repository

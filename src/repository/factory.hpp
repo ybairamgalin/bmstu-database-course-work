@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <userver/storages/mongo/pool.hpp>
+
 #include "articles_repository.hpp"
 #include "event_repository.hpp"
 #include "file_meta_repository.hpp"
@@ -48,6 +50,19 @@ class SimpleRepositoryFactory : public IRepositoryFactory {
   std::unique_ptr<Impl> impl_;
 };
 
-class RequestMongoRepositoryFactory : public SimpleRepositoryFactory {};
+class RequestMongoRepositoryFactory : public SimpleRepositoryFactory {
+ public:
+  RequestMongoRepositoryFactory(
+      userver::clients::http::Client& http_client,
+      userver::storages::postgres::ClusterPtr cluster_ptr,
+      userver::storages::mongo::PoolPtr mongo_pool,
+      std::shared_ptr<Aws::S3::S3Client> s3_client);
+  ~RequestMongoRepositoryFactory() override;
+
+  std::unique_ptr<RequestsRepository> MakeRequestsRepository() override;
+
+ private:
+  userver::storages::mongo::PoolPtr mongo_pool_;
+};
 
 }  // namespace repository

@@ -2,16 +2,45 @@
   "request": {
     "handler": "v2/request",
     "method": "POST",
-    "body_required": true
+    "body_required": true,
+    "id_param_name": "request_id"
+  },
+  "get_request": {
+    "handler": "v2/request",
+    "method": "GET",
+    "body_required": false,
+    "id_param_name": "request_id"
+  },
+  "all_requests": {
+    "handler": "/v2/request/list",
+    "method": "GET",
+    "body_required": false
   },
   "event": {
     "handler": "v2/event",
     "method": "POST",
     "body_required": true
   },
-  "get_request": {
-    "handler": "v2/request",
+  "all_events": {
+    "handler": "v2/event/list",
     "method": "GET",
     "body_required": false
+  },
+  "comment": {
+    "handler": "v2/request/comment",
+    "method": "POST",
+    "body_required": true,
+    "id_param_name": "request_id",
+    "omit_response_body": true
+  },
+  "access": {
+    "handler": "/v2/manage/access",
+    "method": "PUT",
+    "body_required": true
+  },
+  "upload_file" : {
+    "handler": "/v2/file",
+    "method": "PUT",
+    "body_required": true
   }
 }

@@ -1,3 +1,7 @@
+import warnings
+
+warnings.simplefilter("ignore")
+
 import argparse
 import json
 
@@ -17,7 +21,7 @@ def parse_args(config: dict):
         'command',
         choices=config.keys(),
     )
-    parser.add_argument('filename')
+    parser.add_argument('-f', '--filename')
     parser.add_argument('--id')
 
     return parser.parse_args()
@@ -44,17 +48,30 @@ def call(config, args):
     body = None
     if command_cfg['body_required']:
         with open(args.filename, 'r') as body_file:
-            body = json.load(body_file)
+            body = ''.join(body_file.readlines())
             print('Request body')
-            print(json.dumps(body, indent=4, ensure_ascii=False))
+            print(body)
+
+    query_params = None
+    if 'id_param_name' in command_cfg:
+        query_params = {
+            command_cfg['id_param_name']: args.id
+        }
 
     auth_token = get_token()
     response = get_caller(command_cfg['method'])(
         f'http://localhost:8080/{command_cfg["handler"]}',
-        data=json.dumps(body),
+        params=query_params,
+        data=body,
         headers={'Token': auth_token},
     )
     print(f'Got status: {response.status_code}')
+
+    if (
+        'omit_response_body' in command_cfg
+        and command_cfg['omit_response_body'] is True
+    ):
+        return
 
     body = response.json()
     if body:

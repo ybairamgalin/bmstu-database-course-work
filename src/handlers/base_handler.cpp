@@ -20,7 +20,8 @@ namespace handlers {
 BaseHandler::BaseHandler(const userver::components::ComponentConfig& config,
                          const userver::components::ComponentContext& context)
     : userver::server::handlers::HttpHandlerBase(config, context),
-      services_(di::InitFactories(config, context)) {}
+      services_(context.FindComponent<di::DiComponent>().MakeServiceFactory()) {
+}
 
 std::string BaseHandler::HandleRequestThrow(
     const userver::server::http::HttpRequest& request,

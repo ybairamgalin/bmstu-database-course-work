@@ -33,7 +33,8 @@ void Auth::HandleRequest(userver::server::http::HttpRequest& request,
 AuthFactory::AuthFactory(const userver::components::ComponentConfig& config,
                          const userver::components::ComponentContext& context)
     : userver::server::middlewares::HttpMiddlewareFactoryBase(config, context),
-      services_(di::InitFactories(config, context)) {}
+      services_(context.FindComponent<di::DiComponent>().MakeServiceFactory()) {
+}
 
 std::unique_ptr<userver::server::middlewares::HttpMiddlewareBase>
 AuthFactory::Create(const userver::server::handlers::HttpHandlerBase&,

@@ -138,6 +138,7 @@ struct Test {
 void RequestRepositoryIntTestComponent::RunTests() {
   std::vector<Test> tests;
   tests.emplace_back(DECL_TEST(TestInsert));
+
   tests.emplace_back(DECL_TEST(TestUpdate));
   tests.emplace_back(DECL_TEST(TestAddComment));
   tests.emplace_back(DECL_TEST(TestGetAll));
@@ -178,6 +179,8 @@ void RequestRepositoryIntTestComponent::RunTests() {
 void RequestRepositoryIntTestComponent::Cleanup() {
   cluster_ptr_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
                         "delete from service.requests");
+  cluster_ptr_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                        "delete from service.comments");
 
   auto mongo_requests = pool_->GetCollection("requests");
   mongo_requests.Drop();
