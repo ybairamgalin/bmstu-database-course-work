@@ -26,6 +26,21 @@ struct RequestToCreateOrUpdate {
   std::string status;
 };
 
+class RequestToCreateOrUpdateBuilder {
+ public:
+  RequestToCreateOrUpdateBuilder();
+
+  RequestToCreateOrUpdateBuilder& WithAuthor(const AuthData& auth_data);
+  RequestToCreateOrUpdateBuilder& WithEvent(const boost::uuids::uuid& event_id);
+  RequestToCreateOrUpdateBuilder& WithDescription(const std::string& description);
+  RequestToCreateOrUpdateBuilder& WithStatus(const std::string& status);
+
+  RequestToCreateOrUpdate Build();
+
+ private:
+  RequestToCreateOrUpdate request_;
+};
+
 struct RequestComment {
   std::string content;
   UserInfo author;

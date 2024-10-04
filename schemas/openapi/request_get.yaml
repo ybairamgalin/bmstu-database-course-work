@@ -1,0 +1,62 @@
+RequestGetResponse200:
+  type: object
+  additionalProperties: false
+  required:
+    - event_id
+    - attachments
+    - status
+    - user
+    - description
+    - comments
+    - created_at
+    - updated_at
+  properties:
+    event_id:
+      description: Related event id
+      type: string
+      format: uuid
+    attachments:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required:
+          - download_url
+          - filename
+        properties:
+          download_url:
+            type: string
+          filename:
+            type: string
+    user:
+      $ref: "common.yaml#/UserFullInfo"
+    description:
+      type: string
+    status:
+      type: string
+    comments:
+      type: array
+      items:
+        $ref: "#/RequestComment"
+    created_at:
+      type: string
+      format: date-time
+    updated_at:
+      type: string
+      format: date-time
+
+RequestComment:
+  type: object
+  additionalProperties: false
+  required:
+    - content
+    - author
+    - created_at
+  properties:
+    content:
+      type: string
+    author:
+      $ref: "common.yaml#/UserFullInfo"
+    created_at:
+      type: string
+      format: date-time

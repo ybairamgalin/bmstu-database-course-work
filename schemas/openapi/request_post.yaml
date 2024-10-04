@@ -1,0 +1,45 @@
+RequestPostBody:
+  type: object
+  additionalProperties: false
+  required:
+    - event_id
+    - attachments
+  properties:
+    event_id:
+      description: Related event id
+      type: string
+      format: uuid
+    attachments:
+      type: array
+      items:
+        type: object
+        required:
+          - id
+          - filename
+        properties:
+          id:
+            type: string
+            format: uuid
+          filename:
+            type: string
+        additionalProperties: false
+    description:
+      description: Description of request
+      type: string
+    status:
+      type: string
+      enum:
+        - new
+        - moderating
+        - info_required
+        - accepted
+        - declined
+RequestPostResponse:
+  additionalProperties: false
+  type: object
+  required:
+    - request_id
+  properties:
+    request_id:
+      type: string
+      format: uuid

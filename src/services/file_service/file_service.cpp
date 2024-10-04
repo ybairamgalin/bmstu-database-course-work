@@ -46,7 +46,7 @@ std::optional<FileToDownload> FileService::GetFile(
   if (!file_meta_opt) {
     return std::nullopt;
   }
-  return FileToDownload{file_opt.value(), "213"};
+  return FileToDownload{file_opt.value(), "filename"};
 }
 
 }  // namespace services

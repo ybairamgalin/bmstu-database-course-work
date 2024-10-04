@@ -4,13 +4,11 @@
 
 #include <memory>
 
-#include "database/article.hpp"
 #include "database/event.hpp"
 #include "database/file_meta.hpp"
 #include "database/mongo_request.hpp"
 #include "database/request.hpp"
 #include "database/user_data.hpp"
-#include "database/permission.hpp"
 #include "http/file_storage.hpp"
 #include "http/user_data.hpp"
 
@@ -66,16 +64,6 @@ SimpleRepositoryFactory::MakeEventsRepository() {
   return std::make_unique<DbEventRepository>(impl_->cluster_ptr);
 }
 
-std::unique_ptr<ArticleRepository>
-SimpleRepositoryFactory::MakeArticleRepository() {
-  return std::make_unique<DbArticleRepository>(impl_->cluster_ptr);
-}
-
-std::unique_ptr<PermissionRepository>
-SimpleRepositoryFactory::MakePermissionRepository() {
-  return std::make_unique<PgPermissionRepository>(impl_->cluster_ptr);
-}
-
 SimpleRepositoryFactory::~SimpleRepositoryFactory() = default;
 
 RequestMongoRepositoryFactory::RequestMongoRepositoryFactory(
@@ -93,4 +81,5 @@ std::unique_ptr<RequestsRepository>
 RequestMongoRepositoryFactory::MakeRequestsRepository() {
   return std::make_unique<MongoRequestRepository>(mongo_pool_);
 }
+
 }  // namespace repository

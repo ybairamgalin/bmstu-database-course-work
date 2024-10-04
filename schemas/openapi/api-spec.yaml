@@ -1,0 +1,305 @@
+openapi: 3.0.0
+info:
+  title: Приложение для подачи заявок на it-конференции
+  description: Спецификация публичного api
+  version: 1.0.0
+paths:
+  /v3/requests:
+    post:
+      summary: Создать заявку
+      tags:
+        - Все пользователи
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'request_post.yaml#/RequestPostBody'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: 'request_post.yaml#/RequestPostResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+        403:
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+    get:
+      summary: Получить заявку c фильтрами
+      tags:
+        - Все пользователи
+      parameters:
+        - in: query
+          name: request_id
+          description: Id заявки
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: event_id
+          description: Id мероприятия
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: author_login
+          description: Логин автора
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: created_after
+          description: Показать заявки созданные после
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Requests list
+          content:
+            application/json:
+              schema:
+                $ref: 'request_list_get.yaml#/RequestListGetResponse200'
+
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+
+  /v3/requests/{id}:
+    get:
+      summary: Получить заявку по id
+      tags:
+        - Все пользователи
+      responses:
+        200:
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: 'request_get.yaml#/RequestGetResponse200'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+
+
+  /v3/requests/{id}/comments:
+    post:
+      summary: Добавить комментарий к заявке
+      tags:
+        - Все пользователи
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'request_comment_post.yaml#/RequestCommentPostBody'
+      responses:
+        201:
+          description: Created
+
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+  /v3/events:
+    post:
+      summary: Создать мероприятие
+      tags:
+        - Все пользователи
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'event_post.yaml#/EventPostBody'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: 'event_post.yaml#/EventPostResponse'
+
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+    get:
+      summary: Получить мероприятие по части названия
+      parameters:
+        - in: query
+          name: name_part
+          description: Часть названия мероприятия
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'event_post.yaml#/EventPostBody'
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: 'event_list_get.yaml#/EventListGet200Response'
+
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+  /v3/events/{id}:
+    put:
+      description: Изменить
+      responses:
+        200:
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: 'event_post.yaml#/EventPostResponse'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+  /v3/files:
+    put:
+      summary: Загрузить файл
+      tags:
+        - Все пользователи
+      requestBody:
+        required: true
+        content:
+          application/octet-stream: {}
+
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: 'file_put.yaml#/FilePutResponse200'
+
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+        413:
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+
+  /v3/roles:
+    put:
+      summary: Управление доступами
+      tags:
+        - Админ
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'manage_access_put.yaml#/ManageAccessPutBody'
+      responses:
+        200:
+          description: Ok
+
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'
+
+        403:
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/ErrorResponse'

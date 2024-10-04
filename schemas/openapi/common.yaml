@@ -1,0 +1,40 @@
+ErrorResponse:
+  type: object
+  additionalProperties: false
+  required:
+    - code
+    - message
+  properties:
+    code:
+      type: integer
+    message:
+      type: string
+UserFullInfo:
+  type: object
+  additionalProperties: false
+  required:
+    - id
+    - name
+    - login
+    - phone
+  properties:
+    id:
+      type: integer
+      format: int64
+    name:
+      type: string
+    login:
+      type: string
+    phone:
+      type: string
+Event:
+  type: object
+  additionalProperties: false
+  required:
+    - name
+    - description
+  properties:
+    name:
+      type: string
+    description:
+      type: string

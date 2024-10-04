@@ -4,13 +4,11 @@
 
 #include <userver/storages/mongo/pool.hpp>
 
-#include "articles_repository.hpp"
 #include "event_repository.hpp"
 #include "file_meta_repository.hpp"
 #include "file_storage_repository.hpp"
 #include "requests_repository.hpp"
 #include "user_data_repository.hpp"
-#include "permission.hpp"
 
 namespace Aws::S3 {
 class S3Client;
@@ -28,8 +26,6 @@ class IRepositoryFactory {
   virtual std::unique_ptr<EventRepository> MakeEventsRepository() = 0;
   virtual std::unique_ptr<FileStorageRepository>
   MakeFileStorageRepository() = 0;
-  virtual std::unique_ptr<ArticleRepository> MakeArticleRepository() = 0;
-  virtual std::unique_ptr<PermissionRepository> MakePermissionRepository() = 0;
 };
 
 class SimpleRepositoryFactory : public IRepositoryFactory {
@@ -45,8 +41,6 @@ class SimpleRepositoryFactory : public IRepositoryFactory {
   std::unique_ptr<FileMetaRepository> MakeFileMetaRepository() override;
   std::unique_ptr<FileStorageRepository> MakeFileStorageRepository() override;
   std::unique_ptr<EventRepository> MakeEventsRepository() override;
-  std::unique_ptr<ArticleRepository> MakeArticleRepository() override;
-  std::unique_ptr<PermissionRepository> MakePermissionRepository() override;
 
  private:
   struct Impl;

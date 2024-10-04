@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "repository/factory.hpp"
-#include "repository/permission.hpp"
 #include "services/idm_service.hpp"
 
 namespace services {
@@ -18,7 +17,6 @@ class SimpleIdmService : public IIdmService {
 
  private:
   std::unique_ptr<repository::UserDataRepository> user_data_repository_;
-  std::unique_ptr<repository::PermissionRepository> permission_repository_;
 };
 
 }  // namespace services

@@ -1,0 +1,10 @@
+EventListGet200Response:
+  additionalProperties: false
+  type: object
+  required:
+    - events
+  properties:
+    events:
+      type: array
+      items:
+        $ref: "common.yaml#/Event"

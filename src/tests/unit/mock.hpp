@@ -39,6 +39,23 @@ class MockUserDataRepository : public UserDataRepository {
   MOCK_METHOD(void, SerUserRole,
               (const std::string& login, const std::string& role), (override));
   MOCK_METHOD(void, SaveUserData, (const AuthData&), (override));
+  MOCK_METHOD(void, AddUserToPermissionGroups,
+              (int64_t user_id,
+               const std::vector<std::string>& permission_group));
+};
+
+class MockFileMetaRepository : public FileMetaRepository {
+ public:
+  MOCK_METHOD(void, UpsertFileMeta, (const FileMeta&), (override));
+  MOCK_METHOD(std::vector<FileMeta>, GetFileMetaByRequestId, (int64_t request_id), (override));
+  MOCK_METHOD(std::optional<FileMeta>, GetFileMetaByHash, (const std::string& hash), (override));
+  MOCK_METHOD(std::optional<FileMeta>, GetFileMetaByFileUuid, (const boost::uuids::uuid& uuid), (override));
+};
+
+class MockFileStorageRepository : public FileStorageRepository {
+ public:
+  MOCK_METHOD(void, UploadFile, (std::string&& file_content, boost::uuids::uuid uuid), (override));
+  MOCK_METHOD(std::optional<std::string>, GetFile, (boost::uuids::uuid uuid), (override));
 };
 
 class MockRepositoryFactory : public IRepositoryFactory {
@@ -55,8 +72,6 @@ class MockRepositoryFactory : public IRepositoryFactory {
               (override));
   MOCK_METHOD(std::unique_ptr<FileStorageRepository>, MakeFileStorageRepository,
               (), (override));
-  MOCK_METHOD(std::unique_ptr<ArticleRepository>, MakeArticleRepository, (),
-              (override));
 };
 
 }  // namespace repository

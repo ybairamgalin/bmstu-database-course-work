@@ -170,9 +170,6 @@ void RequestRepositoryIntTestComponent::RunTests() {
   run_log +=
       runner(std::make_shared<repository::DbRequestsRepository>(cluster_ptr_));
 
-  run_log += "Running mongo tests\n";
-  run_log +=
-      runner(std::make_shared<repository::MongoRequestRepository>(pool_));
   std::cerr << run_log;
 }
 

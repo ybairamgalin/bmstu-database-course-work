@@ -41,4 +41,5 @@ AuthFactory::Create(const userver::server::handlers::HttpHandlerBase&,
                     userver::yaml_config::YamlConfig) const {
   return std::make_unique<Auth>(services_->MakeAuthService());
 }
+
 }  // namespace middleware
