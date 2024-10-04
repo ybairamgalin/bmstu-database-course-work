@@ -82,4 +82,37 @@ RequestMongoRepositoryFactory::MakeRequestsRepository() {
   return std::make_unique<MongoRequestRepository>(mongo_pool_);
 }
 
+PgRepositoryFactory::PgRepositoryFactory(
+    userver::storages::postgres::ClusterPtr cluster_ptr)
+    : cluster_ptr_(std::move(cluster_ptr)) {}
+
+std::unique_ptr<RequestsRepository>
+PgRepositoryFactory::MakeRequestsRepository() {
+  return std::make_unique<DbRequestsRepository>(cluster_ptr_);
+}
+
+std::unique_ptr<UserDataRepository>
+PgRepositoryFactory::MakeUserDataDbRepository() {
+  return std::make_unique<DbUserDataRepository>(cluster_ptr_);
+}
+
+std::unique_ptr<UserDataRepository>
+PgRepositoryFactory::MakeUserDataHttpRepository() {
+  throw std::runtime_error("Not a pg repository requested");
+}
+
+std::unique_ptr<FileMetaRepository>
+PgRepositoryFactory::MakeFileMetaRepository() {
+  return std::make_unique<DbMetaRepository>(cluster_ptr_);
+}
+
+std::unique_ptr<FileStorageRepository>
+PgRepositoryFactory::MakeFileStorageRepository() {
+  throw std::runtime_error("Not a pg repository requested");
+}
+
+std::unique_ptr<EventRepository> PgRepositoryFactory::MakeEventsRepository() {
+  return std::make_unique<DbEventRepository>(cluster_ptr_);
+}
+
 }  // namespace repository

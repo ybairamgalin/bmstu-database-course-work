@@ -9,7 +9,6 @@ class AuthDataMother {
   repository::AuthData NewUser();
   repository::AuthData NewAdminUser();
   repository::AuthData NewModeratorUser();
-
 };
 
 }  // namespace repository

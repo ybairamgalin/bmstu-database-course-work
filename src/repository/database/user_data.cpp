@@ -148,20 +148,5 @@ void DbUserDataRepository::SerUserRole(const std::string& login,
                         "where login = $1",
                         login, role);
 }
-void DbUserDataRepository::AddUserToPermissionGroups(
-    int64_t user_id, const std::vector<std::string>& permission_groups) {
-  auto trx = cluster_ptr_->Begin(
-      userver::storages::postgres::ClusterHostType::kMaster, {});
-  trx.Execute(
-      "delete from service.user_permission "
-      "where user_id = $1",
-      user_id);
-
-  trx.Execute(
-      "insert into service.user_permission (user_id, permission) "
-      "(select $1, unnest($2)) ",
-      user_id, permission_groups);
-  trx.Commit();
-}
 
 }  // namespace repository

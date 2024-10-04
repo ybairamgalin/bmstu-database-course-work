@@ -172,8 +172,6 @@ target_link_libraries(
 )
 
 add_executable(${PROJECT_NAME}_unittest
-        src/tests/unit/auth_data_object_mother.cpp
-        src/tests/unit/auth_data_object_mother.hpp
         src/tests/unit/request_object_mother.cpp
         src/tests/unit/request_object_mother.hpp
         src/tests/unit/mock.hpp
@@ -182,6 +180,8 @@ add_executable(${PROJECT_NAME}_unittest
         src/tests/unit/test_request_service.cpp
         src/tests/unit/test_event_service.cpp
         src/tests/unit/test_file_service.cpp
+        src/tests/object_mother.hpp
+        src/tests/object_mother.cpp
 )
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE
         ${PROJECT_NAME}_service_layer
@@ -192,9 +192,21 @@ add_google_tests(${PROJECT_NAME}_unittest)
 add_executable(${PROJECT_NAME}_inttest
         src/utils/uuid.cpp
         src/utils/uuid.hpp
+        src/repository/factory.hpp
+        src/repository/factory.cpp
         src/tests/integration/test_request_repository.cpp
         src/tests/integration/test_request_repository.hpp
         src/tests/integration/main.cpp
+        src/tests/integration/runner.hpp
+        src/tests/integration/runner.cpp
+        src/tests/integration/test_component.hpp
+        src/tests/integration/test_component.cpp
+        src/tests/integration/test_event_repository.hpp
+        src/tests/integration/test_event_repository.cpp
+        src/tests/integration/test_user_data_repository.hpp
+        src/tests/integration/test_user_data_repository.cpp
+        src/tests/object_mother.hpp
+        src/tests/object_mother.cpp
 )
 target_link_libraries(${PROJECT_NAME}_inttest PRIVATE
         userver::mongo

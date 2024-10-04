@@ -47,6 +47,22 @@ class SimpleRepositoryFactory : public IRepositoryFactory {
   std::unique_ptr<Impl> impl_;
 };
 
+class PgRepositoryFactory : public IRepositoryFactory {
+ public:
+  explicit PgRepositoryFactory(
+      userver::storages::postgres::ClusterPtr cluster_ptr);
+
+  std::unique_ptr<RequestsRepository> MakeRequestsRepository() override;
+  std::unique_ptr<UserDataRepository> MakeUserDataDbRepository() override;
+  std::unique_ptr<UserDataRepository> MakeUserDataHttpRepository() override;
+  std::unique_ptr<FileMetaRepository> MakeFileMetaRepository() override;
+  std::unique_ptr<FileStorageRepository> MakeFileStorageRepository() override;
+  std::unique_ptr<EventRepository> MakeEventsRepository() override;
+
+ private:
+  userver::storages::postgres::ClusterPtr cluster_ptr_;
+};
+
 class RequestMongoRepositoryFactory : public SimpleRepositoryFactory {
  public:
   RequestMongoRepositoryFactory(

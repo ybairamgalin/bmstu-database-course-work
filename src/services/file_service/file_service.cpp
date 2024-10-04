@@ -4,7 +4,6 @@
 
 #include <userver/crypto/hash.hpp>
 
-#include "repository/exception.h"
 #include "services/exception.hpp"
 
 namespace services {

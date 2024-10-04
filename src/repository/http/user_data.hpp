@@ -14,8 +14,6 @@ class YandexLoginDataProvider : public UserDataRepository {
   std::vector<AuthData> GetUserDataByIds(
       const std::vector<int64_t>& id) override;
   void SerUserRole(const std::string &login, const std::string &role) override;
-  void AddUserToPermissionGroups(
-      int64_t user_id, const std::vector<std::string>& permission_group) override;
  private:
   userver::clients::http::Client& http_client_;
 };

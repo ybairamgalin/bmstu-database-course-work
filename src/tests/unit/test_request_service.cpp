@@ -5,9 +5,9 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 
-#include "auth_data_object_mother.hpp"
 #include "base_service_test.hpp"
 #include "request_object_mother.hpp"
+#include "tests/object_mother.hpp"
 
 #include "services/auth_service.hpp"
 #include "services/exception.hpp"

@@ -22,8 +22,6 @@ class DbUserDataRepository : public UserDataRepository {
 
   void SaveUserData(const repository::AuthData&) override;
   void SerUserRole(const std::string& login, const std::string& role) override;
-  void AddUserToPermissionGroups(
-      int64_t user_id, const std::vector<std::string>& permission_group) override;
 
  private:
   template <typename... Args>

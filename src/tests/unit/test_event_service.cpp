@@ -7,10 +7,7 @@
 
 #include "base_service_test.hpp"
 
-#include "services/auth_service.hpp"
 #include "services/event/event.hpp"
-#include "services/exception.hpp"
-#include "services/request_management/request_management.hpp"
 
 using namespace ::testing;
 

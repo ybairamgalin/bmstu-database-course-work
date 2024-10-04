@@ -31,8 +31,6 @@ class UserDataRepository {
   virtual void SerUserRole(const std::string& login,
                            const std::string& role) = 0;
   virtual void SaveUserData(const AuthData&) = 0;
-  virtual void AddUserToPermissionGroups(
-      int64_t user_id, const std::vector<std::string>& permission_group) = 0;
 };
 
 }  // namespace repository
