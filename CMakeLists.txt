@@ -180,6 +180,7 @@ add_executable(${PROJECT_NAME}_unittest
         src/tests/unit/test_request_service.cpp
         src/tests/unit/test_event_service.cpp
         src/tests/unit/test_file_service.cpp
+        src/tests/unit/test_idm_service.cpp
         src/tests/object_mother.hpp
         src/tests/object_mother.cpp
 )

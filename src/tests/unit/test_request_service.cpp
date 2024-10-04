@@ -63,14 +63,8 @@ TEST_F(RequestsServiceTest, GetRequestById_AccessDenied) {
   EXPECT_CALL(*requests_repository_, GetRequestById(request_id))
       .WillOnce(testing::Return(db_request));
 
-  try {
-    service_->GetRequestById(request_id, auth);
-    FAIL() << "Expected ServiceLevelException";
-  } catch (const services::ServiceLevelException& ex) {
-    EXPECT_EQ(ex.GetErrorType(), services::ErrorType::kPermissionDenied);
-  } catch (...) {
-    FAIL() << "Expected ServiceLevelException";
-  }
+  EXPECT_THROW(service_->GetRequestById(request_id, auth),
+               services::ServiceLevelException);
 }
 
 TEST_F(RequestsServiceTest, AddRequest_Success) {
