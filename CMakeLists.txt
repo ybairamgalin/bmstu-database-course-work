@@ -195,17 +195,17 @@ add_executable(${PROJECT_NAME}_inttest
         src/utils/uuid.hpp
         src/repository/factory.hpp
         src/repository/factory.cpp
-        src/tests/integration/test_request_repository.cpp
-        src/tests/integration/test_request_repository.hpp
-        src/tests/integration/main.cpp
-        src/tests/integration/runner.hpp
-        src/tests/integration/runner.cpp
-        src/tests/integration/test_component.hpp
-        src/tests/integration/test_component.cpp
-        src/tests/integration/test_event_repository.hpp
-        src/tests/integration/test_event_repository.cpp
-        src/tests/integration/test_user_data_repository.hpp
-        src/tests/integration/test_user_data_repository.cpp
+        src/tests/nonmock/test_request_repository.cpp
+        src/tests/nonmock/test_request_repository.hpp
+        src/tests/nonmock/main.cpp
+        src/tests/nonmock/runner.hpp
+        src/tests/nonmock/runner.cpp
+        src/tests/nonmock/test_component.hpp
+        src/tests/nonmock/test_component.cpp
+        src/tests/nonmock/test_event_repository.hpp
+        src/tests/nonmock/test_event_repository.cpp
+        src/tests/nonmock/test_user_data_repository.hpp
+        src/tests/nonmock/test_user_data_repository.cpp
         src/tests/object_mother.hpp
         src/tests/object_mother.cpp
 )

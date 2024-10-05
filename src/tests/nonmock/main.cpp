@@ -6,7 +6,7 @@
 #include <userver/storages/postgres/component.hpp>
 #include <userver/testsuite/testsuite_support.hpp>
 
-#include "tests/integration/test_component.hpp"
+#include "tests/nonmock/test_component.hpp"
 
 int main(int argc, char* argv[]) {
   return userver::utils::DaemonMain(
