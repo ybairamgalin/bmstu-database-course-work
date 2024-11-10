@@ -27,6 +27,15 @@ std::string BaseHandler::HandleRequestThrow(
     const userver::server::http::HttpRequest& request,
     userver::server::request::RequestContext& ctx) const {
   try {
+    auto& response = request.GetHttpResponse();
+    constexpr std::string_view kCorsHeaderOrigin = "Access-Control-Allow-Origin";
+    constexpr std::string_view kCorsHeaderHeaders = "Access-Control-Allow-Headers";
+
+    response.SetHeader(kCorsHeaderOrigin, "*");
+    response.SetHeader(kCorsHeaderHeaders, "Content-type, X-Token");
+    if (request.GetMethod() == userver::server::http::HttpMethod::kOptions) {
+      return {};
+    }
     return Handle(request, ctx);
   } catch (const std::exception& ex) {
     LOG_ERROR() << fmt::format("Got unhandled exception: {}", ex.what());

@@ -8,12 +8,13 @@ namespace repository {
 
 class MongoRequestRepository : public RequestsRepository {
  public:
-  explicit MongoRequestRepository(
-      userver::storages::mongo::PoolPtr  pool);
+  explicit MongoRequestRepository(userver::storages::mongo::PoolPtr pool);
 
   std::optional<RequestFull> GetRequestById(
       const boost::uuids::uuid& uuid) override;
   std::vector<RequestShort> GetAll() override;
+  std::vector<RequestShort> GetFiltered(
+      const repository::RequestFilters& filters) override;
   void Insert(const repository::Request& request) override;
   void Update(const repository::Request& request) override;
   void AddComment(const boost::uuids::uuid& id, const std::string& content,

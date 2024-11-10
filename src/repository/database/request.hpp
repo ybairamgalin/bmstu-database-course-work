@@ -17,7 +17,9 @@ class DbRequestsRepository : public RequestsRepository {
   void Update(const repository::Request& request) override;
   void AddComment(const boost::uuids::uuid& id, const std::string& content,
                   int64_t author_id) override;
-  std::vector<RequestShort> GetAll() override;
+  std::vector<RequestShort> GetFiltered(
+      const repository::RequestFilters& filters)
+      override; std::vector<RequestShort> GetAll() override;
 
  private:
   userver::storages::postgres::ClusterPtr cluster_ptr_;

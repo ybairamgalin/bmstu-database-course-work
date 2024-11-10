@@ -123,6 +123,15 @@ add_library(${PROJECT_NAME}_rest_api_layer
         src/handlers/v2/request_list_get.hpp
         src/handlers/v2/request_post.cpp
         src/handlers/v2/request_post.hpp
+        src/handlers/v3/requests_post.cpp
+        src/handlers/v3/requests_get.cpp
+        src/handlers/v3/requests_id_get.cpp
+        src/handlers/v3/requests_id_comments.cpp
+        src/handlers/v3/roles.cpp
+        src/handlers/v3/events_get.cpp
+        src/handlers/v3/events_post.cpp
+        src/handlers/v3/events_id_put.cpp
+        src/handlers/v3/files_put.cpp
         src/http/exception.hpp
         src/http/query.cpp
         src/http/query.hpp

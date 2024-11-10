@@ -1,19 +1,20 @@
 #pragma once
 
+#include "gen/handlers/event_post.hpp"
 #include "handlers/base_json_handler.hpp"
-#include "gen/handlers/request_post.hpp"
+#include "http/request.hpp"
 
 namespace handlers::v3 {
 
-class RequestsPost : public BaseJsonHandler<gen::RequestPostBody,
-                                           gen::RequestPostResponse200> {
+class EventsIdPut
+    : public BaseJsonHandler<gen::EventPostBody, http::EmptyResponseBody> {
  public:
-  static constexpr std::string_view kName = "v3_requests_post";
+  static constexpr std::string_view kName = "v3_events_id_put";
 
   using BaseJsonHandler::Request;
   using BaseJsonHandler::Response;
 
-  RequestsPost(const userver::components::ComponentConfig& config,
+  EventsIdPut(const userver::components::ComponentConfig& config,
               const userver::components::ComponentContext& context);
 
   Response HandleJson(
@@ -21,4 +22,4 @@ class RequestsPost : public BaseJsonHandler<gen::RequestPostBody,
       userver::server::request::RequestContext& ctx) const override;
 };
 
-}
+}  // namespace handlers::v3

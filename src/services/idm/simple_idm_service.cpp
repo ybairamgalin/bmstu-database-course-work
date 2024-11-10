@@ -27,7 +27,8 @@ SimpleIdmService::SimpleIdmService(
 
 void SimpleIdmService::HandleIdmRequest(IdmRequest&& request) {
   if (request.request_author.role != AuthRole::kAdmin) {
-    throw ServiceLevelException("You cannot manage users permissions");
+    throw ServiceLevelException("You cannot manage users permissions",
+                                ErrorType::kPermissionDenied);
   }
 
   const auto user_data =

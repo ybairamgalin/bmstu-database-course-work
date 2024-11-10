@@ -12,7 +12,3 @@ ManageAccessPutBody:
         - user
         - moderator
         - admin
-    permission_groups:
-      type: array
-      items:
-        type: string

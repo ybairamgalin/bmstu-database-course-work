@@ -172,7 +172,40 @@ std::vector<RequestShort> RequestManagementService::GetAll(
   }
 
   auto db_requests = request_repository_->GetAll();
+  return MapRequests(db_requests);
+}
 
+std::vector<RequestShort> RequestManagementService::GetFiltered(
+    const RequestFilters& filters, const AuthData& auth) {
+  repository::RequestFilters repository_filters;
+  if (auth.role == AuthRole::kUser) {
+    if (filters.author_login.has_value() &&
+        filters.author_login.value() != auth.login) {
+      return {};
+    }
+    repository_filters.author_id.emplace(auth.user_id);
+  } else {
+    if (filters.author_login.has_value()) {
+      auto user_data = user_data_repository_->GetUserDataByLogin(
+          filters.author_login.value());
+      if (!user_data.has_value()) {
+        throw ServiceLevelException("User not found");
+      }
+      repository_filters.author_id = user_data.value().user_id;
+    }
+  }
+  repository_filters.request_id = filters.request_id;
+  repository_filters.event_id = filters.event_id;
+  repository_filters.created_after =
+      filters.created_after.has_value()
+          ? userver::storages::postgres::TimePointTz{filters.created_after
+                                                         .value()}
+          : std::optional<userver::storages::postgres::TimePointTz>();
+  return MapRequests(request_repository_->GetFiltered(repository_filters));
+}
+
+std::vector<services::RequestShort> RequestManagementService::MapRequests(
+    const std::vector<repository::RequestShort>& db_requests) {
   std::vector<int64_t> user_ids;
   user_ids.reserve(db_requests.size());
   for (const auto& db_request : db_requests) {

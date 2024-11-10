@@ -3,12 +3,20 @@ info:
   title: Приложение для подачи заявок на it-конференции
   description: Спецификация публичного api
   version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Локальный сервер
 paths:
   /v3/requests:
     post:
       summary: Создать заявку
-      tags:
-        - Все пользователи
+      parameters:
+        - in: header
+          name: X-Token
+          description: Auth token
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -37,9 +45,13 @@ paths:
 
     get:
       summary: Получить заявку c фильтрами
-      tags:
-        - Все пользователи
       parameters:
+        - in: header
+          name: X-Token
+          description: Auth token
+          required: true
+          schema:
+            type: string
         - in: query
           name: request_id
           description: Id заявки
@@ -57,7 +69,6 @@ paths:
           description: Логин автора
           schema:
             type: string
-            format: uuid
         - in: query
           name: created_after
           description: Показать заявки созданные после
@@ -90,8 +101,19 @@ paths:
   /v3/requests/{id}:
     get:
       summary: Получить заявку по id
-      tags:
-        - Все пользователи
+      parameters:
+        - in: header
+          name: X-Token
+          description: Auth token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         200:
           description: Updated
@@ -123,8 +145,19 @@ paths:
   /v3/requests/{id}/comments:
     post:
       summary: Добавить комментарий к заявке
-      tags:
-        - Все пользователи
+      parameters:
+        - in: header
+          name: X-Token
+          description: Auth token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -152,8 +185,13 @@ paths:
   /v3/events:
     post:
       summary: Создать мероприятие
-      tags:
-        - Все пользователи
+      parameters:
+        - in: header
+          name: X-Token
+          description: Auth token
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -190,12 +228,12 @@ paths:
           description: Часть названия мероприятия
           schema:
             type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: 'event_post.yaml#/EventPostBody'
+        - in: header
+          name: X-Token
+          description: Auth token
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: Ok
@@ -214,6 +252,25 @@ paths:
   /v3/events/{id}:
     put:
       description: Изменить
+      parameters:
+        - in: header
+          name: X-Token
+          description: Auth token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'event_post.yaml#/EventPostBody'
       responses:
         200:
           description: Updated
@@ -245,12 +302,20 @@ paths:
   /v3/files:
     put:
       summary: Загрузить файл
-      tags:
-        - Все пользователи
+      parameters:
+        - in: header
+          name: X-Token
+          description: Auth token
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
-          application/octet-stream: {}
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
 
       responses:
         200:
@@ -278,8 +343,13 @@ paths:
   /v3/roles:
     put:
       summary: Управление доступами
-      tags:
-        - Админ
+      parameters:
+        - in: header
+          name: X-Token
+          description: Auth token
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:

@@ -32,7 +32,8 @@ class RequestToCreateOrUpdateBuilder {
 
   RequestToCreateOrUpdateBuilder& WithAuthor(const AuthData& auth_data);
   RequestToCreateOrUpdateBuilder& WithEvent(const boost::uuids::uuid& event_id);
-  RequestToCreateOrUpdateBuilder& WithDescription(const std::string& description);
+  RequestToCreateOrUpdateBuilder& WithDescription(
+      const std::string& description);
   RequestToCreateOrUpdateBuilder& WithStatus(const std::string& status);
 
   RequestToCreateOrUpdate Build();
@@ -69,6 +70,13 @@ struct RequestShort {
   userver::utils::datetime::TimePointTz created_at;
 };
 
+struct RequestFilters {
+  std::optional<boost::uuids::uuid> request_id;
+  std::optional<std::string> author_login;
+  std::optional<boost::uuids::uuid> event_id;
+  std::optional<userver::utils::datetime::TimePointTz> created_after{};
+};
+
 class IRequestManagementService {
  public:
   virtual ~IRequestManagementService() = default;
@@ -81,6 +89,8 @@ class IRequestManagementService {
   virtual void UpdateRequest(const boost::uuids::uuid& request_id,
                              const RequestToCreateOrUpdate& request) = 0;
   virtual std::vector<RequestShort> GetAll(const AuthData& auth) = 0;
+  virtual std::vector<RequestShort> GetFiltered(const RequestFilters& filters,
+                                                const AuthData& auth) = 0;
 };
 
 }  // namespace services

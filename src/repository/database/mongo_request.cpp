@@ -143,4 +143,9 @@ void MongoRequestRepository::AddComment(const boost::uuids::uuid& id,
                                           "created_at", comment.created_at))));
 }
 
+std::vector<RequestShort> MongoRequestRepository::GetFiltered(
+    const RequestFilters&) {
+  throw std::runtime_error("Not implemented");
+}
+
 }  // namespace repository

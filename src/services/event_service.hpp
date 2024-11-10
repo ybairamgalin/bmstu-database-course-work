@@ -21,6 +21,9 @@ class IEventService {
  public:
   virtual ~IEventService() = default;
   virtual boost::uuids::uuid AddEvent(const Event& event) = 0;
+  virtual void UpdateEvent(const boost::uuids::uuid& id, const Event& event,
+                           const AuthData& auth) = 0;
+  virtual std::vector<Event> SearchEvents(const std::string& substring) = 0;
   virtual std::vector<Event> GetAllEvents() = 0;
 };
 

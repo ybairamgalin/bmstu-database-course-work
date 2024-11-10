@@ -7,12 +7,12 @@
 
 namespace handlers::v3 {
 
-RequestPost::RequestPost(const userver::components::ComponentConfig& config,
+RequestsPost::RequestsPost(const userver::components::ComponentConfig& config,
                          const userver::components::ComponentContext& context)
     : BaseJsonHandler(config, context) {}
 
-RequestPost::Response RequestPost::HandleJson(
-    RequestPost::Request&& request,
+RequestsPost::Response RequestsPost::HandleJson(
+    RequestsPost::Request&& request,
     userver::server::request::RequestContext& ctx) const {
   auto auth = ctx.GetData<services::AuthData>("auth");
 

@@ -1,140 +1,185 @@
 components_manager:
-    task_processors:
+  task_processors:
 
-        main-task-processor:
-            worker_threads: $worker-threads
+    main-task-processor:
+      worker_threads: $worker-threads
 
-        fs-task-processor:
-            worker_threads: $worker-fs-threads
+    fs-task-processor:
+      worker_threads: $worker-fs-threads
 
-    default_task_processor: main-task-processor
+  default_task_processor: main-task-processor
 
-    components:
-        server:
-            listener:
-                port: $server-port
-                task_processor: main-task-processor
-        logging:
-            fs-task-processor: fs-task-processor
-            loggers:
-                default:
-                    file_path: '@stderr'
-                    level: $logger-level
-                    overflow_behavior: discard
+  components:
+    server:
+      listener:
+        port: $server-port
+        task_processor: main-task-processor
+    logging:
+      fs-task-processor: fs-task-processor
+      loggers:
+        default:
+          file_path: '@stderr'
+          level: $logger-level
+          overflow_behavior: discard
 
-        dynamic-config:
-            defaults:
-                HTTP_CLIENT_CONNECTION_POOL_SIZE: 1000
-                POSTGRES_DEFAULT_COMMAND_CONTROL:
-                    network_timeout_ms: 750
-                    statement_timeout_ms: 500
+    dynamic-config:
+      defaults:
+        HTTP_CLIENT_CONNECTION_POOL_SIZE: 1000
+        POSTGRES_DEFAULT_COMMAND_CONTROL:
+          network_timeout_ms: 750
+          statement_timeout_ms: 500
 
-        testsuite-support: {}
+    testsuite-support: { }
 
-        auth-pipeline-builder: {}
-        auth-middleware: {}
+    auth-pipeline-builder: { }
+    auth-middleware: { }
 
-        di-component:
-            pg-component: postgres-db-1
-            mongo-component: mongo-db
-            s3-region: $s3region
-            s3-endpoint: $s3endpoint
-            use-mongo: $usemongo
+    di-component:
+      pg-component: postgres-db-1
+      mongo-component: mongo-db
+      s3-region: $s3region
+      s3-endpoint: $s3endpoint
+      use-mongo: $usemongo
 
-        http-client:
-            fs-task-processor: fs-task-processor
+    http-client:
+      fs-task-processor: fs-task-processor
 
-        tests-control:
-            load-enabled: $is-testing
-            path: /tests/{action}
-            method: POST
-            task_processor: main-task-processor
-        handler-ping:
-            path: /ping
-            method: GET
-            task_processor: main-task-processor
-            throttling_enabled: false
-            url_trailing_slash: strict-match
+    tests-control:
+      load-enabled: $is-testing
+      path: /tests/{action}
+      method: POST
+      task_processor: main-task-processor
+    handler-ping:
+      path: /ping
+      method: GET
+      task_processor: main-task-processor
+      throttling_enabled: false
+      url_trailing_slash: strict-match
 
-        v2_request_post:
-            path: /v2/request
-            method: POST
-            task_processor: main-task-processor
-            middlewares:
-                pipeline-builder: auth-pipeline-builder
-                auth-middleware: { }
-        v2_request_get:
-            path: /v2/request
-            method: GET
-            task_processor: main-task-processor
-            middlewares:
-                pipeline-builder: auth-pipeline-builder
-                auth-middleware: {}
-        v2_request_list_get:
-            path: /v2/request/list
-            method: GET
-            task_processor: main-task-processor
-            middlewares:
-                pipeline-builder: auth-pipeline-builder
-                auth-middleware: { }
-        v2_event_post:
-            path: /v2/event
-            method: POST
-            task_processor: main-task-processor
-        v2_event_list_get:
-            path: /v2/event/list
-            method: GET
-            task_processor: main-task-processor
-        v2_request_comment_post:
-            path: /v2/request/comment
-            method: POST
-            task_processor: main-task-processor
-            middlewares:
-                pipeline-builder: auth-pipeline-builder
-                auth-middleware: { }
-        v2_manage_access_put:
-            path: /v2/manage/access
-            method: PUT
-            task_processor: main-task-processor
-            middlewares:
-                pipeline-builder: auth-pipeline-builder
-                auth-middleware: { }
-        v2_article_get:
-            path: /v2/article
-            method: GET
-            task_processor: main-task-processor
-        v2_article_post:
-            path: /v2/article
-            method: POST
-            task_processor: main-task-processor
-            middlewares:
-                pipeline-builder: auth-pipeline-builder
-                auth-middleware: {}
-        v2_file_put:
-            path: /v2/file
-            method: PUT
-            task_processor: main-task-processor
-            middlewares:
-                pipeline-builder: auth-pipeline-builder
-                auth-middleware: { }
+    v2_request_post:
+      path: /v2/request
+      method: POST
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v2_request_get:
+      path: /v2/request
+      method: GET
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v2_request_list_get:
+      path: /v2/request/list
+      method: GET
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v2_event_post:
+      path: /v2/event
+      method: POST
+      task_processor: main-task-processor
+    v2_event_list_get:
+      path: /v2/event/list
+      method: GET
+      task_processor: main-task-processor
+    v2_request_comment_post:
+      path: /v2/request/comment
+      method: POST
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v2_manage_access_put:
+      path: /v2/manage/access
+      method: PUT
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v2_file_put:
+      path: /v2/file
+      method: PUT
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
 
-        v2_permission_group_post:
-            path: /v2/permission-group
-            method: POST
-            task_processor: main-task-processor
-            middlewares:
-                pipeline-builder: auth-pipeline-builder
-                auth-middleware: { }
+    v3_requests_post:
+      path: /v3/requests
+      method: POST,OPTIONS
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v3_requests_get:
+      path: /v3/requests
+      method: GET
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v3_requests_id_get:
+      path: /v3/requests/{id}
+      method: GET,OPTIONS
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v3_requests_id_comments:
+      path: /v3/requests/{id}/comments
+      method: POST,OPTIONS
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v3_events_id_put:
+      path: /v3/events/{id}
+      method: PUT,OPTIONS
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v3_events_post:
+      path: /v3/events
+      method: POST,OPTIONS
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v3_events_get:
+      path: /v3/events
+      method: GET
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v3_roles_put:
+      path: /v3/roles
+      method: PUT,OPTIONS
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v3_files_put:
+      path: /v3/files
+      method: PUT,OPTIONS
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
 
-        postgres-db-1:
-            dbconnection: $dbconnection
-            blocking_task_processor: fs-task-processor
-            dns_resolver: async
-            sync-start: false
-            connlimit_mode: manual
+    postgres-db-1:
+      dbconnection: $dbconnection
+      blocking_task_processor: fs-task-processor
+      dns_resolver: async
+      sync-start: false
+      connlimit_mode: manual
 
-        mongo-db:
-            dbconnection: $mongoconnection
+    mongo-db:
+      dbconnection: $mongoconnection
 
-        dns-client:
-            fs-task-processor: fs-task-processor
+    dns-client:
+      fs-task-processor: fs-task-processor

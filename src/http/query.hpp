@@ -7,6 +7,9 @@
 #include <fmt/format.h>
 #include <boost/uuid/uuid.hpp>
 
+#include <userver/utils/datetime.hpp>
+#include <userver/utils/datetime/timepoint_tz.hpp>
+
 #include "../utils/meta.hpp"
 #include "exception.hpp"
 
@@ -41,6 +44,12 @@ boost::uuids::uuid GetRequiredQueryParamOtThrow<boost::uuids::uuid>(
 
 template <>
 std::optional<boost::uuids::uuid> GetQueryParamOpt<boost::uuids::uuid>(
+    const std::unordered_map<std::string, std::string>& params,
+    const std::string& name);
+
+template <>
+std::optional<userver::utils::datetime::TimePointTz>
+GetQueryParamOpt<userver::utils::datetime::TimePointTz>(
     const std::unordered_map<std::string, std::string>& params,
     const std::string& name);
 

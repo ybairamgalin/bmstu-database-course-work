@@ -7,6 +7,9 @@
 
 namespace utils {
 
+std::vector<std::string> GetPathParamsVector(
+    const userver::server::http::HttpRequest& request);
+
 std::unordered_map<std::string, std::string> ConvertHeadersToMap(
     const userver::server::http::HttpRequest& request);
 

@@ -18,6 +18,15 @@
 #include "handlers/v2/request_get.hpp"
 #include "handlers/v2/request_list_get.hpp"
 #include "handlers/v2/request_post.hpp"
+#include "handlers/v3/events_get.hpp"
+#include "handlers/v3/events_id_put.hpp"
+#include "handlers/v3/events_post.hpp"
+#include "handlers/v3/files_put.hpp"
+#include "handlers/v3/requests_get.hpp"
+#include "handlers/v3/requests_id_comments.hpp"
+#include "handlers/v3/requests_id_get.hpp"
+#include "handlers/v3/requests_post.hpp"
+#include "handlers/v3/roles.hpp"
 #include "middleware/auth.hpp"
 #include "middleware/auth_pipeline_builder.hpp"
 
@@ -40,6 +49,7 @@ userver::components::ComponentList MakeComponents() {
       .Append<middleware::AuthMiddlewarePipelineBuilder>(
           "auth-pipeline-builder")
       // handlers
+      // v2
       .Append<handlers::v2::RequestPost>()
       .Append<handlers::v2::RequestGet>()
       .Append<handlers::v2::RequestCommentPost>()
@@ -47,5 +57,15 @@ userver::components::ComponentList MakeComponents() {
       .Append<handlers::v2::EventPost>()
       .Append<handlers::v2::EventListGet>()
       .Append<handlers::v2::ManageAccessPut>()
-      .Append<handlers::v2::FilePut>();
+      .Append<handlers::v2::FilePut>()
+      // v3
+      .Append<handlers::v3::RequestsPost>()
+      .Append<handlers::v3::EventsPost>()
+      .Append<handlers::v3::RequestsIdGet>()
+      .Append<handlers::v3::RequestsIdCommentsPost>()
+      .Append<handlers::v3::RolesPut>()
+      .Append<handlers::v3::RequestsGet>()
+      .Append<handlers::v3::EventsGet>()
+      .Append<handlers::v3::EventsIdPut>()
+      .Append<handlers::v3::FilesPut>();
 }
