@@ -1,4 +1,3 @@
--- INSERT INTO hello_schema.users(name, count)
--- VALUES ('user-from-initial_data.sql', 42)
--- ON CONFLICT (name)
--- DO NOTHING;
+insert into service.permissions (name, description)
+values
+    ('comment_add', 'Позволяет добавлять коментарии к заявкам других пользователей');

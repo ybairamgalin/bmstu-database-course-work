@@ -1,0 +1,24 @@
+RequestListGetResponse200:
+  additionalProperties: false
+  type: object
+  required:
+    - requests
+  properties:
+    requests:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required:
+          - id
+          - author
+          - created_at
+        properties:
+          id:
+            type: string
+            format: uuid
+          author:
+            $ref: "common.yaml#/UserFullInfo"
+          created_at:
+            type: string
+            format: date-time

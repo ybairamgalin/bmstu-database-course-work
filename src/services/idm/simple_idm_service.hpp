@@ -2,15 +2,16 @@
 
 #include <memory>
 
-#include "../../repository/factory.hpp"
-#include "../idm_service.hpp"
+#include "repository/factory.hpp"
+#include "services/idm_service.hpp"
 
 namespace services {
 
 class SimpleIdmService : public IIdmService {
  public:
-  SimpleIdmService(const std::shared_ptr<repository::IRepositoryFactory>&
-                       repository_factory);
+  explicit SimpleIdmService(
+      const std::shared_ptr<repository::IRepositoryFactory>&
+          repository_factory);
 
   void HandleIdmRequest(services::IdmRequest&& request) override;
 

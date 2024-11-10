@@ -25,7 +25,9 @@ void DbEventRepository::AddEvent(const Event& event) {
   cluster_ptr_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       "insert into service.events (event_id, name, description) "
-      "values ($1, $2, $3)",
+      "values ($1, $2, $3) "
+      "on conflict (event_id) do update "
+      "set name = excluded.name, description = excluded.description",
       event.uuid, event.name, event.description);
 }
 

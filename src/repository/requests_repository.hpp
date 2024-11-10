@@ -57,6 +57,13 @@ struct RequestShort {
   userver::storages::postgres::TimePointTz created_at{};
 };
 
+struct RequestFilters {
+  std::optional<boost::uuids::uuid> request_id;
+  std::optional<int64_t> author_id;
+  std::optional<boost::uuids::uuid> event_id;
+  std::optional<userver::storages::postgres::TimePointTz> created_after{};
+};
+
 class RequestsRepository {
  public:
   virtual ~RequestsRepository() = default;
@@ -66,6 +73,8 @@ class RequestsRepository {
   virtual void Update(const Request& request) = 0;
   virtual void AddComment(const boost::uuids::uuid& id,
                           const std::string& content, int64_t author_id) = 0;
+  virtual std::vector<RequestShort> GetFiltered(
+      const RequestFilters& filters) = 0;
   virtual std::vector<RequestShort> GetAll() = 0;
 };
 

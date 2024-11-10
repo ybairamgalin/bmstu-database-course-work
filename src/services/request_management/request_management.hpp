@@ -21,6 +21,13 @@ class RequestManagementService : public IRequestManagementService {
   void AddComment(const boost::uuids::uuid& request_id,
                   const std::string& content, const AuthData& auth) override;
   std::vector<RequestShort> GetAll(const AuthData& auth) override;
+  std::vector<RequestShort> GetFiltered(
+      const services::RequestFilters& filters,
+      const services::AuthData& auth) override;
+
+ private:
+  std::vector<services::RequestShort> MapRequests(
+      const std::vector<repository::RequestShort>& db_requests);
 
  private:
   std::unique_ptr<repository::RequestsRepository> request_repository_;

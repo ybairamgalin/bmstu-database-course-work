@@ -38,6 +38,13 @@ test-debug test-release: test-%: build-%
 	cd build_$* && ((test -t 1 && GTEST_COLOR=1 PYTEST_ADDOPTS="--color=yes" ctest -V) || ctest -V)
 	pycodestyle tests
 
+.PHONY: unittest
+unittest: build-debug
+	cmake --build build_debug -j $(NPROCS) --target pg_service_template_unittest
+	build_debug/pg_service_template_unittest \
+		--gtest_output=xml:build_debug/report.xml \
+		--gtest_shuffle
+
 .PHONY: test-int
 test-int: test-%: build-debug
 	cmake --build build_debug -j $(NPROCS) --target pg_service_template_inttest
@@ -89,7 +96,7 @@ docker-start-service-debug docker-start-service-release: docker-start-service-%:
 
 # Start targets makefile in docker environment
 .PHONY: docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release docker-test-int
-docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release docker-test-int: docker-%:
+docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release docker-test-int docker-unittest: docker-%:
 	$(DOCKER_COMPOSE) run --rm pg_service_template-container make $*
 
 .PHONY: gen
@@ -104,6 +111,10 @@ gen:
 		bash run_codegen.sh && \
 	find src/gen -type f -exec $(CLANG_FORMAT) -i {} + && \
 	bash schemas/generate_cmake.sh
+
+.PHONY: docker-vim
+docker-vim:
+	docker run -it --mount type=bind,source=./,target=/pg_service_template -w /pg_service_template userver_dev /bin/bash
 
 # Stop docker container and remove PG data
 .PHONY: docker-clean-data

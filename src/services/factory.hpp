@@ -5,13 +5,13 @@
 #include "userver/clients/http/client.hpp"
 #include "userver/storages/postgres/cluster.hpp"
 
-#include "article_service.hpp"
 #include "auth_service.hpp"
 #include "event_service.hpp"
 #include "file_service.hpp"
 #include "idm_service.hpp"
 #include "repository/factory.hpp"
 #include "request_management_service.hpp"
+#include "permission_service.hpp"
 
 namespace services {
 
@@ -24,7 +24,6 @@ class IServiceFactory {
   MakeRequestManagementService() = 0;
   virtual std::unique_ptr<IEventService> MakeEventService() = 0;
   virtual std::unique_ptr<IFileService> MakeFileService() = 0;
-  virtual std::unique_ptr<IArticleService> MakeArticleService() = 0;
 };
 
 class SimpleServiceFactory : public IServiceFactory {
@@ -37,7 +36,6 @@ class SimpleServiceFactory : public IServiceFactory {
       override;
   std::unique_ptr<IEventService> MakeEventService() override;
   std::unique_ptr<IFileService> MakeFileService() override;
-  std::unique_ptr<IArticleService> MakeArticleService() override;
 
  private:
   std::shared_ptr<repository::IRepositoryFactory> repository_factory_;

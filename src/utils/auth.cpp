@@ -5,7 +5,7 @@ namespace utils {
 services::AuthData AuthOrThrow(
     const std::unordered_map<std::string, std::string>& headers,
     const std::unique_ptr<services::IAuthService>& auth_service) {
-  const auto it = headers.find("Token");
+  const auto it = headers.find("X-Token");
   if (it == headers.end()) {
     throw http::HttpException{401, "Missing auth token"};
   }

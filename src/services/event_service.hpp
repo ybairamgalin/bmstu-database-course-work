@@ -20,11 +20,10 @@ struct EventFull {
 class IEventService {
  public:
   virtual ~IEventService() = default;
-  virtual std::vector<EventFull> GetEvents(
-      const std::vector<boost::uuids::uuid>& uuids) = 0;
   virtual boost::uuids::uuid AddEvent(const Event& event) = 0;
-  virtual boost::uuids::uuid UpdateEvent(const Event& event,
-                                         const boost::uuids::uuid& id) = 0;
+  virtual void UpdateEvent(const boost::uuids::uuid& id, const Event& event,
+                           const AuthData& auth) = 0;
+  virtual std::vector<Event> SearchEvents(const std::string& substring) = 0;
   virtual std::vector<Event> GetAllEvents() = 0;
 };
 

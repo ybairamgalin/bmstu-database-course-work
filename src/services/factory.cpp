@@ -1,6 +1,5 @@
 #include "factory.hpp"
 
-#include "article/article.hpp"
 #include "auth/yandex_auth.hpp"
 #include "event/event.hpp"
 #include "file_service/file_service.hpp"
@@ -33,10 +32,6 @@ std::unique_ptr<IEventService> SimpleServiceFactory::MakeEventService() {
 
 std::unique_ptr<IFileService> SimpleServiceFactory::MakeFileService() {
   return std::make_unique<FileService>(repository_factory_);
-}
-
-std::unique_ptr<IArticleService> SimpleServiceFactory::MakeArticleService() {
-  return std::make_unique<ArticleService>(repository_factory_);
 }
 
 }  // namespace services

@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.12)
 project(pg_service_template CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Adding userver dependency
 find_package(userver COMPONENTS core postgresql QUIET)
 if (NOT userver_FOUND)  # Fallback to subdirectory usage
@@ -33,9 +35,6 @@ pkg_check_modules(LIBBSON REQUIRED libbson-1.0)
 include_directories(${LIBBSON_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME}_service_layer
-        src/services/article/article.cpp
-        src/services/article/article.hpp
-        src/services/article_service.hpp
         src/services/auth/yandex_auth.cpp
         src/services/auth/yandex_auth.hpp
         src/services/auth_service.hpp
@@ -54,13 +53,12 @@ add_library(${PROJECT_NAME}_service_layer
         src/services/idm_service.hpp
         src/services/mapping/mapping.cpp
         src/services/mapping/mapping.hpp
-        src/services/models/permission.cpp
-        src/services/models/permission.hpp
         src/services/models/user.cpp
         src/services/models/user.hpp
         src/services/request_management/request_management.cpp
         src/services/request_management/request_management.hpp
         src/services/request_management_service.hpp
+        src/services/request_management_service.cpp
 )
 target_link_libraries(${PROJECT_NAME}_service_layer PUBLIC
         userver::postgresql
@@ -70,9 +68,6 @@ target_include_directories(${PROJECT_NAME}_service_layer PUBLIC src)
 target_include_directories(${PROJECT_NAME}_service_layer PUBLIC src/gen)
 
 add_library(${PROJECT_NAME}_data_access_layer
-        src/repository/articles_repository.hpp
-        src/repository/database/article.cpp
-        src/repository/database/article.hpp
         src/repository/database/event.cpp
         src/repository/database/event.hpp
         src/repository/database/file_meta.cpp
@@ -112,10 +107,6 @@ add_library(${PROJECT_NAME}_rest_api_layer
         src/handlers/base_handler.hpp
         src/handlers/base_json_handler.hpp
         src/handlers/base_json_handler_fwd.hpp
-        src/handlers/v2/article_get.cpp
-        src/handlers/v2/article_get.hpp
-        src/handlers/v2/article_post.cpp
-        src/handlers/v2/article_post.hpp
         src/handlers/v2/event_list_get.cpp
         src/handlers/v2/event_list_get.hpp
         src/handlers/v2/event_post.cpp
@@ -132,6 +123,15 @@ add_library(${PROJECT_NAME}_rest_api_layer
         src/handlers/v2/request_list_get.hpp
         src/handlers/v2/request_post.cpp
         src/handlers/v2/request_post.hpp
+        src/handlers/v3/requests_post.cpp
+        src/handlers/v3/requests_get.cpp
+        src/handlers/v3/requests_id_get.cpp
+        src/handlers/v3/requests_id_comments.cpp
+        src/handlers/v3/roles.cpp
+        src/handlers/v3/events_get.cpp
+        src/handlers/v3/events_post.cpp
+        src/handlers/v3/events_id_put.cpp
+        src/handlers/v3/files_put.cpp
         src/http/exception.hpp
         src/http/query.cpp
         src/http/query.hpp
@@ -180,10 +180,18 @@ target_link_libraries(
         ${PROJECT_NAME}_gen
 )
 
-
 add_executable(${PROJECT_NAME}_unittest
+        src/tests/unit/request_object_mother.cpp
+        src/tests/unit/request_object_mother.hpp
         src/tests/unit/mock.hpp
+        src/tests/unit/base_service_test.cpp
+        src/tests/unit/base_service_test.hpp
         src/tests/unit/test_request_service.cpp
+        src/tests/unit/test_event_service.cpp
+        src/tests/unit/test_file_service.cpp
+        src/tests/unit/test_idm_service.cpp
+        src/tests/object_mother.hpp
+        src/tests/object_mother.cpp
 )
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE
         ${PROJECT_NAME}_service_layer
@@ -194,9 +202,21 @@ add_google_tests(${PROJECT_NAME}_unittest)
 add_executable(${PROJECT_NAME}_inttest
         src/utils/uuid.cpp
         src/utils/uuid.hpp
-        src/tests/integration/test_request_repository.cpp
-        src/tests/integration/test_request_repository.hpp
-        src/tests/integration/main.cpp
+        src/repository/factory.hpp
+        src/repository/factory.cpp
+        src/tests/nonmock/test_request_repository.cpp
+        src/tests/nonmock/test_request_repository.hpp
+        src/tests/nonmock/main.cpp
+        src/tests/nonmock/runner.hpp
+        src/tests/nonmock/runner.cpp
+        src/tests/nonmock/test_component.hpp
+        src/tests/nonmock/test_component.cpp
+        src/tests/nonmock/test_event_repository.hpp
+        src/tests/nonmock/test_event_repository.cpp
+        src/tests/nonmock/test_user_data_repository.hpp
+        src/tests/nonmock/test_user_data_repository.cpp
+        src/tests/object_mother.hpp
+        src/tests/object_mother.cpp
 )
 target_link_libraries(${PROJECT_NAME}_inttest PRIVATE
         userver::mongo

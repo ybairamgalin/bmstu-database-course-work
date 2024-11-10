@@ -1,0 +1,14 @@
+ManageAccessPutBody:
+  type: object
+  additionalProperties: false
+  required:
+    - login
+  properties:
+    login:
+      type: string
+    new_role:
+      type: string
+      enum:
+        - user
+        - moderator
+        - admin

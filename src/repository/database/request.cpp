@@ -148,6 +148,23 @@ void DbRequestsRepository::AddComment(const boost::uuids::uuid& id,
       id, author_id, content);
 }
 
+std::vector<RequestShort> DbRequestsRepository::GetFiltered(
+    const RequestFilters& filters) {
+  auto result = cluster_ptr_->Execute(
+      userver::storages::postgres::ClusterHostType::kSlave,
+      "select request_id, user_id, created_at "
+      "from service.requests "
+      "where $1 is null or request_id = $1 "
+      "  and $2 is null or user_id = $2 "
+      "  and $3 is null or event_id = $3 "
+      "  and $4 is null or created_at > $4 "
+      "order by created_at desc",
+      filters.request_id, filters.author_id, filters.event_id,
+      filters.created_after);
+  return result.AsContainer<std::vector<RequestShort>>(
+      userver::storages::postgres::kRowTag);
+}
+
 std::vector<RequestShort> DbRequestsRepository::GetAll() {
   auto result = cluster_ptr_->Execute(
       userver::storages::postgres::ClusterHostType::kSlave,

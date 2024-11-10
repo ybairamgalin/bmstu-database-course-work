@@ -3,7 +3,6 @@ ManageAccessPutBody:
   additionalProperties: false
   required:
     - login
-    - new_role
   properties:
     login:
       type: string
@@ -13,3 +12,7 @@ ManageAccessPutBody:
         - user
         - moderator
         - admin
+    permission_groups:
+      type: array
+      items:
+        type: string

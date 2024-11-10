@@ -56,4 +56,18 @@ std::optional<boost::uuids::uuid> GetQueryParamOpt<boost::uuids::uuid>(
   return uuid_opt.value();
 }
 
+template <>
+std::optional<userver::utils::datetime::TimePointTz>
+GetQueryParamOpt<userver::utils::datetime::TimePointTz>(
+    const std::unordered_map<std::string, std::string>& params,
+    const std::string& name) {
+  auto datetime_opt = GetQueryParamOpt<std::string>(params, name);
+  if (!datetime_opt.has_value()) {
+    return std::nullopt;
+  }
+  const auto time = userver::utils::datetime::FromRfc3339StringSaturating(
+      datetime_opt.value());
+  return userver::utils::datetime::TimePointTz{time};
+}
+
 }  // namespace http

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 #include "../http/exception.hpp"
 #include "../services/exception.hpp"
 #include "base_json_handler_fwd.hpp"
@@ -39,6 +41,7 @@ std::string BaseJsonHandler<RequestBody, ResponseBody>::Handle(
     parsed_request = ParseRequest(request);
   } catch (const std::exception& ex) {
     LOG_WARNING() << fmt::format("Parse exception: {}", ex.what());
+    request.SetResponseStatus(userver::server::http::HttpStatus(400));
     return utils::ToJsonString(gen::ErrorResponse{400, ex.what()});
   }
   return Process(std::move(parsed_request), request, ctx);
@@ -54,6 +57,7 @@ BaseJsonHandler<RequestBody, ResponseBody>::ParseRequest(
     parsed_request.body =
         gen::Parse(json, userver::formats::parse::To<RequestBody>());
   }
+  parsed_request.path_args = utils::GetPathParamsVector(request);
   parsed_request.query_params = utils::ConvertQueryParamsToMap(request);
   parsed_request.headers = utils::ConvertHeadersToMap(request);
   return parsed_request;

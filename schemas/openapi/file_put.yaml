@@ -1,0 +1,9 @@
+FilePutResponse200:
+  additionalProperties: false
+  type: object
+  required:
+    - file_id
+  properties:
+    file_id:
+      type: string
+      format: uuid

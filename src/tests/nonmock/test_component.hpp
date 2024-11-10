@@ -8,20 +8,17 @@
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 
-class RequestRepositoryIntTestComponent
-    : public userver::components::ComponentBase {
+class IntegrationTestingComponent : public userver::components::ComponentBase {
  public:
   static constexpr std::string_view kName = "request_int_test";
 
-  RequestRepositoryIntTestComponent(
+  IntegrationTestingComponent(
       const userver::components::ComponentConfig& config,
       const userver::components::ComponentContext& context);
 
  private:
   void RunTests();
-  void Cleanup();
 
  private:
   userver::storages::postgres::ClusterPtr cluster_ptr_;
-  userver::storages::mongo::PoolPtr pool_;
 };

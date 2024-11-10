@@ -27,10 +27,13 @@ SimpleIdmService::SimpleIdmService(
 
 void SimpleIdmService::HandleIdmRequest(IdmRequest&& request) {
   if (request.request_author.role != AuthRole::kAdmin) {
-    throw ServiceLevelException("You cannot manage users permissions");
+    throw ServiceLevelException("You cannot manage users permissions",
+                                ErrorType::kPermissionDenied);
   }
 
-  if (!user_data_repository_->GetUserDataByLogin(request.login).has_value()) {
+  const auto user_data =
+      user_data_repository_->GetUserDataByLogin(request.login);
+  if (!user_data.has_value()) {
     throw ServiceLevelException(
         fmt::format("User with login {} does not exist", request.login));
   }

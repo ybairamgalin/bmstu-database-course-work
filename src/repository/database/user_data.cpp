@@ -1,7 +1,7 @@
 #include "user_data.hpp"
 
-#include "utils/merge_utils.hpp"
 #include "repository/http/user_data.hpp"
+#include "utils/merge_utils.hpp"
 
 namespace {
 
@@ -67,31 +67,31 @@ void DbUserDataRepository::SaveUserData(const repository::AuthData& auth_data) {
       auth_data.user_id, auth_data.token, auth_data.login, auth_data.name,
       auth_data.phone);
 
-//  auto trx = cluster_ptr_->Begin(
-//      userver::storages::postgres::ClusterHostType::kMaster, {});
+  //  auto trx = cluster_ptr_->Begin(
+  //      userver::storages::postgres::ClusterHostType::kMaster, {});
   //  const auto db_permissions = trx.Execute(
   //      "select slug "
   //      "from service.permissions "
   //      "where user_id = $1",
   //      auth_data.user_id);
-//  const auto permissions_set =
-//      db_permissions.AsContainer<std::set<std::string>>();
-//  const auto merged_result =
+  //  const auto permissions_set =
+  //      db_permissions.AsContainer<std::set<std::string>>();
+  //  const auto merged_result =
   //      utils::Merge(permissions_set, auth_data.permission_group);
-//
-//  if (!merged_result.added.empty()) {
-//    trx.Execute(
-//        "insert into service.permissions (slug, user_id) "
-//        "(select unnest($1), $2)",
-//        merged_result.added, auth_data.user_id);
-//  }
-//  if (!merged_result.deleted.empty()) {
-//    trx.Execute(
-//        "delete from service.permissions "
-//        "where slug in (select unnest($1)) and user_id = $2",
-//        merged_result.deleted, auth_data.user_id);
-//  }
-//  trx.Commit();
+  //
+  //  if (!merged_result.added.empty()) {
+  //    trx.Execute(
+  //        "insert into service.permissions (slug, user_id) "
+  //        "(select unnest($1), $2)",
+  //        merged_result.added, auth_data.user_id);
+  //  }
+  //  if (!merged_result.deleted.empty()) {
+  //    trx.Execute(
+  //        "delete from service.permissions "
+  //        "where slug in (select unnest($1)) and user_id = $2",
+  //        merged_result.deleted, auth_data.user_id);
+  //  }
+  //  trx.Commit();
 }
 
 template <typename... Args>
@@ -112,12 +112,12 @@ std::optional<repository::AuthData> DbUserDataRepository::GetUserDataByQuery(
 }
 
 std::set<std::string> DbUserDataRepository::GetPermissions(int64_t user_id) {
-//  auto result_permissions = cluster_ptr_->Execute(
-//      userver::storages::postgres::ClusterHostType::kMaster,
-//      "select slug "
-//      "from service.permissions "
-//      "where user_id = $1",
-//      user_id);
+  //  auto result_permissions = cluster_ptr_->Execute(
+  //      userver::storages::postgres::ClusterHostType::kMaster,
+  //      "select slug "
+  //      "from service.permissions "
+  //      "where user_id = $1",
+  //      user_id);
   return {};
 }
 std::vector<AuthData> DbUserDataRepository::GetUserDataByIds(

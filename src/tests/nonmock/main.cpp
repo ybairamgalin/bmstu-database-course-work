@@ -6,7 +6,7 @@
 #include <userver/storages/postgres/component.hpp>
 #include <userver/testsuite/testsuite_support.hpp>
 
-#include "tests/integration/test_request_repository.hpp"
+#include "tests/nonmock/test_component.hpp"
 
 int main(int argc, char* argv[]) {
   return userver::utils::DaemonMain(
@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
       userver::components::MinimalServerComponentList()
           .Append<userver::components::TestsuiteSupport>()
           .Append<userver::clients::dns::Component>()
-          .Append<RequestRepositoryIntTestComponent>()
+          .Append<IntegrationTestingComponent>()
           .Append<userver::components::Postgres>("postgres-db-1")
           .Append<userver::components::Mongo>("mongo-db"));
 }
