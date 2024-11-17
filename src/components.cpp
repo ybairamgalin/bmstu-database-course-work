@@ -18,7 +18,9 @@
 #include "handlers/v2/request_get.hpp"
 #include "handlers/v2/request_list_get.hpp"
 #include "handlers/v2/request_post.hpp"
+#include "handlers/v3/events_delete.hpp"
 #include "handlers/v3/events_get.hpp"
+#include "handlers/v3/events_id_get.hpp"
 #include "handlers/v3/events_id_put.hpp"
 #include "handlers/v3/events_post.hpp"
 #include "handlers/v3/files_put.hpp"
@@ -67,5 +69,7 @@ userver::components::ComponentList MakeComponents() {
       .Append<handlers::v3::RequestsGet>()
       .Append<handlers::v3::EventsGet>()
       .Append<handlers::v3::EventsIdPut>()
-      .Append<handlers::v3::FilesPut>();
+      .Append<handlers::v3::FilesPut>()
+      .Append<handlers::v3::EventsDelete>()
+      .Append<handlers::v3::EventsIdGet>();
 }

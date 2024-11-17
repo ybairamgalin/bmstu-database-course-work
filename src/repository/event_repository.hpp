@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <boost/uuid/uuid.hpp>
 
@@ -18,6 +18,7 @@ class EventRepository {
   virtual ~EventRepository() = default;
   virtual std::vector<Event> GetEventsByIds(
       const std::vector<boost::uuids::uuid>& event_id) = 0;
+  virtual void DeleteEvent(const boost::uuids::uuid& id) = 0;
   virtual void AddEvent(const Event& event) = 0;
   virtual std::vector<Event> GetAll() = 0;
 };

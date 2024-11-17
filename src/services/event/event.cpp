@@ -54,4 +54,21 @@ std::vector<Event> EventService::SearchEvents(const std::string& substring) {
   return result;
 }
 
+void EventService::DeleteEvent(const boost::uuids::uuid& id,
+                               const AuthData& auth) {
+  if (auth.role != AuthRole::kModerator) {
+    throw ServiceLevelException("You cannot delete events",
+                                ErrorType::kPermissionDenied);
+  }
+  event_repository_->DeleteEvent(id);
+}
+
+std::optional<EventFull> EventService::GetEventById(
+    const boost::uuids::uuid& id) {
+  auto events = event_repository_->GetEventsByIds({id});
+  return events.empty() ? std::optional<EventFull>()
+                        : services::EventFull{events.front().name,
+                                              events.front().description};
+}
+
 }  // namespace services

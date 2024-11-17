@@ -142,6 +142,20 @@ components_manager:
       middlewares:
         pipeline-builder: auth-pipeline-builder
         auth-middleware: { }
+    v3_events_delete:
+      path: /v3/events/{id}
+      method: DELETE
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
+    v3_events_id_get:
+      path: /v3/events/{id}
+      method: GET
+      task_processor: main-task-processor
+      middlewares:
+        pipeline-builder: auth-pipeline-builder
+        auth-middleware: { }
     v3_events_post:
       path: /v3/events
       method: POST,OPTIONS
@@ -170,6 +184,8 @@ components_manager:
       middlewares:
         pipeline-builder: auth-pipeline-builder
         auth-middleware: { }
+
+
 
     postgres-db-1:
       dbconnection: $dbconnection

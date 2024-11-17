@@ -14,6 +14,7 @@ class DbEventRepository : public EventRepository {
       const std::vector<boost::uuids::uuid>& event_id) override;
   void AddEvent(const repository::Event &event) override;
   std::vector<Event> GetAll() override;
+  void DeleteEvent(const boost::uuids::uuid &id) override;
 
  private:
   userver::storages::postgres::ClusterPtr cluster_ptr_;

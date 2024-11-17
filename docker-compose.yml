@@ -23,7 +23,9 @@ services:
         networks:
           - postgres
     pg_service_template-container:
-        image: db_course_work
+        image: cr.yandex/crp37i9qfn16d69aaulp/conference-app:latest
+        container_name: backend_service
+        hostname: backend-1
         privileged: true
         environment:
           - POSTGRES_DB=pg_service_template_db_1
@@ -42,20 +44,42 @@ services:
           - ./tests/run_as_user.sh
         depends_on:
           - postgres
-          - mongo
-          - swagger
+#          - mongo
+#          - swagger
+#          - nginx
+#          - pg_admin
         networks:
           - postgres
     swagger:
       image: swaggerapi/swagger-ui
+      container_name: swagger
       environment:
         - SWAGGER_JSON=/mnt/swagger/api-spec.yaml
       volumes:
         - ./schemas/openapi/:/mnt/swagger
       ports:
-        - 80:8080
+        - 30000:80
       networks:
         - postgres
+    nginx:
+      image: nginx
+      ports:
+        - 80:80
+      volumes:
+        - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+        - ./nginx/static:/usr/share/nginx/html
+      networks:
+        - postgres
+    pg_admin:
+      image: dpage/pgadmin4:latest
+      container_name: pg_admin
+      networks:
+        - postgres
+      ports:
+        - 30001:80
+      environment:
+        - PGADMIN_DEFAULT_EMAIL=default@email.com
+        - PGADMIN_DEFAULT_PASSWORD=password
 
 networks:
     postgres:

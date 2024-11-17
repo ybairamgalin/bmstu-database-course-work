@@ -15,6 +15,9 @@ class EventService : public IEventService {
   void UpdateEvent(const boost::uuids::uuid& id, const services::Event& event,
                    const services::AuthData& auth) override;
   std::vector<Event> SearchEvents(const std::string& substring) override;
+  void DeleteEvent(const boost::uuids::uuid& id,
+                   const services::AuthData& auth) override;
+  std::optional<EventFull> GetEventById(const boost::uuids::uuid& id) override;
 
  private:
   std::unique_ptr<repository::EventRepository> event_repository_;

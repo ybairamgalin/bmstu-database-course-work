@@ -40,4 +40,11 @@ std::vector<Event> DbEventRepository::GetAll() {
       userver::storages::postgres::kRowTag);
 }
 
+void DbEventRepository::DeleteEvent(const boost::uuids::uuid& id) {
+  cluster_ptr_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                        "delete from service.events "
+                        "where event_id = $1",
+                        id);
+}
+
 }  // namespace repository

@@ -132,6 +132,8 @@ add_library(${PROJECT_NAME}_rest_api_layer
         src/handlers/v3/events_post.cpp
         src/handlers/v3/events_id_put.cpp
         src/handlers/v3/files_put.cpp
+        src/handlers/v3/events_delete.cpp
+        src/handlers/v3/events_id_get.cpp
         src/http/exception.hpp
         src/http/query.cpp
         src/http/query.hpp

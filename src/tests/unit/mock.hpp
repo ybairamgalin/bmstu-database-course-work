@@ -18,6 +18,8 @@ class MockRequestsRepository : public RequestsRepository {
                int64_t author_id),
               (override));
   MOCK_METHOD(std::vector<RequestShort>, GetAll, (), (override));
+  MOCK_METHOD(std::vector<RequestShort>, GetFiltered,
+              (const RequestFilters& filters), (override));
 };
 
 class MockEventRepository : public EventRepository {
@@ -26,6 +28,7 @@ class MockEventRepository : public EventRepository {
               (const std::vector<boost::uuids::uuid>& event_id), (override));
   MOCK_METHOD(void, AddEvent, (const Event& event), (override));
   MOCK_METHOD(std::vector<Event>, GetAll, (), (override));
+  MOCK_METHOD(void, DeleteEvent, (const boost::uuids::uuid&), (override));
 };
 
 class MockUserDataRepository : public UserDataRepository {
@@ -47,15 +50,21 @@ class MockUserDataRepository : public UserDataRepository {
 class MockFileMetaRepository : public FileMetaRepository {
  public:
   MOCK_METHOD(void, UpsertFileMeta, (const FileMeta&), (override));
-  MOCK_METHOD(std::vector<FileMeta>, GetFileMetaByRequestId, (int64_t request_id), (override));
-  MOCK_METHOD(std::optional<FileMeta>, GetFileMetaByHash, (const std::string& hash), (override));
-  MOCK_METHOD(std::optional<FileMeta>, GetFileMetaByFileUuid, (const boost::uuids::uuid& uuid), (override));
+  MOCK_METHOD(std::vector<FileMeta>, GetFileMetaByRequestId,
+              (int64_t request_id), (override));
+  MOCK_METHOD(std::optional<FileMeta>, GetFileMetaByHash,
+              (const std::string& hash), (override));
+  MOCK_METHOD(std::optional<FileMeta>, GetFileMetaByFileUuid,
+              (const boost::uuids::uuid& uuid), (override));
 };
 
 class MockFileStorageRepository : public FileStorageRepository {
  public:
-  MOCK_METHOD(void, UploadFile, (std::string&& file_content, boost::uuids::uuid uuid), (override));
-  MOCK_METHOD(std::optional<std::string>, GetFile, (boost::uuids::uuid uuid), (override));
+  MOCK_METHOD(void, UploadFile,
+              (std::string && file_content, boost::uuids::uuid uuid),
+              (override));
+  MOCK_METHOD(std::optional<std::string>, GetFile, (boost::uuids::uuid uuid),
+              (override));
 };
 
 class MockRepositoryFactory : public IRepositoryFactory {

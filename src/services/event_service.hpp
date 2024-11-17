@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -25,6 +26,10 @@ class IEventService {
                            const AuthData& auth) = 0;
   virtual std::vector<Event> SearchEvents(const std::string& substring) = 0;
   virtual std::vector<Event> GetAllEvents() = 0;
+  virtual void DeleteEvent(const boost::uuids::uuid& id,
+                           const AuthData& auth) = 0;
+  virtual std::optional<EventFull> GetEventById(
+      const boost::uuids::uuid& id) = 0;
 };
 
 }  // namespace services
