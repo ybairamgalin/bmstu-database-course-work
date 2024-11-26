@@ -22,3 +22,12 @@ jobs:
       - name: Build service and tests
         run: | 
           docker run -t -v .:/code cr.yandex/crp37i9qfn16d69aaulp/conference-app:latest /bin/bash /code/ci/run_build.sh
+
+      - name: Build docker image
+        run: |
+          export DOCKER_TAG=cr.yandex/crp37i9qfn16d69aaulp/conference_app:github_run_${GITHUB_RUN_ID}
+          docker build . --network=host -f docker/release/Dockerfile --tag ${DOCKER_TAG}
+
+      - name: Upload docker image
+        run: |
+          docker push ${DOCKER_TAG}
