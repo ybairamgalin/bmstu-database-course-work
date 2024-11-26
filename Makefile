@@ -103,13 +103,12 @@ docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docke
 gen:
 	mkdir -p src/gen && \
 	rm -rf src/gen/* && \
-	docker run --rm -it --network ip6net \
+	docker run --rm -t \
 		--mount type=bind,source=./schemas,target=/etc/schemas \
 		--mount type=bind,source=./src/gen,target=/gen \
 		-w /etc/schemas \
-		ghcr.io/userver-framework/ubuntu-22.04-userver-pg:latest \
+		cr.yandex/crp37i9qfn16d69aaulp/conference-app:latest \
 		bash run_codegen.sh && \
-	find src/gen -type f -exec $(CLANG_FORMAT) -i {} + && \
 	bash schemas/generate_cmake.sh
 
 .PHONY: docker-vim

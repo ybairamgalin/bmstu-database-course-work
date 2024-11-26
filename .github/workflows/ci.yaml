@@ -3,18 +3,22 @@ name: CI. Should run after every push to this repo
 on: [push, pull_request]
 
 jobs:
-  tests:
+  Build-docker-image:
     runs-on: ubuntu-latest
     steps:
       - name: Set up dependencies
         run: docker --version
-      - name: Pull docker images
+
+      - name: Pull Docker image
         run: |
           docker pull cr.yandex/crp37i9qfn16d69aaulp/conference-app:latest
+
       - name: Clone repository
         uses: actions/checkout@v4
-      - name: 123
-        run: ls -al
-      - name: Build service
+
+      - name: Run codegen
+        run: make gen
+
+      - name: Build service and tests
         run: | 
-          docker run -t -v db_course_work:/code cr.yandex/crp37i9qfn16d69aaulp/conference-app:latest /bin/bash /code/run_build.sh
+          docker run -t -v .:/code cr.yandex/crp37i9qfn16d69aaulp/conference-app:latest /bin/bash /code/ci/run_build.sh
