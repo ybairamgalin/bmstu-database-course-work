@@ -30,4 +30,5 @@ jobs:
 
       - name: Upload docker image
         run: |
+          export DOCKER_TAG=cr.yandex/crp37i9qfn16d69aaulp/conference_app:github_run_${GITHUB_RUN_ID}
           docker push ${DOCKER_TAG}
