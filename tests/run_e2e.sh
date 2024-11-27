@@ -8,4 +8,4 @@ set -e
 
 sleep 20
 
-pytest -vv --junitxml=/report/report_e2e.xml /usr/bin/service/tests
+pytest -vv --junit-xml=/report/report_e2e.xml --junit-prefix=e2e /usr/bin/service/tests
