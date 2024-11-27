@@ -85,6 +85,13 @@ jobs:
       - name: Stop all containers
         run: docker stop $(docker ps -a -q)
 
+      - name: Save inttest report
+        uses: actions/upload-artifact@v4
+        with:
+          name: inttest_report
+          path: ./docker/inttest/report/report_inttest.xml
+          retention-days: 3
+
       - name: Run e2e tests
         run: docker compose -f docker/e2e/docker-compose.yaml run service --build
 
