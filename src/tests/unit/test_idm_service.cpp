@@ -74,18 +74,6 @@ TEST(AuthServiceTest, TestBadTokenFormat) {
   EXPECT_TRUE(true);
 }
 
-TEST(RequestsServiceTest, TestGetAllRequests) {
-  EXPECT_TRUE(true);
-}
-
-TEST(RequestsServiceTest, TestFilterRequestsByDate) {
-  EXPECT_TRUE(true);
-}
-
-TEST(RequestsServiceTest, TestFilterRequestsById) {
-  EXPECT_TRUE(true);
-}
-
-TEST(RequestsServiceTest, TestFilterRequestsByAuthor) {
+TEST(PermissionServiceTest, TestGetAllRequests) {
   EXPECT_TRUE(true);
 }

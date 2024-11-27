@@ -154,3 +154,16 @@ TEST_F(RequestsServiceTest, GetAll_Success) {
   EXPECT_EQ(result[0].author.name, db_auth_data.name);
   EXPECT_EQ(result[0].author.login, db_auth_data.login);
 }
+
+TEST_F(RequestsServiceTest, TestFilterRequestsByDate) {
+  EXPECT_TRUE(true);
+}
+
+TEST_F(RequestsServiceTest, TestFilterRequestsById) {
+  EXPECT_TRUE(true);
+}
+
+TEST_F(RequestsServiceTest, TestFilterRequestsByAuthor) {
+  EXPECT_TRUE(true);
+}
+
