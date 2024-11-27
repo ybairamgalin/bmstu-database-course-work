@@ -114,26 +114,27 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: unittest_report
-          path: ./allure-results/unittest.xml
+          path: ./unittest
 
       - name: Download inttest
         uses: actions/download-artifact@v4
         with:
           name: inttest_report
-          path: ./allure-results/inttest.xml
+          path: ./inttest
 
       - name: Download e2e
         uses: actions/download-artifact@v4
         with:
           name: e2e_report
-          path: ./allure-results/e2e.xml
+          path: ./e2e
 
-      - name: Unzip artifacts
+      - name: Merge artifacts
         run: |
+          mkdir -p ./allure-results
+          mv unittest/* ./allure-results/
+          mv e2e/* ./allure-results/
+          mv inttest/* ./allure-results/
           ls -al ./allure-results
-          cat ./allure-results/inttest.xml
-          cat ./allure-results/e2e.xml
-          cat ./allure-results/unittest.xml
 
       - name: Set up JDK 11
         uses: actions/setup-java@v3
