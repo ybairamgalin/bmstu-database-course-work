@@ -142,7 +142,7 @@ jobs:
 
       - name: Generate report
         run: |
-          allure generate allure-results --clean -o allure-report
+          allure-commandline/allure-2.20.1/bin/allure generate allure-results --clean -o allure-report
 
       - name: Upload to pages
         uses: peaceiris/actions-gh-pages@v3
