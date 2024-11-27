@@ -118,12 +118,14 @@ jobs:
 
       - name: Download inttest
         uses: actions/download-artifact@v4
+        continue-on-error: true
         with:
           name: inttest_report
           path: ./inttest
 
       - name: Download e2e
         uses: actions/download-artifact@v4
+        continue-on-error: true
         with:
           name: e2e_report
           path: ./e2e
@@ -135,6 +137,7 @@ jobs:
           mv e2e/* ./allure-results/
           mv inttest/* ./allure-results/
           ls -al ./allure-results
+        continue-on-error: true
 
       - name: Load test report history
         uses: actions/checkout@v3
