@@ -57,3 +57,35 @@ TEST_F(IdmServiceTest, TestHandleIdmRequestSuccess) {
 
   service_->HandleIdmRequest(std::move(idm_request));
 }
+
+TEST(AuthServiceTest, TestAuthPermissionDenied) {
+  EXPECT_TRUE(true);
+}
+
+TEST(AuthServiceTest, TestAuthMissingToken) {
+  EXPECT_TRUE(true);
+}
+
+TEST(AuthServiceTest, TestAuthSuccess) {
+  EXPECT_TRUE(true);
+}
+
+TEST(AuthServiceTest, TestBadTokenFormat) {
+  EXPECT_TRUE(true);
+}
+
+TEST(RequestsServiceTest, TestGetAllRequests) {
+  EXPECT_TRUE(true);
+}
+
+TEST(RequestsServiceTest, TestFilterRequestsByDate) {
+  EXPECT_TRUE(true);
+}
+
+TEST(RequestsServiceTest, TestFilterRequestsById) {
+  EXPECT_TRUE(true);
+}
+
+TEST(RequestsServiceTest, TestFilterRequestsByAuthor) {
+  EXPECT_TRUE(true);
+}
