@@ -34,6 +34,7 @@ services:
       - CORES_DIR=/cores
     volumes:
       - ${TC_CORES_DIR:-./.cores}:/cores:rw
+      - ./report:/report
     ports:
       - 8080:8080
     entrypoint:
