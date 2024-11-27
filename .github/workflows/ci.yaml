@@ -104,3 +104,10 @@ jobs:
           name: e2e_report
           path: ./docker/e2e/report/report_e2e.xml
           retention-days: 3
+
+  Generate-report:
+    runs-on: ubuntu-latest
+    needs: Run-tests
+    steps:
+      - name: Hello
+        run: echo 'Hello'
