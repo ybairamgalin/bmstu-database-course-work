@@ -72,5 +72,11 @@ jobs:
       - name: Run integration tests
         run: docker compose -f docker/inttest/docker-compose.yaml run service || true
 
+      - name: Stop all containers
+        run: docker stop $(docker ps -a -q)
+
       - name: Run e2e tests
-        run: docker run -t inttest_image pytest /usr/bin/service/tests
+        run: docker compose -f docker/e2e/docker-compose.yaml run service --build
+
+      - name: Stop all containers
+        run: docker stop $(docker ps -a -q)
