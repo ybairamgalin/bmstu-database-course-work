@@ -61,7 +61,14 @@ jobs:
 
       - name: Run unittests
         run: >
-          docker run -t inttest_image /usr/bin/service/pg_service_template_unittest
+          docker run -t inttest_image /usr/bin/service/pg_service_template_unittest --gtest_output=xml:/report.xml
+
+      - name: Save report
+        uses: actions/upload-artifact@v4
+        with:
+          name: unittest_report
+          path: report.xml
+          retention-days: 3
 
       - name: Pull postgres image
         run: docker pull postgres:12
