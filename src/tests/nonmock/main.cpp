@@ -15,6 +15,5 @@ int main(int argc, char* argv[]) {
           .Append<userver::components::TestsuiteSupport>()
           .Append<userver::clients::dns::Component>()
           .Append<IntegrationTestingComponent>()
-          .Append<userver::components::Postgres>("postgres-db-1")
-          .Append<userver::components::Mongo>("mongo-db"));
+          .Append<userver::components::Postgres>("postgres-db-1"));
 }

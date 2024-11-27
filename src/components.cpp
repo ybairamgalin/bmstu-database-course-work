@@ -43,8 +43,6 @@ userver::components::ComponentList MakeComponents() {
       .Append<di::DiComponent>()
       // postgres
       .Append<userver::components::Postgres>("postgres-db-1")
-      // mongo
-      .Append<userver::components::Mongo>("mongo-db")
       // middleware
       .Append<middleware::AuthFactory>()
       // pipeline builder

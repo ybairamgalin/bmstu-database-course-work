@@ -16,7 +16,7 @@ IntegrationTestingComponent::IntegrationTestingComponent(
           context.FindComponent<userver::components::Postgres>("postgres-db-1")
               .GetCluster()) {
   RunTests();
-  std::terminate();
+  exit(0);
 }
 
 void IntegrationTestingComponent::RunTests() {

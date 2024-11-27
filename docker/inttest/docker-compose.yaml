@@ -2,8 +2,8 @@ version: "2.3"
 
 services:
   postgres:
-    container_name: service-postgres
     image: postgres:12
+    hostname: service-postgres
     environment:
       - POSTGRES_DB=pg_service_template_db_1
       - POSTGRES_USER=user
@@ -11,14 +11,18 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./postgresql/schemas:/docker-entrypoint-initdb.d
+      - ./init:/docker-entrypoint-initdb.d
       - ./.pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - postgres
 
-  pg_service_template-container:
-    image: cr.yandex/crp37i9qfn16d69aaulp/conference-app:latest
-    container_name: backend-service-1
+  service:
+    image: inttest_image
     hostname: backend-1
     privileged: true
     environment:
@@ -29,17 +33,20 @@ services:
       - CCACHE_DIR=/pg_service_template/.ccache
       - CORES_DIR=/cores
     volumes:
-      - .:/pg_service_template:rw
       - ${TC_CORES_DIR:-./.cores}:/cores:rw
     ports:
       - 8080:8080
-    working_dir: /pg_service_template
     entrypoint:
-      - ./tests/run_as_user.sh
+      - /usr/bin/service/pg_service_template_inttest
+      - --config
+      - /etc/configs/int_test_config.yaml
+      - --config_vars
+      - /etc/configs/config_vars.docker.yaml
     networks:
       - postgres
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
 networks:
   postgres:

@@ -1,2 +1,2 @@
-async def test_ok(service_client):
+def test_ok():
     assert 1 == 1

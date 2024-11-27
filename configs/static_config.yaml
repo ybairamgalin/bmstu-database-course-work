@@ -36,10 +36,9 @@ components_manager:
 
     di-component:
       pg-component: postgres-db-1
-      mongo-component: mongo-db
-      s3-region: $s3region
-      s3-endpoint: $s3endpoint
-      use-mongo: $usemongo
+      s3-region: ru-central1
+      s3-endpoint: storage.yandexcloud.net
+      use-mongo: false
 
     http-client:
       fs-task-processor: fs-task-processor
@@ -193,9 +192,6 @@ components_manager:
       dns_resolver: async
       sync-start: false
       connlimit_mode: manual
-
-    mongo-db:
-      dbconnection: $mongoconnection
 
     dns-client:
       fs-task-processor: fs-task-processor

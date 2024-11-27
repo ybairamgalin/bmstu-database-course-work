@@ -9,7 +9,6 @@
 #include <userver/clients/http/component.hpp>
 #include <userver/components/component.hpp>
 #include <userver/storages/mongo/component.hpp>
-#include <userver/storages/mongo/pool.hpp>
 #include <userver/storages/postgres/component.hpp>
 #include <userver/yaml_config/merge_schemas.hpp>
 #include <userver/yaml_config/schema.hpp>
@@ -53,11 +52,7 @@ DiComponent::DiComponent(const userver::components::ComponentConfig& config,
               .FindComponent<userver::components::Postgres>(
                   config["pg-component"].As<std::string>())
               .GetCluster(),
-          context
-              .FindComponent<userver::components::Mongo>(
-                  config["mongo-component"].As<std::string>())
-              .GetPool(),
-          config)) {}
+          nullptr, config)) {}
 
 std::unique_ptr<services::IServiceFactory> DiComponent::MakeServiceFactory() {
   std::unique_ptr<repository::IRepositoryFactory> repository_factory;
@@ -85,9 +80,6 @@ properties:
     pg-component:
         type: string
         description: Pg-component
-    mongo-component:
-        type: string
-        description: Component
     s3-region:
         type: string
         description: Component
