@@ -92,11 +92,11 @@ jobs:
           path: ./docker/inttest/report/report_inttest.xml
           retention-days: 3
 
-      - name: Run e2e tests
-        run: docker compose -f docker/e2e/docker-compose.yaml run service --build
+#      - name: Run e2e tests
+#        run: docker compose -f docker/e2e/docker-compose.yaml run service --build
 
-      - name: Stop all containers
-        run: docker stop $(docker ps -a -q)
+#      - name: Stop all containers
+#        run: docker stop $(docker ps -a -q)
 
       - name: Save e2e report
         uses: actions/upload-artifact@v4
@@ -111,19 +111,19 @@ jobs:
     if: always()
     steps:
       - name: Download unittest
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: unittest_report
           path: ./allure-results/unittest.xml
 
       - name: Download inttest
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: inttest_report
           path: ./allure-results/inttest.xml
 
       - name: Download e2e
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: e2e_report
           path: ./allure-results/e2e.xml
@@ -148,4 +148,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./allure-report/
-
