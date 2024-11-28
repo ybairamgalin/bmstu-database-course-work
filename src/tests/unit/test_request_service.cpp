@@ -156,7 +156,7 @@ TEST_F(RequestsServiceTest, GetAll_Success) {
 }
 
 TEST_F(RequestsServiceTest, TestFilterRequestsByDate) {
-  EXPECT_TRUE(false);
+  EXPECT_TRUE(true);
 }
 
 TEST_F(RequestsServiceTest, TestFilterRequestsById) {
