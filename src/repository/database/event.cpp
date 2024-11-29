@@ -22,6 +22,7 @@ std::vector<Event> DbEventRepository::GetEventsByIds(
 }
 
 void DbEventRepository::AddEvent(const Event& event) {
+  LOG_WARNING() << "Adding event";
   cluster_ptr_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       "insert into service.events (event_id, name, description) "

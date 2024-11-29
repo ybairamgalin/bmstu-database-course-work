@@ -1,6 +1,7 @@
 #include "test_component.hpp"
 
 #include <iostream>
+#include <userver/utils/periodic_task.hpp>
 
 #include "runner.hpp"
 
@@ -14,20 +15,24 @@ IntegrationTestingComponent::IntegrationTestingComponent(
     : ComponentBase(config, context),
       cluster_ptr_(
           context.FindComponent<userver::components::Postgres>("postgres-db-1")
-              .GetCluster()) {
-  RunTests();
-  exit(0);
-}
+              .GetCluster()),
+      syncer_(userver::utils::PeriodicTask{}) {
+  LOG_WARNING() << "Starting inttest component";
 
-void IntegrationTestingComponent::RunTests() {
   {
     AddRequestRepositoryTests();
     AddEventRepositoryTests();
     AddUserDataRepositoryTests();
   }
 
-  std::string run_log{"Running pg tests\n"};
-  run_log += TestRunner::Run(cluster_ptr_);
+  std::chrono::seconds interval{2000};
+  userver::utils::PeriodicTask::Settings settings{interval};
+  settings.flags |= userver::utils::PeriodicTask::Flags::kNow;
+  syncer_.Start("run_intttest_task", settings, [this] { RunTests(); });
+}
 
+void IntegrationTestingComponent::RunTests() {
+  std::string run_log{"Running pg tests\n"};
+  run_log += TestRunner().Run(cluster_ptr_);
   std::cerr << run_log;
 }

@@ -5,6 +5,7 @@
 #include <userver/components/component.hpp>
 #include <userver/components/component_base.hpp>
 #include <userver/storages/mongo/pool.hpp>
+#include <userver/utils/periodic_task.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 
@@ -21,4 +22,5 @@ class IntegrationTestingComponent : public userver::components::ComponentBase {
 
  private:
   userver::storages::postgres::ClusterPtr cluster_ptr_;
+  userver::utils::PeriodicTask syncer_;
 };
