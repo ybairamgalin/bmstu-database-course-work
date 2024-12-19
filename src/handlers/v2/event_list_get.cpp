@@ -12,8 +12,8 @@ EventListGet::Response EventListGet::HandleJson(
   gen::EventListGet200Response response{};
   response.events.reserve(events.size());
   for (auto& event : events) {
-    response.events.emplace_back(
-        gen::Event{std::move(event.name), std::move(event.description)});
+    response.events.emplace_back(gen::Event{event.id, std::move(event.name),
+                                            std::move(event.description)});
   }
   return EventListGet::Response{response, 200, {}};
 }

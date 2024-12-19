@@ -31,9 +31,13 @@ Event:
   type: object
   additionalProperties: false
   required:
+    - id
     - name
     - description
   properties:
+    id:
+      type: string
+      format: uuid
     name:
       type: string
     description:

@@ -1,5 +1,7 @@
 #include "events_id_put.hpp"
 
+#include <boost/uuid/uuid_generators.hpp>
+
 #include "utils/uuid.hpp"
 
 namespace handlers::v3 {
@@ -20,7 +22,9 @@ EventsIdPut::Response EventsIdPut::HandleJson(
 
   services_->MakeEventService()->UpdateEvent(
       event_id.value(),
-      services::Event{request.body.name, request.body.description}, auth);
+      services::Event{boost::uuids::random_generator()(), request.body.name,
+                      request.body.description},
+      auth);
   return {200, {}};
 }
 

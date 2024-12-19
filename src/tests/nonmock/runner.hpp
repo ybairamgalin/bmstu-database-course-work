@@ -15,12 +15,22 @@ struct Test {
 
 class TestRunner {
  public:
-  static std::string Run(
-      const userver::storages::postgres::ClusterPtr& cluster_ptr);
+  TestRunner();
+
+  std::string Run(const userver::storages::postgres::ClusterPtr& cluster_ptr);
 
   static void AddSuite(const std::string& name, const std::vector<Test>& tests);
+
+ private:
+  std::string RunSuite(
+      const userver::storages::postgres::ClusterPtr& cluster_ptr,
+      const std::vector<Test>& tests);
+
+  std::atomic<size_t> total_tests_;
+  std::atomic<size_t> passed_tests_;
 };
 
 #ifndef DECL_TEST
-#define DECL_TEST(t) Test{#t, t}
+#define DECL_TEST(t) \
+  Test { #t, t }
 #endif

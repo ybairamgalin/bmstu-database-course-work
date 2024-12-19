@@ -26,6 +26,7 @@ BaseHandler::BaseHandler(const userver::components::ComponentConfig& config,
 std::string BaseHandler::HandleRequestThrow(
     const userver::server::http::HttpRequest& request,
     userver::server::request::RequestContext& ctx) const {
+  userver::tracing::Span{"BaseHandler::HandleRequest"};
   try {
     auto& response = request.GetHttpResponse();
     constexpr std::string_view kCorsHeaderOrigin = "Access-Control-Allow-Origin";
