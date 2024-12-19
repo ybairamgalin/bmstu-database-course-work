@@ -27,7 +27,7 @@ EventsIdGet::Response EventsIdGet::HandleJson(
     throw services::ServiceLevelException("Event does not exist");
   }
   return EventsIdGet::Response{
-      gen::Event{event->name, event->description}, 200, {}};
+      gen::Event{event->id, event->name, event->description}, 200, {}};
 }
 
 }  // namespace handlers::v3

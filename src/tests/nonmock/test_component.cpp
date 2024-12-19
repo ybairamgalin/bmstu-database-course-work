@@ -1,6 +1,7 @@
 #include "test_component.hpp"
 
 #include <iostream>
+#include <signal.h>
 #include <userver/utils/periodic_task.hpp>
 
 #include "runner.hpp"
@@ -35,4 +36,6 @@ void IntegrationTestingComponent::RunTests() {
   std::string run_log{"Running pg tests\n"};
   run_log += TestRunner().Run(cluster_ptr_);
   std::cerr << run_log;
+
+  std::terminate();
 }

@@ -6,6 +6,7 @@
 #include <boost/uuid/uuid_generators.hpp>
 
 #include <userver/utils/assert.hpp>
+#include <userver/tracing/tracing.hpp>
 
 #include "repository/event_repository.hpp"
 #include "repository/factory.hpp"
@@ -24,6 +25,8 @@ class EventMother {
 
 void TestAddEventSuccess(
     const std::shared_ptr<repository::IRepositoryFactory>& repository_factory) {
+  userver::tracing::Span("TestAddEventSuccess");
+
   auto event = EventMother().NewEvent();
 
   auto events_repository = repository_factory->MakeEventsRepository();

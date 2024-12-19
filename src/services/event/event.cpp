@@ -23,7 +23,7 @@ std::vector<Event> EventService::GetAllEvents() {
   result.reserve(events.size());
   for (auto& event : events) {
     result.emplace_back(
-        Event{std::move(event.name), std::move(event.description)});
+        Event{event.uuid, std::move(event.name), std::move(event.description)});
   }
   return result;
 }
@@ -66,9 +66,10 @@ void EventService::DeleteEvent(const boost::uuids::uuid& id,
 std::optional<EventFull> EventService::GetEventById(
     const boost::uuids::uuid& id) {
   auto events = event_repository_->GetEventsByIds({id});
-  return events.empty() ? std::optional<EventFull>()
-                        : services::EventFull{events.front().name,
-                                              events.front().description};
+  return events.empty()
+             ? std::optional<EventFull>()
+             : services::EventFull{events.front().uuid, events.front().name,
+                                   events.front().description};
 }
 
 }  // namespace services

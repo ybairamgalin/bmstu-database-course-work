@@ -4,6 +4,10 @@ components_manager:
     main-task-processor:          # Make a task processor for CPU-bound couroutine tasks.
       worker_threads: $worker-threads         # Process tasks in 4 threads.
 
+    grpc-blocking-task-processor: # For blocking gRPC channel creation
+      worker_threads: 2
+      thread_name: grpc-worker
+
     fs-task-processor:            # Make a separate task processor for filesystem bound tasks.
       worker_threads: $worker-fs-threads
 
@@ -19,11 +23,23 @@ components_manager:
 
     logging:
       fs-task-processor: fs-task-processor
-      loggers:
-        default:
-          file_path: '@stderr'
-          level: $logger-level
-          overflow_behavior: discard
+      loggers: {}
+
+    grpc-client-factory:
+      middlewares: [ ]
+      channel-args: { }
+
+    grpc-client-common:
+      # The TaskProcessor for blocking connection initiation
+      blocking-task-processor: grpc-blocking-task-processor
+
+    otlp-logger:
+      endpoint: '84.201.170.37:4317'
+      service-name: conference-app-inttest
+      log-level: debug
+      # How to rename attributes, if you really need to
+      attributes-mapping:
+        module: line
 
     request_int_test: {}
 

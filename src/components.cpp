@@ -3,11 +3,15 @@
 #include <userver/clients/dns/component.hpp>
 #include <userver/clients/http/component.hpp>
 #include <userver/components/minimal_server_component_list.hpp>
+#include <userver/otlp/logs/component.hpp>
 #include <userver/server/handlers/ping.hpp>
 #include <userver/server/handlers/tests_control.hpp>
 #include <userver/storages/mongo/component.hpp>
 #include <userver/storages/postgres/component.hpp>
 #include <userver/testsuite/testsuite_support.hpp>
+#include <userver/ugrpc/client/client_factory_component.hpp>
+#include <userver/ugrpc/client/simple_client_component.hpp>
+#include <userver/ugrpc/client/common_component.hpp>
 
 #include "di/init.hpp"
 #include "handlers/v2/event_list_get.hpp"
@@ -48,6 +52,10 @@ userver::components::ComponentList MakeComponents() {
       // pipeline builder
       .Append<middleware::AuthMiddlewarePipelineBuilder>(
           "auth-pipeline-builder")
+      // tracing
+      .Append<userver::ugrpc::client::ClientFactoryComponent>()
+      .Append<userver::ugrpc::client::CommonComponent>()
+      .Append<userver::otlp::LoggerComponent>()
       // handlers
       // v2
       .Append<handlers::v2::RequestPost>()

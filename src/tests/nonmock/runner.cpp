@@ -37,7 +37,7 @@ std::string TestRunner::Run(
   std::vector<userver::engine::TaskWithResult<std::string>> tasks;
   for (auto& [suite, tests] : suite_to_tests) {
     run_log += fmt::format("RUNNING SUITE {}\n", suite);
-    //    std::random_shuffle(tests.begin(), tests.end());
+    std::random_shuffle(tests.begin(), tests.end());
 
     auto task = userver::utils::Async(fmt::format("task_for_suite_{}", suite),
                                       &TestRunner::RunSuite, this, cluster_ptr,
