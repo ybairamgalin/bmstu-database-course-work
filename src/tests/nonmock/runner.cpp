@@ -31,6 +31,7 @@ std::string TestRunner::Run(
   for (auto& [suite, tests] : suite_to_tests) {
     run_log += fmt::format("RUNNING SUITE {}\n", suite);
     std::random_shuffle(tests.begin(), tests.end());
+<<<<<<< HEAD
     for (const auto& test : tests) {
       Cleanup(cluster_ptr);
       ++total_tests;
@@ -45,6 +46,13 @@ std::string TestRunner::Run(
       }
     }
     run_log += "\n";
+=======
+
+    auto task = userver::utils::Async(fmt::format("task_for_suite_{}", suite),
+                                      &TestRunner::RunSuite, this, cluster_ptr,
+                                      std::move(tests));
+    tasks.emplace_back(std::move(task));
+>>>>>>> 6cf6b3d (add id for events)
   }
 
   run_log += fmt::format("\nRESULT: PASSED {}/{}\n\n", passed, total_tests);

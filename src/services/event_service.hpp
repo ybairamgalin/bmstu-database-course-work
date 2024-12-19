@@ -9,11 +9,13 @@
 namespace services {
 
 struct Event {
+  boost::uuids::uuid id;
   std::string name;
   std::string description;
 };
 
 struct EventFull {
+  boost::uuids::uuid id;
   std::string name;
   std::string description;
 };

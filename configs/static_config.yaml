@@ -1,5 +1,8 @@
 components_manager:
   task_processors:
+    grpc-blocking-task-processor: # For blocking gRPC channel creation
+      worker_threads: 2
+      thread_name: grpc-worker
 
     main-task-processor:
       worker_threads: $worker-threads
@@ -16,11 +19,23 @@ components_manager:
         task_processor: main-task-processor
     logging:
       fs-task-processor: fs-task-processor
-      loggers:
-        default:
-          file_path: '@stderr'
-          level: $logger-level
-          overflow_behavior: discard
+      loggers: {}
+
+    grpc-client-factory:
+      middlewares: [ ]
+      channel-args: { }
+
+    grpc-client-common:
+      # The TaskProcessor for blocking connection initiation
+      blocking-task-processor: grpc-blocking-task-processor
+
+    otlp-logger:
+      endpoint: '84.201.170.37:4317'
+      service-name: conference-app
+      log-level: debug
+      # How to rename attributes, if you really need to
+      attributes-mapping:
+        module: line
 
     dynamic-config:
       defaults:

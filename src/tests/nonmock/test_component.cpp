@@ -1,6 +1,11 @@
 #include "test_component.hpp"
 
 #include <iostream>
+<<<<<<< HEAD
+=======
+#include <signal.h>
+#include <userver/utils/periodic_task.hpp>
+>>>>>>> 6cf6b3d (add id for events)
 
 #include "runner.hpp"
 
@@ -30,4 +35,6 @@ void IntegrationTestingComponent::RunTests() {
   run_log += TestRunner::Run(cluster_ptr_);
 
   std::cerr << run_log;
+
+  std::terminate();
 }
