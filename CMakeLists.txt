@@ -4,10 +4,12 @@ project(pg_service_template CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Adding userver dependency
-find_package(userver COMPONENTS core postgresql QUIET)
+find_package(userver COMPONENTS core postgresql otlp grpc QUIET)
 if (NOT userver_FOUND)  # Fallback to subdirectory usage
     # Enable userver libraries that are needed in this project
     set(USERVER_FEATURE_POSTGRESQL ON CACHE BOOL "" FORCE)
+    set(USERVER_FEATURE_GRPC ON CACHE BOOL "" FORCE)
+    set(USERVER_FEATURE_OTLP ON CACHE BOOL "" FORCE)
 
     # Compatibility mode: some systems don't support these features
     set(USERVER_FEATURE_CRYPTOPP_BLAKE2 OFF CACHE BOOL "" FORCE)
@@ -93,6 +95,8 @@ add_library(${PROJECT_NAME}_data_access_layer
 target_link_libraries(${PROJECT_NAME}_data_access_layer PUBLIC
         userver::postgresql
         userver::mongo
+        userver::grpc
+        userver::otlp
         ${AWSSDK_LINK_LIBRARIES}
 )
 target_include_directories(${PROJECT_NAME}_data_access_layer PUBLIC src)
@@ -162,6 +166,8 @@ target_link_libraries(
         ${PROJECT_NAME}_rest_api_layer PUBLIC
         userver::postgresql
         userver::mongo
+        userver::grpc
+        userver::otlp
         ${PROJECT_NAME}_service_layer
         ${PROJECT_NAME}_data_access_layer
 )
@@ -222,11 +228,9 @@ add_executable(${PROJECT_NAME}_inttest
 )
 target_link_libraries(${PROJECT_NAME}_inttest PRIVATE
         userver::mongo
+        userver::otlp
         ${PROJECT_NAME}_data_access_layer
 )
-
-# Functional Tests
-include(UserverTestsuite)
 
 userver_testsuite_add_simple()
 
